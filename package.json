@@ -1,0 +1,23 @@
+{
+  "name": "webdoan1",
+  "version": "1.0.0",
+  "description": "Khi code xong dùng:\r git add .\r git commit -m \"nội dung bạn thay đổi\"\r git push origin main",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rufa909/WebDoAn1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rufa909/WebDoAn1/issues"
+  },
+  "homepage": "https://github.com/Rufa909/WebDoAn1#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
