@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trang Chủ</title>
     <link rel="stylesheet" href="css/index.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
   </head>
   <body>
-
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-white bg-white">
       <div class="container-fluid">
         <a class="navbar-brand" href="javascript:void(0)">Logo</a>
         <button
@@ -21,24 +28,27 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="mynavbar">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)">Link</a>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="text" placeholder="Search" />
-            <button class="btn btn-primary" type="button">Search</button>
-          </form>
+        
+        <div class="d-flex" id="mynavbar">
+          <div class="btn-group">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style="background-color: #007BFF; border: none; color: rgb(255, 255, 255);"
+            >
+              Đăng nhập <img src="/public/images/default-user-image.png" width="30" height="30" style="border-radius: 50%;" />
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Đăng Nhập</a></li>
+              <li><a class="dropdown-item" href="#">Đăng Ký</a></li>
+              <li><a class="dropdown-item" href="#">Đăng Xuất</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </nav>
+    </nav> <hr>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
