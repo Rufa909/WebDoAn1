@@ -1,54 +1,654 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang Chủ</title>
-    <link rel="stylesheet" href="css/index.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-sm navbar-white bg-white">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="javascript:void(0)">Logo</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mynavbar"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alibaba homestay </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        <div class="d-flex" id="mynavbar">
-          <div class="btn-group">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="background-color: rgb(60, 200, 150); border: none; color: rgb(255, 255, 255);"
-            >
-              Đăng nhập <img src="/public/images/default-user-image.png" width="30" height="30" style="border-radius: 50%;" />
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Đăng Nhập</a></li>
-              <li><a class="dropdown-item" href="./pages/register.html">Đăng Ký</a></li>
-              <li><a class="dropdown-item" href="#">Đăng Xuất</a></li>
-            </ul>
-          </div>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4ecdc4, #4ecdc4);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .branch-section {
+            margin: 50px 0;
+        }
+        
+        .branch-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .room-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .room-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .room-card:hover .room-image {
+            transform: scale(1.05);
+        }
+        
+        .room-info {
+            padding: 20px;
+        }
+        
+        .room-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .amenity {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #495057;
+        }
+        
+        .amenity i {
+            margin-right: 5px;
+            color: #007bff;
+        }
+        
+        .discount {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .book-btn:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .calendar-section {
+            margin: 50px 0;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calendar-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calendar-table th,
+        .calendar-table td {
+            padding: 15px 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+        
+        .calendar-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .calendar-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .calendar-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .date-cell {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .today {
+            background: #fff3cd !important;
+            font-weight: 700;
+        }
+        
+        .lucky-bag {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .lucky-bag img {
+            max-width: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .lucky-bag img:hover {
+            transform: scale(1.1);
+        }
+        
+        .rooftop-section {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin: 40px 0;
+        }
+        
+        .rooftop-section h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .rooms-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .calendar-table {
+                font-size: 0.7rem;
+            }
+            
+            .calendar-table th,
+            .calendar-table td {
+                padding: 8px 5px;
+            }
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .branch-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .branch-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #e9ecef;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .branch-btn.active,
+        .branch-btn:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 10%; font-size: 2rem;">🏠</div>
+        <div class="floating-element" style="top: 20%; right: 10%; font-size: 1.5rem;">🌟</div>
+        <div class="floating-element" style="bottom: 20%; left: 20%; font-size: 2rem;">🎮</div>
+        <div class="floating-element" style="bottom: 10%; right: 20%; font-size: 1.5rem;">💖</div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>Điểm đến tại Cần Thơ</h1>
+            <p>ALibabahome - Không gian nghỉ dưỡng hoàn hảo</p>
+        </header>
+
+        <div class="branch-selector">
+            <button class="branch-btn active" onclick="showBranch('all')">Tất cả chi nhánh</button>
+            <button class="branch-btn" onclick="showBranch('hung-phu')">Hưng Phú 1, Cái Răng</button>
+            <button class="branch-btn" onclick="showBranch('dai-ngan')">Đại Ngân, Ninh Kiều</button>
+            <button class="branch-btn" onclick="showBranch('hong-phat')">Hồng Phát, Ninh Kiều</button>
+            <button class="branch-btn" onclick="showBranch('ben-ninh-kieu')">Bến Ninh Kiều</button>
         </div>
-      </div>
-    </nav> <hr>
+
+        <!-- Chi nhánh Hưng Phú 1, Cái Răng -->
+        <section class="branch-section" data-branch="hung-phu">
+            <h2 class="branch-title">Home - Hưng Phú 1, Cái Răng</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=250&fit=crop" alt="Fini Home" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Fini Home</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-chair"></i> Ghế lười</span>
+                            <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                            <span class="amenity"><i class="fas fa-wifi"></i> WiFi</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=250&fit=crop" alt="Luca Home" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Luca Home</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-tv"></i> Smart TV</span>
+                            <span class="amenity"><i class="fas fa-utensils"></i> Nhà bếp</span>
+                            <span class="amenity"><i class="fas fa-wifi"></i> WiFi</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=250&fit=crop" alt="CCV Cinemas 1" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">CCV Cinemas 1</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                            <span class="amenity"><i class="fas fa-gamepad"></i> Gaming</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1571508601891-ca5e7a713859?w=400&h=250&fit=crop" alt="Sweet Dreams" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Sweet Dreams</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                            <span class="amenity"><i class="fas fa-mirror"></i> Gương trang điểm</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi nhánh Đại Ngân, Ninh Kiều -->
+        <section class="branch-section" data-branch="dai-ngan">
+            <h2 class="branch-title">Home - Đại Ngân, Ninh Kiều</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=250&fit=crop" alt="Lovely" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Lovely</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-heart"></i> Romantic</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                            <span class="amenity"><i class="fas fa-wifi"></i> WiFi</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=250&fit=crop" alt="Secret Home" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Secret Home</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                            <span class="amenity"><i class="fas fa-mirror"></i> Gương King</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1560448075-bb485b067938?w=400&h=250&fit=crop" alt="Dynamic Game" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Dynamic Game</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-gamepad"></i> Console Game</span>
+                            <span class="amenity"><i class="fas fa-chair"></i> Gaming Chair</span>
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi nhánh Hồng Phát, Ninh Kiều -->
+        <section class="branch-section" data-branch="hong-phat">
+            <h2 class="branch-title">Home - Hồng Phát, Ninh Kiều</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=250&fit=crop" alt="Ocean City" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Ocean City</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-water"></i> Ocean View</span>
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fas fa-balcony-door"></i> Ban công</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=250&fit=crop" alt="Cook & Chill" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Cook & Chill</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-utensils"></i> Full Kitchen</span>
+                            <span class="amenity"><i class="fas fa-chair"></i> Ghế lười</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1571708681406-95463291d704?w=400&h=250&fit=crop" alt="Pink Paradise" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Pink Paradise</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-heart"></i> Pink Theme</span>
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fas fa-mirror"></i> Gương trang điểm</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=250&fit=crop" alt="Ball Chill" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Ball Chill</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-table-tennis"></i> Bàn bi-da</span>
+                            <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                            <span class="amenity"><i class="fas fa-balcony-door"></i> Ban công</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi nhánh Khu dân cư 91B -->
+        <section class="branch-section" data-branch="ben-ninh-kieu">
+            <h2 class="branch-title">Home - Khu dân cư 91B, Ninh Kiều</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <div class="discount">Giảm 20.000 đ</div>
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=250&fit=crop" alt="Cook" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Cook</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-utensils"></i> Full Kitchen</span>
+                            <span class="amenity"><i class="fas fa-wifi"></i> WiFi</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="discount">Giảm 30.000 đ</div>
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=250&fit=crop" alt="Amber" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Amber</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-gem"></i> Premium</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="discount">Giảm 30.000 đ</div>
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=250&fit=crop" alt="Squid Game" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Squid Game</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-gamepad"></i> Game Theme</span>
+                            <span class="amenity"><i class="fas fa-video"></i> Máy chiếu</span>
+                            <span class="amenity"><i class="fab fa-netflix"></i> Netflix</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="discount">Giảm 20.000 đ</div>
+                    <img src="https://images.unsplash.com/photo-1571708681406-95463291d704?w=400&h=250&fit=crop" alt="Black Pink" class="room-image">
+                    <div class="room-info">
+                        <h3 class="room-name">Black Pink</h3>
+                        <div class="amenities">
+                            <span class="amenity"><i class="fas fa-music"></i> K-Pop Theme</span>
+                            <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                            <span class="amenity"><i class="fas fa-book"></i> Reading Corner</span>
+                        </div>
+                        <button class="book-btn">Đặt phòng</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        
+
+        <footer style="text-align: center; padding: 40px 0; color: #6c757d; border-top: 1px solid #dee2e6; margin-top: 50px;">
+            <p>&copy; 2025 LocalHome Cần Thơ. Tất cả quyền được bảo lưu.</p>
+            <p>Liên hệ: 📞 0123.456.789 | 📧 info@localhome.vn</p>
+        </footer>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+    <script>
+
+        // Branch filtering functionality
+        function showBranch(branchId) {
+            const sections = document.querySelectorAll('.branch-section');
+            const buttons = document.querySelectorAll('.branch-btn');
+            
+            // Remove active class from all buttons
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            if (branchId === 'all') {
+                sections.forEach(section => {
+                    section.style.display = 'block';
+                    section.style.animation = 'fadeIn 0.5s ease-in-out';
+                });
+            } else {
+                sections.forEach(section => {
+                    if (section.dataset.branch === branchId) {
+                        section.style.display = 'block';
+                        section.style.animation = 'fadeIn 0.5s ease-in-out';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+        }
+        
+        
+        
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes bounceIn {
+                0% { transform: scale(0.3); opacity: 0; }
+                50% { transform: scale(1.1); opacity: 0.8; }
+                70% { transform: scale(0.9); opacity: 0.9; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add some interactive effects
+        document.querySelectorAll('.room-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+    
+</body>
 </html>
