@@ -286,9 +286,8 @@ hr {
     padding: 8px 5px;
   }
 }
-/* Mobile dưới 576px */
+
 @media (max-width: 576px) {
-  /* Header: logo + login button xuống hàng */
   .header-container .container-fluid {
     display: flex;
     justify-content: space-between;
@@ -306,7 +305,6 @@ hr {
     font-size: 1rem !important;
   }
 
-  /* Footer thành 1 cột */
   footer .col-3, footer .col-md-3 {
     flex: 0 0 100%;
     max-width: 100%;
@@ -319,23 +317,21 @@ hr {
   }
   .branch-selector {
     gap: 8px;
-    justify-content: center; /* giữ giữa màn hình */
-    overflow-x: hidden;       /* chặn tràn ngang */
+    justify-content: center; 
+    overflow-x: hidden;     
   }
 
   .branch-btn {
-    flex: 1 1 auto;           /* tự co giãn vừa khung */
+    flex: 1 1 auto;    
     font-size: 0.8rem;
     padding: 6px 12px;
   }
-  /* Branch title nhỏ lại */
   .branch-title {
     font-size: 1.4rem;
     padding: 10px;
   }
 }
 
-/* Tablet dưới 992px */
 @media (max-width: 992px) {
   .branch-title {
     font-size: 1.6rem;
