@@ -12,3 +12,5 @@ git pull origin main (để lấy source code của người đã upload trướ
 " npm install express ": install node modules (express)
 
 " npm install mysql2 ": install MySQL
+" npm install express dotenv ": Quản lý biến môi trường
+" npm install --save-dev nodemon "
