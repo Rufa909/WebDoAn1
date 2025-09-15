@@ -15,6 +15,8 @@ git pull origin main (để lấy source code của người đã upload trướ
 " npm install express dotenv ": Quản lý biến môi trường
 " npm install bcrypt ": Mã hóa mật khẩu
 " npm install --save-dev nodemon ": Cài đặt nodemon và lưu vào mục devDependencies
+" npm install sweetalert2 ": thư viện Sweetaler2 hỗ trợ popup
+" npm install nodemailer ": xác thực mail
 
 
 " node server.js ": chạy thử server với dạng public

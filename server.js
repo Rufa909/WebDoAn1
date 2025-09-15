@@ -1,54 +1,72 @@
-require('dotenv').config();
-const express = require('express');
-const bcrypt = require('bcrypt');
-const mysql = require('mysql2');
-const path = require('path');
+require("dotenv").config();
+const express = require("express");
+const bcrypt = require("bcrypt");
+const mysql = require("mysql2");
+const path = require("path");
 const app = express();
 
-// Middleware đọc JSON body
+// Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
-
-// Kết nối MySQL
-let Pool_db;
-(async () => {
-  Pool_db = await mysql.createPool({
+// Pool MySQL
+const Pool_db = mysql
+  .createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  });
-})();
+    database: process.env.DB_NAME,
+  })
+  .promise();
 
-app.post('/register', async (req, res) => {
-    const { hovaten, matkhau, email } = req.body;
+// Route đăng ký
+app.post("/register", async (req, res) => {
+  const { hovaten, matkhau, xacnhanmatkhau, email } = req.body;
 
-    if (!hovaten || !matkhau || !email) {
-        return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin.' });
+  if (!hovaten || !matkhau || !email || !xacnhanmatkhau) {
+    return res.sendStatus(400);
+  }
+
+  if (matkhau !== xacnhanmatkhau) {
+        return res.sendStatus(401);
     }
-    try {
-        // Mã hóa mật khẩu
-        const hashedPassword = await bcrypt.hash(matkhau, 10);
-        // Lưu thông tin người dùng vào cơ sở dữ liệu
-        const [result] = await Pool_db.execute(
-            'INSERT INTO users (hovaten, matkhau, email) VALUES (?, ?, ?)',
-            [hovaten, hashedPassword, email]
-        );
-        res.status(201).json({ message: 'Đăng ký thành công!', userId: result.insertId });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Lỗi máy chủ. Vui lòng thử lại sau.', error: error.message});
+  try {
+    // Kiểm tra email tồn tại
+    const [existing] = await Pool_db.execute(
+      "SELECT id FROM users WHERE email=?",
+      [email]
+    );
+    if (existing.length > 0) {
+      return res.sendStatus(409);
     }
+
+    // Mã hoá mật khẩu
+    const hashedPassword = await bcrypt.hash(matkhau, 10);
+
+    // Lưu vào DB
+    const [result] = await Pool_db.execute(
+      "INSERT INTO users (hovaten, matkhau, email) VALUES (?, ?, ?)",
+      [hovaten, hashedPassword, email]
+    );
+
+    res.sendStatus(201);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Trang chủ
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pages', 'register.html'));
+// Trang đăng ký
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pages", "register.html"));
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server chạy ở http://localhost:${PORT}`));

@@ -17,6 +17,9 @@ body {
   justify-content: center;
   align-items: center;
 }
+.swal2-container {
+  z-index: 99999 !important;
+}
 .bg-image {
   position: fixed;
   top: 0;
@@ -28,6 +31,7 @@ body {
   filter: blur(3px) brightness(0.9);
 }
 #register-form {
+    position: relative;
     background: rgb(255, 255, 255);
     padding: 20px;
     border-radius: 8px;
@@ -35,6 +39,7 @@ body {
     max-width: 400px;
     margin: auto;
     margin-bottom: auto;
+    z-index: 1;
 }
 #register-form h2 {
     text-align: center;

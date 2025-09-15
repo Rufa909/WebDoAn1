@@ -8,18 +8,21 @@
 </head>
 <body>
     <img src="/images/Homestay_BG.jpg" class="bg-image">
-    <form action="/register" method="POST" id ="register-form">
+    <form id ="register-form">
         <h2>Đăng Ký</h2>
-        <input type="text" id="username" name="username" placeholder="Họ và tên" required>
+        <input type="text" id="hovaten" name="hovaten" placeholder="Họ và tên" required>
 
         <input type="email" id="email" name="email" placeholder="Email" required>
 
-        <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
-        <input type="password" id="confirm_password" name="confirm_password" placeholder="Xác nhận mật khẩu" required>
+        <input type="password" id="matkhau" name="matkhau" placeholder="Mật khẩu" required>
+        <input type="password" id="xacnhanmatkhau" name="xacnhanmatkhau" placeholder="Xác nhận mật khẩu" required>
 
         <button type="submit">Đăng Ký</button>
         
         <button type="button" onclick="window.location.href='/login'">Bạn đã có tài khoản? Đăng nhập ngay</button>
     </form>
+
+    <script src="/js/register.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
