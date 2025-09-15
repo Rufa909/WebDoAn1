@@ -13,4 +13,8 @@ git pull origin main (để lấy source code của người đã upload trướ
 
 " npm install mysql2 ": install MySQL
 " npm install express dotenv ": Quản lý biến môi trường
-" npm install --save-dev nodemon "
+" npm install bcrypt ": Mã hóa mật khẩu
+" npm install --save-dev nodemon ": Cài đặt nodemon và lưu vào mục devDependencies
+
+
+" node server.js ": chạy thử server với dạng public
