@@ -1,9 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const bcrypt = require('bcrypt');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2');
 const path = require('path');
-const e = require('express');
 const app = express();
 
 // Middleware đọc JSON body
