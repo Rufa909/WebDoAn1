@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alibaba Home</title>
+     <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/index.css" />
+</head>
+<body>
+    <div class="header-container">
+      <div
+        class="container-fluid d-flex justify-content-between align-items-center"
+      >
+        <a
+          class="navbar-brand"
+          href="javascript:void(0)"
+          style="
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: black;
+            text-decoration: none;
+          "
+        >
+          <img src="/images/logo.png" width="70" height="70" /> Alibaba
+          Homestay
+          
+        </a>
+      </div>
+      <hr>
+    </div>
+    <table id="timeTable">
+  <thead>
+    <tr>
+      <th>Ngày</th>
+      <th>10:00 - 13:00</th>
+      <th>13:30 - 16:30</th>
+      <th>17:00 - 20:00</th>
+      <th>20:30 - 09:20</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 70%;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  thead {
+    background: #2c3e50;
+    color: white;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 14px 18px;
+    min-width: 120px;
+  }
+
+  tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+
+  .past {
+    background: #ffcccc; /* đỏ nhạt */
+  }
+
+  .active {
+    background: white;
+    border: 2px solid black !important;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  const timeSlots = [
+    { start: "10:00", end: "13:00" },
+    { start: "13:30", end: "16:30" },
+    { start: "17:00", end: "20:00" },
+    { start: "20:30", end: "09:20" } // ca qua đêm
+  ];
+
+  const numberOfDays = 7; // số ngày hiển thị
+
+  // Định dạng ngày dd/mm/yyyy
+  function formatDateVN(date) {
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  function generateTable() {
+    const tbody = document.querySelector("#timeTable tbody");
+    tbody.innerHTML = "";
+
+    const today = new Date();
+
+    for (let i = 0; i < numberOfDays; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+
+      const isoDate = date.toISOString().split("T")[0]; 
+      const formattedDate = formatDateVN(date);
+
+      let row = `<tr><td>${formattedDate}</td>`;
+
+      timeSlots.forEach(slot => {
+        row += `<td class="slot" 
+                   data-date="${isoDate}" 
+                   data-start="${slot.start}" 
+                   data-end="${slot.end}"></td>`;
+      });
+
+      row += "</tr>";
+      tbody.innerHTML += row;
+    }
+  }
+
+  function checkTimeSlots() {
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    document.querySelectorAll(".slot").forEach(cell => {
+      const slotDate = cell.dataset.date;
+      let [sh, sm] = cell.dataset.start.split(":").map(Number);
+      let [eh, em] = cell.dataset.end.split(":").map(Number);
+
+      let start = sh * 60 + sm;
+      let end = eh * 60 + em;
+
+      cell.className = "slot"; // reset class
+
+      if (slotDate < today) {
+        cell.classList.add("past"); 
+      } else if (slotDate === today) {
+        // cùng ngày
+        if (end < start) { 
+          // ca qua đêm
+          if (currentMinutes >= start || currentMinutes <= end) {
+            cell.classList.add("active");
+          } else if (currentMinutes > end && currentMinutes < start) {
+            cell.classList.add("past");
+          }
+        } else {
+          if (currentMinutes >= start && currentMinutes <= end) {
+            cell.classList.add("active");
+          } else if (currentMinutes > end) {
+            cell.classList.add("past");
+          }
+        }
+      }
+    });
+  }
+
+  generateTable();
+  checkTimeSlots();
+  setInterval(checkTimeSlots, 60000); // cập nhật mỗi phút
+</script>
+
+</body>
+</html>
