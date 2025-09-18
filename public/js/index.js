@@ -164,10 +164,16 @@ filterSections.forEach(section => {
     const title = section.querySelector('h5').innerText;
 
     buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            if (title !== 'Tiện ích') {
-                buttons.forEach(b => b.classList.remove('active'));
-                button.classList.add('active');
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            button.blur(); 
+            if (title !== 'Tiện ích') {              
+                if (button.classList.contains('active')) {
+                    button.classList.remove('active');
+                } else {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    button.classList.add('active');
+                }
             } else {
                 button.classList.toggle('active');
             }
@@ -188,6 +194,5 @@ resetButton.addEventListener('click', () => {
         applyFilters();
     }, 0);
 });
-
 // --- Khi tải trang, hiển thị tất cả homestay ---
 displayHomestays(homestays);
