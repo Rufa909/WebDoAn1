@@ -38,80 +38,755 @@
       </div>
       <hr>
     </div>
-    <table id="bookingTable">
-  <thead>
-    <tr>
-      <th>Ngày</th>
-      <th>10:00 - 13:00<br><span class="price">250k</span></th>
-      <th>13:30 - 16:30<br><span class="price">250k</span></th>
-      <th>17:00 - 20:00<br><span class="price">250k</span></th>
-      <th>20:30 - 09:20<br><span class="price">350k</span></th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
 
-<div id="bookingInfo" style="margin-top:20px; font-size:18px; font-weight:bold; color:#2c3e50;">
-  Tổng tiền: 0k
-</div>
+    <!-- Bảng Giá - Full Width trên cùng -->
+    <div class="pricing-section-top">
+      <h2 class="pricing-title">Bảng giá</h2>
+      <div class="pricing-table">
+        <div class="pricing-item">
+          <div class="time-slot">10:00 - 13:00</div>
+          <div class="price-main">189.000 <span class="currency">đ</span></div>
+          <div class="price-sub">329.000 <span class="currency">đ/đêm</span></div>
+        </div>
+        
+        <div class="pricing-item">
+          <div class="time-slot">13:30 - 16:30</div>
+          <div class="price-main">209.000 <span class="currency">đ</span></div>
+          <div class="price-sub">619.000 <span class="currency">đ/ngày</span> <span class="note">(cả đêm giá ngày)</span></div>
+        </div>
+        
+        <div class="pricing-item">
+          <div class="time-slot">17:00 - 20:00</div>
+          <div class="price-main">209.000 <span class="currency">đ</span></div>
+        </div>
+        
+        <div class="pricing-item overnight">
+          <div class="time-slot">20:30 - 09:30</div>
+          <div class="price-main">350.000 <span class="currency">đ</span></div>
+          <div class="overnight-label">Qua đêm</div>
+        </div>
+      </div>
+      
+      <div class="pricing-note">
+        <p><strong>Lưu ý chọn khung giờ dành cho bạn</strong></p>
+      </div>
+    </div>
 
+    <!-- Main Content - Chia đôi dưới -->
+    <div class="main-content">
+      <!-- Bảng chọn thời gian - Bên trái -->
+      <div class="booking-section">
+        <h2 class="booking-title">Chọn thời gian</h2>
+        <table id="bookingTable">
+          <thead>
+            <tr>
+              <th>Ngày</th>
+              <th>10:00 - 13:00<br><span class="price">250.000đ</span></th>
+              <th>13:30 - 16:30<br><span class="price">250.000đ</span></th>
+              <th>17:00 - 20:00<br><span class="price">250.000đ</span></th>
+              <th>20:30 - 09:20<br><span class="price">350.000đ</span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div id="bookingInfo" style="margin-top:20px; font-size:18px; font-weight:bold; color:#2c3e50;">
+          Tổng tiền: 0k
+        </div>
+
+        <button type="button" id="bookNowBtn" class="submit-btn" style="margin-top: 15px; width: 100%;">
+          Đặt phòng
+        </button>
+      </div>
+
+      <!-- Modal xác nhận đặt phòng -->
+      <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Xác nhận đặt phòng</h2>
+            <span class="close">&times;</span>
+          </div>
+          <div class="modal-body">
+            <div class="booking-info">
+              <p class="booking-location">Bạn đang đặt phòng tại:</p>
+              <h3 class="location-name">Home - Hung Phú 1, Cái Răng, Cần Thơ</h3>
+              
+              <div class="customer-info">
+                <p><strong>Tên khách hàng:</strong> <span id="customerName">-</span></p>
+                <p><strong>Số điện thoại:</strong> <span id="customerPhone">-</span></p>
+                <p><strong>Chi nhánh:</strong> Home - Hung Phú 1, Cái Răng</p>
+                <p><strong>Tên phòng:</strong> Fini Home</p>
+              </div>
+
+              <div class="booking-details" id="bookingDetails">
+                <!-- Thông tin khung giờ sẽ được điền bởi JavaScript -->
+              </div>
+
+              
+
+              <div class="total-amount">
+                <p><strong>Số tiền tạm tính:</strong> <span id="totalAmount">.000đ</span></p>
+              </div>
+
+              <div class="notice">
+                <p><em>KHÁCH MUỐN BẢO LƯU HAY ĐỔI NGÀY VUI LÒNG BÁO TRƯỚC 3 TIẾNG TRƯỚC GIỜ CHECK IN</em></p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" id="editBooking">Sửa lại thông tin</button>
+            <button type="button" class="btn-primary" id="confirmBooking">Đặt phòng</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Đặt Phòng - Bên phải -->
+      <div class="booking-form-section">
+        <h2 class="form-title">Thông tin Đặt phòng</h2>
+        
+        <form class="booking-form">
+          <div class="form-group">
+            <input type="text" placeholder="Họ và tên" class="form-input" required>
+          </div>
+          
+          <div class="form-group">
+            <input type="tel" placeholder="Số điện thoại" class="form-input" required>
+            <small class="form-note">* Bạn vui lòng nhập đúng số điện thoại. Home sẽ gửi thông tin check-in qua Zalo.</small>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Số lượng khách</label>
+            <select class="form-select">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <small class="form-note">* Nếu > 2 khách: Home sẽ phép phụ thu 50k/khách ạ!<br>* Home chỉ nhận tối đa 2 khách nếu khách book ca khung giờ qua đêm.</small>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Căn cước công dân</label>
+            <div class="upload-area">
+              <i class="fas fa-camera"></i>
+              <span>Mặt trước</span>
+            </div>
+            <div class="upload-area">
+              <i class="fas fa-camera"></i>
+              <span>Mặt sau</span>
+            </div>
+            <small class="form-note">* Thông tin CCCD sẽ bạn được lưu trữ và bảo mật trong cơ sở dữ liệu của chúng tôi. Bạn vui lòng chuẩn bị sẵn CCCD của bạn để thực hiện việc check-in nhanh chóng nhé (Tiếp tục Đặt phòng).</small>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Ghi chú cho LocalHome</label>
+            <textarea placeholder="Nhập ghi chú..." class="form-textarea"></textarea>
+          </div>
+          
+          <div class="terms-section">
+            <p class="terms-text">
+              <strong style="color: #e74c3c;">Xác nhận mọi người đã đủ tuổi vị thành niên, hoặc trẻ em phải có người lớn đi cùng. Nghiêm cấm chủ trách nhiệm với thông tin này.</strong>
+            </p>
+            <p class="terms-text">
+              Sau khi quét mã thanh toán thành công bạn hãy gửi lại đây để chúng tôi xác nhận thông tin Đặt phòng (Tiếp tục Đặt phòng).
+            </p>
+            <p class="terms-text">
+              Khi bấm 'Đặt phòng' đồng nghĩa với việc bạn đã đọc và đồng ý với các <a href="#" style="color: #007bff;">Nội quy</a> & <a href="#" style="color: #007bff;">Chính sách</a> của LocalHome.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
 
 <style>
   body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f8f9fa;
+  }
+
+  /* Bảng giá trên cùng - Full Width */
+  .pricing-section-top {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+
+  .pricing-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  .pricing-table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+
+  .pricing-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .pricing-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  }
+
+  .pricing-item.overnight {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  }
+
+  .pricing-item.overnight:hover {
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+  }
+
+  .time-slot {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    opacity: 0.9;
+  }
+
+  .price-main {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .currency {
+    font-size: 18px;
+    font-weight: normal;
+  }
+
+  .price-sub {
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 5px;
+  }
+
+  .note {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .overnight-label {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  .pricing-note {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 16px;
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+  }
+
+  /* Main Content Layout - Chia đôi */
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  /* Booking Form Section */
+  .booking-form-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .form-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+  }
+
+  .booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-label {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  }
+
+  .form-textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .form-note {
+    color: #666;
+    font-size: 13px;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  .upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .upload-area:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+  }
+
+  .upload-area i {
+    font-size: 24px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .terms-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+  }
+
+  .terms-text {
+    margin-bottom: 12px;
+    line-height: 1.5;
+    font-size: 14px;
+    color: #444;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+  }
+
+  /* Booking Section Styles */
+  .booking-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .booking-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
   }
 
   table {
     border-collapse: collapse;
-    width: 70%;
+    width: 100%;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 
   thead {
-    background: #2c3e50;
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
     color: white;
   }
 
   th, td {
-    border: 1px solid #ccc;
-    padding: 14px 18px;
-    min-width: 140px;
+    border: 1px solid #e0e0e0;
+    padding: 12px 8px;
+    min-width: 80px;
     cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  th {
+    font-weight: bold;
+    font-size: 12px;
   }
 
   tr:nth-child(even) {
-    background: #f9f9f9;
+    background: #f8f9fa;
   }
 
   .price {
-     display: block;
-    font-size: 16px;  
+    display: block;
+    font-size: 12px;  
     font-weight: normal;
-    color: rgb(255, 0, 191);
+    color: #e74c3c;
+    margin-top: 5px;
   }
 
   .past {
-    background: #ffcccc;
+    background: #ffebee;
+    color: #c62828;
     cursor: not-allowed;
+    opacity: 0.6;
   }
 
   .active {
-    background: white;
-    border: 2px solid black !important;
+    background: #fff3e0;
+    border: 2px solid #ff9800 !important;
     font-weight: bold;
     cursor: not-allowed;
+    color: #ef6c00;
   }
 
   .available {
-    background: #ccffcc;
+    background: #e8f5e8;
+    color: #2e7d32;
+  }
+
+  .available:hover {
+    background: #c8e6c9;
+    transform: scale(1.02);
   }
 
   .selected {
-    background: #66cc66 !important;
+    background: #4caf50 !important;
     color: white;
     font-weight: bold;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+  }
+
+  #bookingInfo {
+    text-align: center;
+    padding: 20px;
+    background: #e8f5e8;
+    border-radius: 8px;
+    border: 2px solid #4caf50;
+    margin-top: 25px;
+  }
+
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 3% auto;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s;
+  }
+
+  @keyframes slideIn {
+    from {transform: translateY(-50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: background-color 0.3s;
+  }
+
+  .close:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .modal-body {
+    padding: 30px;
+  }
+
+  .booking-info {
+    line-height: 1.6;
+  }
+
+  .booking-location {
+    color: #e74c3c;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .location-name {
+    color: #e74c3c;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 25px;
+  }
+
+  .customer-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+  }
+
+  .customer-info p {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .booking-details {
+    background: #e8f5e8;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #4caf50;
+  }
+
+  .booking-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .booking-time:last-child {
+    border-bottom: none;
+  }
+
+  .time-info {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
+  .time-price {
+    color: #e74c3c;
+    font-weight: bold;
+  }
+
+  
+
+  .total-amount {
+    background: #e3f2fd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #2196f3;
+    text-align: center;
+  }
+
+  .total-amount p {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .total-amount span {
+    color: #e74c3c;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .notice {
+    background: #ffebee;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f44336;
+    text-align: center;
+  }
+
+  .notice p {
+    margin: 0;
+    color: #d32f2f;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  .btn-secondary {
+    background: #95a5a6;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex: 1;
+  }
+
+  .btn-secondary:hover {
+    background: #7f8c8d;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+  }
+  @media (max-width: 768px) {
+    .main-content {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .pricing-table {
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    table {
+      font-size: 12px;
+    }
+    
+    th, td {
+      padding: 8px 4px;
+      min-width: 60px;
+    }
+    
+    .pricing-section-top, .booking-section, .booking-form-section {
+      padding: 20px;
+      margin: 10px;
+    }
+
+    .form-title, .booking-title {
+      font-size: 20px;
+    }
+
+    .submit-btn {
+      font-size: 16px;
+      padding: 12px 25px;
+    }
+
+    .price-main {
+      font-size: 24px;
+    }
+
+    .time-slot {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pricing-table {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 
@@ -145,7 +820,7 @@
       const isoDate = date.toISOString().split("T")[0]; 
       const formattedDate = formatDateVN(date);
 
-      let row = `<tr><td>${formattedDate}</td>`;
+      let row = `<tr><td style="font-weight: bold; background: #f5f5f5;">${formattedDate}</td>`;
 
       timeSlots.forEach(slot => {
         row += `<td class="slot" 
@@ -214,15 +889,138 @@
         total += parseInt(cell.dataset.price);
       });
 
-      document.getElementById("bookingInfo").textContent = `Tổng tiền: ${total}k`;
+      document.getElementById("bookingInfo").textContent = `Tổng tiền: ${total.toLocaleString()}.000đ`;
     }
   });
 
+  // Xử lý modal xác nhận đặt phòng
+  const modal = document.getElementById("confirmationModal");
+  const bookNowBtn = document.getElementById("bookNowBtn");
+  const closeBtn = document.querySelector(".close");
+  const editBtn = document.getElementById("editBooking");
+  const confirmBtn = document.getElementById("confirmBooking");
+
+  // Hiển thị modal khi ấn "Đặt phòng"
+  bookNowBtn.addEventListener("click", function() {
+    // Kiểm tra thông tin bắt buộc
+    const customerName = document.querySelector('input[placeholder="Họ và tên"]').value.trim();
+    const customerPhone = document.querySelector('input[placeholder="Số điện thoại"]').value.trim();
+    const selectedSlots = document.querySelectorAll(".selected");
+
+    if (!customerName) {
+      alert("Vui lòng nhập họ và tên!");
+      return;
+    }
+
+    if (!customerPhone) {
+      alert("Vui lòng nhập số điện thoại!");
+      return;
+    }
+
+    if (selectedSlots.length === 0) {
+      alert("Vui lòng chọn ít nhất một khung giờ!");
+      return;
+    }
+
+    // Điền thông tin vào modal
+    fillModalInformation(customerName, customerPhone, selectedSlots);
+    
+    // Hiển thị modal
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden"; // Ngăn scroll trang chính
+  });
+
+  // Đóng modal
+  function closeModal() {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto"; // Cho phép scroll lại
+  }
+
+  closeBtn.addEventListener("click", closeModal);
+  editBtn.addEventListener("click", closeModal);
+
+  // Đóng modal khi click bên ngoài
+  window.addEventListener("click", function(event) {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Xử lý xác nhận đặt phòng
+  confirmBtn.addEventListener("click", function() {
+    // Thực hiện logic đặt phòng ở đây
+    alert("Đặt phòng thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.");
+    closeModal();
+    
+    // Reset form (tùy chọn)
+    // document.querySelector('.booking-form').reset();
+    // document.querySelectorAll('.selected').forEach(cell => cell.classList.remove('selected'));
+    // document.getElementById("bookingInfo").textContent = "Tổng tiền: 0k";
+  });
+
+  // Hàm điền thông tin vào modal
+  function fillModalInformation(name, phone, selectedSlots) {
+    document.getElementById("customerName").textContent = name;
+    document.getElementById("customerPhone").textContent = phone;
+
+    // Tính tổng tiền và hiển thị thông tin khung giờ
+    let total = 0;
+    let bookingDetailsHTML = "";
+
+    // Tạo map để nhóm theo ngày
+    const bookingsByDate = {};
+
+    selectedSlots.forEach(cell => {
+      const date = cell.dataset.date;
+      const startTime = cell.dataset.start;
+      const endTime = cell.dataset.end;
+      const price = parseInt(cell.dataset.price);
+      
+      total += price;
+
+      // Format ngày
+      const dateObj = new Date(date);
+      const formattedDate = formatDateVN(dateObj);
+
+      if (!bookingsByDate[formattedDate]) {
+        bookingsByDate[formattedDate] = [];
+      }
+
+      bookingsByDate[formattedDate].push({
+        time: `${startTime} - ${endTime}`,
+        price: price
+      });
+    });
+
+    // Tạo HTML cho thông tin đặt phòng
+    Object.keys(bookingsByDate).forEach(date => {
+      bookingDetailsHTML += `<div style="margin-bottom: 15px;">`;
+      bookingDetailsHTML += `<p><strong>Ngày ${date}:</strong></p>`;
+      
+      bookingsByDate[date].forEach(booking => {
+        bookingDetailsHTML += `
+          <div class="booking-time">
+            <span class="time-info">Thời gian: ${booking.time}</span>
+            <span class="time-price">${booking.price.toLocaleString()}.000đ</span>
+          </div>
+        `;
+      });
+      
+      bookingDetailsHTML += `</div>`;
+    });
+
+    if (!bookingDetailsHTML) {
+      bookingDetailsHTML = "<p>Chưa chọn khung giờ nào.</p>";
+    }
+
+    document.getElementById("bookingDetails").innerHTML = bookingDetailsHTML;
+    document.getElementById("totalAmount").textContent = `${total.toLocaleString()}.000đ`;
+  }
+
   generateTable();
-  checkTimeSlots();
+  checkTimeSlots();   
   setInterval(checkTimeSlots, 60000);
 </script>
-
 
 </body>
 </html>
