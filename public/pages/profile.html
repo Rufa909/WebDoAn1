@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký - Alibaba Homestay</title>
+    <title>Hồ Sơ Cá Nhân</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
@@ -14,9 +14,10 @@
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
+    <!-- Header -->
     <div class="header-container">
       <div
         class="container-fluid d-flex justify-content-between align-items-center"
@@ -60,7 +61,7 @@
               color: #fff;
             "
           >
-            Đăng nhập
+            Hi, Alibaba
             <img
               src="../images/default-user-image.png"
               width="30"
@@ -180,147 +181,69 @@
         </div>
     <hr />
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="register-container">
-            <div class="register-header">
-                <h2>ĐĂNG KÝ</h2>
-                <p>Tham gia cộng đồng Alibaba Homestay ngay hôm nay</p>
+    <div class="container">
+        <div class="header" style="position: relative;">
+            <!-- <button class="role-btn" onclick="changeRole()">Admin page</button> -->
+            <div class="avatar" id="userAvatar">AL</div>
+            <h1 class="user-name" id="userName">Alibaba</h1>
+            <div class="user-role" id="userRole">Admin</div>
+        </div>
+
+        <div class="content">
+            <!-- Thông tin cá nhân -->
+            <div class="section">
+                <h2 class="section-title">Thông Tin Cá Nhân</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" class="form-input" id="infoName" value="Alibaba" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-input" id="infoBirth" value="2005-11-09" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giới tính</label>
+                        <select class="form-input" id="infoGender" disabled>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="infoEmail" value="alibabahome@homestay.com" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-input" id="infoPhone" value="+84 123 456 78" disabled>
+                    </div>
+                </div>
             </div>
-            
-            <div class="register-form">
-                <form id="registerForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">Họ</label>
-                            <div class="input-wrapper">
-                                <input type="text" id="firstName" name="firstName" required 
-                                       placeholder="Nhập họ của bạn">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="lastName">Tên</label>
-                            <div class="input-wrapper">
-                                <input type="text" id="lastName" name="lastName" required 
-                                       placeholder="Nhập tên của bạn">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group full-width">
-                        <label for="email">Email</label>
-                        <div class="input-wrapper">
-                            <input type="email" id="email" name="email" required 
-                                   placeholder="Nhập địa chỉ email">
-                            <span class="input-icon">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="phone">Số điện thoại</label>
-                        <div class="input-wrapper">
-                            <input type="tel" id="phone" name="phone" required 
-                                   placeholder="Nhập số điện thoại">
-                            <span class="input-icon">
-                                <i class="fas fa-phone"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="birthDate">Ngày sinh</label>
-                            <div class="input-wrapper">
-                                <input type="date" id="birthDate" name="birthDate" required>
-                                <span class="input-icon">
-                                    <i class="fas fa-calendar"></i>
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="gender">Giới tính</label>
-                            <div class="input-wrapper">
-                                <select id="gender" name="gender" required>
-                                    <option value="">Chọn giới tính</option>
-                                    <option value="male">Nam</option>
-                                    <option value="female">Nữ</option>
-                                    <option value="other">Khác</option>
-                                </select>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="password">Mật khẩu</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="password" name="password" required 
-                                   placeholder="Tạo mật khẩu mạnh">
-                            <span class="input-icon">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                        </div>
-                        <div class="password-strength">
-                            Mật khẩu nên có ít nhất 8 ký tự, bao gồm chữ và số
-                        </div>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="confirmPassword">Xác nhận mật khẩu</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="confirmPassword" name="confirmPassword" required 
-                                   placeholder="Nhập lại mật khẩu">
-                            <span class="input-icon">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="terms-wrapper">
-                        <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">
-                            Tôi đồng ý với <a href="#" target="_blank">Điều khoản sử dụng</a> 
-                            và <a href="#" target="_blank">Chính sách bảo mật</a> của Alibaba Homestay. 
-                            Tôi xác nhận rằng tôi đã đủ 18 tuổi hoặc có sự đồng ý của phụ huynh.
-                        </label>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-user-plus"></i> Tạo tài khoản
-                    </button>
-                </form>
-                
-                <div class="social-login">
-                    <p>Hoặc đăng ký nhanh bằng</p>
-                    <div class="social-buttons">
-                        <button class="social-btn">
-                            <i class="fab fa-google"></i>
-                            Google
-                        </button>
-                        <button class="social-btn">
-                            <i class="fab fa-facebook-f"></i>
-                            Facebook
-                        </button>
-                    </div>
+            <!-- Trạng thái xác minh -->
+            <div class="section">
+                <h2 class="section-title">Trạng Thái Xác Minh</h2>
+                <div>
+                    <span class="badge">Email đã xác minh</span>
+                    <span class="badge">Điện thoại đã xác minh</span>
+                    <span class="badge">CMND đã xác minh</span>
+                    <span class="badge premium">Thành viên VIP</span>
                 </div>
-                
-                <div class="login-link">
-                    Đã có tài khoản? <a href="#">Đăng nhập ngay</a>
-                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="edit-btn" id="editBtn" onclick="toggleEdit()">Chỉnh Sửa</button>
+                <button class="save-btn" id="saveBtn" onclick="saveProfile()" style="display: none;">Lưu</button>
+                <button class="cancel-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none;">Hủy</button>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
+    </div>
     <footer class="footer">
         <p>© 2025 Alibaba Homestay, Inc - Nền tảng đặt Homestay hàng đầu Việt Nam</p>
     </footer>
-    <script src="/js/register.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
