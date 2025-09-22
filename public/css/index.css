@@ -164,14 +164,6 @@ h1 .fa-filter {
     color: inherit;
 }
 
-
-hr {
-    border-top: 1px solid #e0e0e0;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-}
-
-
 button[type="reset"] {
     color: rgba(65, 194, 136, 0.711);
     border-color: #ffffff;
@@ -216,32 +208,6 @@ button[type="submit"]:focus {
     color: #495057;
 }
 
-@media (max-width: 768px) {
-    .filter-box {
-        width: 95%;          
-        top: 55%;          
-        max-height: 90%;    
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 24px;      
-    }
-
-    .filter-section h5.title {
-        font-size: 18px;     
-    }
-
-    .btn-outline-secondary {
-        font-size: 14px;    
-        padding: 0.4rem 0.8rem;
-    }
-
-    .form-control {
-        font-size: 14px;
-        padding: 6px 8px;
-    }
-}
 .dropdown-toggle::after {
   display: none !important;
 }

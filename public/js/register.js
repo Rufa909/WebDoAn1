@@ -1,15 +1,22 @@
-document.getElementById("register-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const regForm = document.getElementById("registerForm");
 
+  regForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
     const form = e.target;
+
     const data = {
-      hovaten: form.hovaten.value,
-      email: form.email.value,
-      matkhau: form.matkhau.value,
-      xacnhanmatkhau: form.xacnhanmatkhau.value,
+      ho: document.getElementById("ho").value,
+      ten: document.getElementById("ten").value,
+      email: document.getElementById("email").value,
+      sdt: document.getElementById("sdt").value,
+      ngaySinh: document.getElementById("ngaySinh").value,
+      gioiTinh: document.getElementById("gioiTinh").value,
+      matKhau: document.getElementById("matKhau").value,
+      xacNhanmatKhau: document.getElementById("xacNhanmatKhau").value,
     };
 
-    if (data.matkhau !== data.xacnhanmatkhau) {
+    if (data.matKhau !== data.xacNhanmatKhau) {
       Swal.fire({
         icon: "error",
         title: "Lỗi",
@@ -17,13 +24,13 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
       });
       return;
     }
-    
+
     try {
-    const res = await fetch("/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+      const res = await fetch("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
       if (res.status == 201) {
         Swal.fire({
           icon: "success",
@@ -31,7 +38,8 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
           text: "Bạn đã đăng ký thành công",
           backdrop: true,
         });
-        form.resest();
+        form.reset();
+        window.location.href = '/pages/login.html';
       } else if (res.status == 400) {
         Swal.fire({
           icon: "error",
@@ -39,19 +47,19 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
           text: "Vui lòng điền đủ thông tin!",
           backdrop: true,
         });
-      } else if (res.status == 401){
+      } else if (res.status == 401) {
         Swal.fire({
-            icon: "error",
-            title: "Lỗi",
-            text: "Mật khẩu và xác nhận mật khẩu chưa trùng khớp!",
-            backdrop: true,
+          icon: "error",
+          title: "Lỗi",
+          text: "Mật khẩu và xác nhận mật khẩu chưa trùng khớp!",
+          backdrop: true,
         });
-      } else if (res.status == 409){
+      } else if (res.status == 409) {
         Swal.fire({
-            icon: "info",
-            title: "Lỗi",
-            text: "Email đã tồn tại!",
-            backdrop: true,
+          icon: "info",
+          title: "Lỗi",
+          text: "Email đã tồn tại!",
+          backdrop: true,
         });
       }
     } catch (err) {
@@ -62,4 +70,5 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
         backdrop: true,
       });
     }
+  });
 });

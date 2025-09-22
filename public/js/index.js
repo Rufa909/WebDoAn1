@@ -1,9 +1,7 @@
-// Branch filtering functionality
 function showBranch(branchId) {
   const sections = document.querySelectorAll(".branch-section");
   const buttons = document.querySelectorAll(".branch-btn");
 
-  // Remove active class from all buttons
   buttons.forEach((btn) => btn.classList.remove("active"));
 
   // Add active class to clicked button

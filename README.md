@@ -19,4 +19,4 @@ git pull origin main (để lấy source code của người đã upload trướ
 " npm install nodemailer ": xác thực mail
 
 
-" node server.js ": chạy thử server với dạng public
+" npm run devStart ": chạy thử server với dạng public
