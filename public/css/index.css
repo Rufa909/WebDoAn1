@@ -591,3 +591,57 @@ hr {
   color: white;
   transform: scale(1.05);
 }
+.scroll-container {
+  position: relative;
+  width: 100%;
+}
+
+.rooms-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn kéo được */
+.rooms-grid::-webkit-scrollbar {
+  display: none;
+}
+.rooms-grid {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.room-card {
+  flex: 0 0 auto;
+  width: 430px;
+  height: 500px;
+}
+
+.room-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Nút mũi tên */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.scroll-btn.left {
+  left: 10px;
+}
+
+.scroll-btn.right {
+  right: 10px;
+}
