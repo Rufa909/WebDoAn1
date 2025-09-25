@@ -616,7 +616,7 @@ hr {
 .room-card {
   flex: 0 0 auto;
   width: 430px;
-  height: 500px;
+  max-height: 500px;
 }
 
 .room-card img {
