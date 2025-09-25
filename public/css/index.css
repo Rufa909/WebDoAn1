@@ -22,14 +22,13 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -65%);
     background: transparent;  
     z-index: 1000;
     width: 50%;         
     max-height: 80%;
     border-radius: 12px; 
 }
-
 
 .filter-box .card-body {
     max-height: 80vh;  
@@ -213,7 +212,8 @@ button[type="submit"]:focus {
 }
 
 hr {
-  margin: 0;
+ border-top: 1px solid rgba(0, 0, 0, 0.547); 
+  margin: 15px 0; 
 }
 
 .container {
@@ -624,24 +624,5 @@ hr {
   border-radius: 10px;
 }
 
-/* Nút mũi tên */
-.scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  padding: 10px 15px;
-  border-radius: 50%;
-  z-index: 10;
-}
 
-.scroll-btn.left {
-  left: 10px;
-}
 
-.scroll-btn.right {
-  right: 10px;
-}
