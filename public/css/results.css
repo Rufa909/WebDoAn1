@@ -1,0 +1,237 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f5f5;
+}
+
+
+.container {
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 30px;
+}
+
+.header-container {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sreach-title{
+    font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.location-header {
+    background-color: #26A69A; 
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#homestay-results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.room-card {
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 580px; 
+    border: 1px solid #e0e0e0;
+}
+
+.room-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.room-image {
+    width: 100%;
+    height: 300px; 
+    object-fit: cover;
+    display: block;
+}
+
+.room-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between; 
+}
+
+.room-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.room-price {
+    font-size: 1.5 rem;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-grow: 1;  
+}
+
+.amenity {
+    display: flex;
+    align-items: center;
+    background: #f0f4f8;  
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem; 
+    color: #333;
+}
+
+.amenity i {
+    margin-right: 4px;
+    color: #2196F3;  
+    font-size: 0.9rem;
+}
+
+.book-btn {
+    width: 100%;
+    background-color: transparent;
+    color: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4); /* Teal color from image */
+   border: 1px solid #4ecdc4;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;  
+    font-size: 0.9rem; 
+}
+
+.book-btn:hover {
+    background:  linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4)#26A69A;
+    color: #ffffff;
+    border-color: #26A69A;
+}
+
+ 
+@media (max-width: 991px) {
+    #homestay-results {
+        grid-template-columns: repeat(2, 1fr);  
+        gap: 20px;
+    }
+
+    .room-card {
+        min-height: 480px;  
+    }
+
+    .room-image {
+        height: 250px;  
+    }
+
+    .room-info {
+        padding: 12px;  
+    }
+
+    .book-btn {
+        padding: 8px 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    #homestay-results {
+        grid-template-columns: repeat(1, 1fr); 
+        gap: 20px;
+    }
+
+    .room-card {
+        min-height: 430px; 
+    }
+
+    .room-image {
+        height: 220px;  
+    }
+
+    .room-name {
+        font-size: 1.1rem;  
+    }
+
+    .room-price {
+        font-size: 1rem;
+    }
+
+    .amenity {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+
+    .book-btn {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-container {
+        padding: 10px 15px;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+
+    .navbar-brand img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .btn-outline-secondary {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kết quả tìm kiếm - Alibaba Homestay</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/results.css"/>
+</head>
+<body>
+    <header class="header-container">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fs-4 fw-bold text-dark text-decoration-none" href="index.html">
+                <img src="images/logo.png" width="60" height="60" class="d-inline-block align-text-top" alt="Logo">
+                Alibaba Homestay
+            </a>
+            
+            <a href="index.html" class="btn btn-outline-secondary">Quay lại & Lọc lại</a>
+        </div>
+        <hr>
+    </header>
+    
+    <main class="container my-5">
+        <h2 class="sreach-title" >Kết quả tìm kiếm của bạn</h2>
+        <div id="homestay-results" class="row">
+            <p class="text-center text-muted">Đang tải kết quả...</p>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+      <div class="border-top mt-5" style="background-color: rgb(250, 250, 250)">
+        <div
+          style="
+            max-width: 1140px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+          "
+        >
+          <div class="row pt-5">
+            <div class="col-md-3">
+              <div class="d-flex">
+                <img
+                  class="home_logo"
+                  src="/public/images/logo.png"
+                  style="border-radius: 4px; width: 50px; height: 50px"
+                />
+                <div
+                  style="
+                    font-weight: 500;
+                    font-weight: bold;
+                    margin-left: 10px;
+                    margin-top: 10px;
+                    font-size: 15px;
+                  "
+                >
+                  Alibaba Homestay
+                </div>
+              </div>
+              <div
+                style="
+                  color: rgb(119, 119, 119);
+                  font-size: 13px;
+                  margin-top: 20px;
+                "
+              >
+                Nền tảng đặt Homestay, căn hộ dịch vụ dành cho giới trẻ hàng đầu
+                Việt Nam
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="footer_label" style="font-weight: bold">Dịch vụ</div>
+              <div class="footer_homestay">
+                <span>Homestay tại Cần Thơ</span>
+              </div>
+              <div class="footer_homestay"><span>Đối tác Homestay</span></div>
+            </div>
+            <div class="col-3">
+              <div class="footer_label" style="font-weight: bold">
+                Chính sách
+              </div>
+              <div class="footer_homestay"><span>Điều khoản</span></div>
+              <div class="footer_homestay"><span>Quyền riêng tư</span></div>
+              <div class="footer_homestay">
+                <span>Chính sách hoàn huỷ</span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="footer_label" style="font-weight: bold">
+                Về chúng tôi
+              </div>
+              <div class="footer_homestay"><span>Blog</span></div>
+              <div class="footer_homestay">
+                <span>Hotline 094.300.5884</span>
+              </div>
+              <div class="footer_homestay">
+                <span>Email alibabahome@gmail.com</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 15px; padding-bottom: 15px">
+            <div class="col-12">
+              <div style="border-top: 1px solid rgb(222, 226, 230)"></div>
+            </div>
+          </div>
+          <div class="row" style="padding-bottom: 15px">
+            <div
+              class="col-md-6"
+              style="color: rgb(119, 119, 119); font-size: 13px"
+            >
+              © 2025 Alibaba Homestay, Inc
+            </div>
+            <div class="col-md-6">
+              <div style="display: flex; justify-content: flex-end">
+                <a href="#" class="ml-2"
+                  ><svg
+                    width="22"
+                    height="22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="footer_social_logo"
+                  >
+                    <path
+                      d="M20 0H2a2 2 0 00-2 2v18a2 2 0 002 2h10v-9H9v-3h3V8.389C12 5.339 13.486 4 16.021 4c1.214 0 1.856.09 2.16.131V7h-1.729C15.376 7 15 7.568 15 8.718V10h3.154l-.428 3H15v9h5a2 2 0 002-2V2a2 2 0 00-2-2z"
+                      fill="#666"
+                    ></path></svg></a
+                ><a href="#" class="ml-2"
+                  ><svg
+                    width="22"
+                    height="22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="footer_social_logo"
+                  >
+                    <path
+                      d="M6.415 0C2.877 0 0 2.88 0 6.418v9.167C0 19.122 2.88 22 6.418 22h9.167C19.122 22 22 19.12 22 15.582V6.415C22 2.877 19.12 0 15.582 0H6.415zm11.002 3.667a.917.917 0 11-.001 1.834.917.917 0 010-1.834zM11 5.5c3.033 0 5.5 2.467 5.5 5.5s-2.467 5.5-5.5 5.5A5.506 5.506 0 015.5 11c0-3.033 2.467-5.5 5.5-5.5zm0 1.833a3.667 3.667 0 100 7.333 3.667 3.667 0 000-7.333z"
+                      fill="#666"
+                    ></path></svg></a
+                ><a href="#" class="ml-2"
+                  ><svg
+                    width="22"
+                    height="22"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="footer_social_logo"
+                  >
+                    <path
+                      d="M20 0H2a2 2 0 00-2 2v18a2 2 0 002 2h18a2 2 0 002-2V2a2 2 0 00-2-2zm-1.311 9.474a4.27 4.27 0 01-3.967-1.911v6.577a4.861 4.861 0 11-4.861-4.862c.102 0 .201.009.3.015v2.396c-.1-.012-.197-.03-.3-.03a2.481 2.481 0 000 4.962c1.371 0 2.581-1.08 2.581-2.45l.024-11.17h2.289a4.268 4.268 0 003.934 3.811v2.662z"
+                      fill="#666"
+                    ></path></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>  
+
+
+
+
+    <script src="js/data.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>

@@ -80,7 +80,6 @@
     </div>
 
     <div id="filterBox" class="filter-box" style="display: none">
-      <div class="container mt-5">
         <div class="row justify-content-center">
           <div class="col-lg-10 col-sm-12">
             <div class="card shadow-sm">
@@ -88,7 +87,7 @@
                 <h1><i class="fa-solid fa-filter"></i> Bộ lọc</h1>
               </div>
               <div class="card-body">
-                <form action="">
+                <form  id="filterForm" action="">
                   <div class="filter-section mb-2">
                     <h5 class="title mb-3">
                       <i class="fa-solid fa-location-dot"></i> Điểm đến
@@ -96,37 +95,37 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="ninh-kieu"
                       >
                         Ninh Kiều
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="cai-rang"
                       >
                         Cái Răng
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="binh-thuy"
                       >
                         Bình Thủy
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="o-mon"
                       >
                         Ô Môn
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="thot-not"
                       >
                         Thốt Nốt
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-location="phong-dien"
                       >
                         Phong Điền
                       </button>
@@ -140,31 +139,31 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-guests="1-2"
                       >
                         1-2
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-guests="3-4"
                       >
                         3-4
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-guests="5-7"
                       >
                         5-7
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-guests="8-10"
                       >
                         8-10
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-guests="tren-10"
                       >
                         Trên 10
                       </button>
@@ -178,13 +177,13 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-don"
                       >
                         Giường Đơn
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-doi"
                       >
                         Giường đôi
                       </button>
@@ -198,31 +197,31 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="1"
                       >
                         1
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="2"
                       >
                         2
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="3"
                       >
                         3
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="4"
                       >
                         4
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="5"
                       >
                         5
                       </button>
@@ -234,25 +233,25 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rating="5"
                       >
                         5 <i class="fa-solid fa-star"></i>
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rating="4"
                       >
                         4 <i class="fa-solid fa-star"></i> trở lên
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rating="3"
                       >
                         3 <i class="fa-solid fa-star"></i> trở lên
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-rating="2"
                       >
                         2 <i class="fa-solid fa-star"></i> trở lên
                       </button>
@@ -264,49 +263,49 @@
                     <div class="filter-options">
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="be-boi"
                       >
                         <i class="fa-solid fa-water-ladder"></i> Bể bơi
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="view-dep"
                       >
                         <i class="fa-solid fa-rainbow"></i> View đẹp
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="phong-gym"
                       >
                         <i class="fa-solid fa-dumbbell"></i> Phòng gym
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="may-chieu"
                       >
                         <i class="fa-solid fa-film"></i> Máy chiếu
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="bep"
                       >
                         <i class="fa-solid fa-kitchen-set"></i> Bếp
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="bon-tam"
                       >
                         <i class="fa-solid fa-bath"></i> Bồn tắm
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="ban-cong"
                       >
                         <i class="fa-solid fa-cloud"></i> Ban công
                       </button>
                       <button
                         type="button"
-                        class="btn btn-outline-secondary me-2 mb-2"
+                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="san-vuon"
                       >
                         <i class="fa-solid fa-tree"></i> Sân vườn
                       </button>
@@ -344,14 +343,13 @@
                     <button
                       type="reset"
                       class="btn me-2 mb-2"
-                      onclick="hideFilter()"
+                     
                     >
                       Xóa bộ lọc
                     </button>
                     <button
                       type="submit"
                       class="btn me-2 mb-2"
-                      onclick="hideFilter()"
                     >
                       Áp dụng
                     </button>
@@ -391,191 +389,262 @@
         </button>
       </div>
 
-     <section class="branch-section" data-branch="cai-rang">
-        <h2 class="branch-title">Home - Cái Răng</h2>
-        <div class="scroll-container">
-            <div class="rooms-grid">
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_2.jpg"
-                  alt="Fini Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Fini Home</h3>
-                  <h4 class="room-price">500.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"
-                      ><i class="fa-solid fa-dumbbell"></i> phòng gym</span>
-                    <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
-                    <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-rainbow"></i> view đẹp</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
-                    <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
+      <section class="branch-section" data-branch="cai-rang">
+          <h2 class="branch-title">Home - Cái Răng</h2>
+          <div class="scroll-container">
+              <div class="rooms-grid">
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="500000" 
+                  data-guests="3-4" 
+                  data-rating="5" 
+                  data-rooms="2" 
+                  data-bed-type="giuong-don"
+                  data-amenities="phong-gym,bon-tam,may-chieu,view-dep"  
+                >
+                  <img
+                    src="images/Anh/Phong_2.jpg"
+                    alt="Fini Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Fini Home</h3>
+                    <h4 class="room-price">500.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"
+                        ><i class="fa-solid fa-dumbbell"></i> phòng gym</span>
+                      <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                      <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
+                      <span class="amenity"><i class="fa-solid fa-rainbow"></i> view đẹp</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i> 3-4 người </span>
+                      <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i> 2 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                   </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                 </div>
-              </div>
 
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_14.jpg"
-                  alt="Fini Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Dream Home</h3>
-                  <h4 class="room-price">800.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"
-                      ><i class="fa-solid fa-film"></i>Máy chiếu</span>
-                    <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
-                    <span class="amenity"><i class="fa-solid fa-dumbbell"></i>phòng gym</span>
-                    <span class="amenity"><i class="fa-solid fa-tree"></i> sân vườn</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
-                    <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="800000" 
+                  data-guests="5-7" 
+                  data-rating="4" 
+                  data-rooms="3" 
+                  data-bed-type="giuong-don"
+                  data-amenities="phong-gym,bon-tam,may-chieu,san-vuon"
+                >
+                  <img
+                    src="images/Anh/Phong_14.jpg"
+                    alt="Fini Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Dream Home</h3>
+                    <h4 class="room-price">800.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"
+                        ><i class="fa-solid fa-film"></i>Máy chiếu</span>
+                      <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                      <span class="amenity"><i class="fa-solid fa-dumbbell"></i>phòng gym</span>
+                      <span class="amenity"><i class="fa-solid fa-tree"></i> sân vườn</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i> 5-7 người </span>
+                      <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i> 3 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                   </div>
+                </div>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="690000" 
+                  data-guests="1-2" 
+                  data-rating="4" 
+                  data-rooms="1" 
+                  data-bed-type="giuong-don"
+                  data-amenities="be-boi,view-dep,ban-cong,bep"
+                >
+                  <img
+                    src="images/Anh/Phong_27.jpg"
+                    alt="Fini Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Sunset Home</h3>
+                    <h4 class="room-price">690.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
+                      <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
+                      <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
+                      <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i> 1-2 người </span>
+                      <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i> 1 phòng</span>
+                          
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
+                  </div>
+                </div>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="620000" 
+                  data-guests="3-4" 
+                  data-rating="3" 
+                  data-rooms="2" 
+                  data-bed-type="giuong-doi"
+                  data-amenities="phong-gym,bon-tam,ban-cong,bep"
+                >
+                  <img
+                    src="images/Anh/Phong_21.jpg"
+                    alt="Fini Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Twin Home</h3>
+                    <h4 class="room-price">620.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
+                      <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                      <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
+                      <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
+                      <span class="amenity"><i class="fa-solid fa-bed"></i> Giường đôi</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i> 3-4 người </span>
+                      <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i> 2 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
+                  </div>
+                </div>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="480000" 
+                  data-guests="1-2" 
+                  data-rating="3" 
+                  data-rooms="1" 
+                  data-bed-type="giuong-don"
+                  data-amenities="ban-cong,bon-tam,may-chieu"
+                >
+                  <img
+                    src="images/Anh/Phong_11.jpg"
+                    alt="Fini Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Gray Home</h3>
+                    <h4 class="room-price">480.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban Công</span>
+                      <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
+                      <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i> 1-2 người </span>
+                      <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i> 1 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
+                  </div>
+                </div>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="590000" 
+                  data-guests="3-4" 
+                  data-rating="4" 
+                  data-rooms="2" 
+                  data-bed-type="giuong-don"
+                  data-amenities="may-chieu,bep,phong-gym,"
+                >
+                  <img
+                    src="images/anh/Phong_10.jpg"
+                    alt="Luca Home"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Luca Home</h3>
+                    <h4 class="room-price">590.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
+                      <span class="amenity"><i class="fa-solid fa-sink"></i>Bếp</span>
+                      <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
+                      <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
+                    </div>
                   <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
-                </div>
-              </div>
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_27.jpg"
-                  alt="Fini Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Sunset Home</h3>
-                  <h4 class="room-price">690.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
-                    <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
-                    <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
-                    <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>1 phòng</span>
-                        
                   </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                 </div>
-              </div>
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_21.jpg"
-                  alt="Fini Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Twin Home</h3>
-                  <h4 class="room-price">620.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
-                    <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
-                    <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
-                    <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
-                    <span class="amenity"><i class="fa-solid fa-bed"></i> Giường đôi</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
-                    <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
-                  </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
-                </div>
-              </div>
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_11.jpg"
-                  alt="Fini Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Gray Home</h3>
-                  <h4 class="room-price">480.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-cloud"></i>Ban Công</span>
-                    <span class="amenity"><i class="fas fa-bath"></i> Bồn tắm</span>
-                    <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
-                    <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>1 phòng</span>
-                  </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
-                </div>
-              </div>
-              <div class="room-card">
-                <img
-                  src="images/anh/Phong_10.jpg"
-                  alt="Luca Home"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Luca Home</h3>
-                  <h4 class="room-price">590.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
-                    <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
-                    <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
-                  </div>
-                 <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
-                </div>
-              </div>
 
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_20.jpg"
-                  alt="CCV Cinemas 1"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Double cozy home</h3>
-                  <h4 class="room-price">650.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span >
-                    <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
-                    <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
-                    <span class="amenity"><i class="fa-solid fa-bed"></i> Giường đôi</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
-                    <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="650000" 
+                  data-guests="3-4" 
+                  data-rating="3" 
+                  data-rooms="2" 
+                  data-bed-type="giuong-doi"
+                  data-amenities="may-chieu,phong-gym,ban-cong">
+                  <img
+                    src="images/Anh/Phong_20.jpg"
+                    alt="CCV Cinemas 1"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Double cozy home</h3>
+                    <h4 class="room-price">650.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span >
+                      <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
+                      <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
+                      <span class="amenity"><i class="fa-solid fa-bed"></i> Giường đôi</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
+                      <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                   </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                 </div>
-              </div>
 
-              <div class="room-card">
-                <img
-                  src="images/Anh/Phong_5.jpg"
-                  alt="Sweet Dreams"
-                  class="room-image"
-                />
-                <div class="room-info">
-                  <h3 class="room-name">Sweet Dreams</h3>
-                  <h4 class="room-price">590.000 VNĐ/đêm</h4>
-                  <div class="amenities">
-                    <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
-                    <span class="amenity"><i class="fa-solid fa-bath"></i> Bồn tắm</span>
-                    <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
-                    <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
+                <div class="room-card"
+                  data-location="cai-rang" 
+                  data-price="590000" 
+                  data-guests="5-7" 
+                  data-rating="3" 
+                  data-rooms="3" 
+                  data-bed-type="giuong-don"
+                  data-amenities="may-chieu,ban-cong,bon-tam"
+                >
+                  <img
+                    src="images/Anh/Phong_5.jpg"
+                    alt="Sweet Dreams"
+                    class="room-image"
+                  />
+                  <div class="room-info">
+                    <h3 class="room-name">Sweet Dreams</h3>
+                    <h4 class="room-price">590.000 VNĐ/đêm</h4>
+                    <div class="amenities">
+                      <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
+                      <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
+                      <span class="amenity"><i class="fa-solid fa-bath"></i> Bồn tắm</span>
+                      <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
+                      <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
+                      <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
+                    </div>
+                    <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                   </div>
-                  <a href="Room/Hưng Phú/FiniHome.html" class="book-btn">Đặt phòng</a>
                 </div>
               </div>
-            </div>
-        </div>
-      </section>
+          </div>
+        </section>
 
       <!-- Chi nhánh Đại Ngân, Ninh Kiều -->
       <section class="branch-section" data-branch="ninh-kieu">
         <h2 class="branch-title">Home - Ninh Kiều</h2>
         <div class="rooms-grid">
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="1200000" 
+            data-guests="8-10" 
+            data-rating="5" 
+            data-rooms="4" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,ban-cong,be-boi,view-dep"
+          >
             <img
               src="images/Anh/Phong_3.jpg"
               alt="Lovely"
@@ -590,15 +659,23 @@
                 <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>8-10 người </span>
-                    <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
-                    <span class="amenity"><i class="fa-solid fa-door-open"></i>4 phòng</span>
+                <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>4 phòng</span>
               </div>
               <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
             </div>
           </div>
-        <div class="room-card">
+        <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="790000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,ban-cong,may-chieu,bep"
+        >
                 <img
-                  src="images/anh/Phong_9.jpg"
+                  src="images/anh/Phong_45.jpg"
                   alt="Luca Home"
                   class="room-image"
                 />
@@ -607,7 +684,7 @@
                   <h4 class="room-price">790.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                     <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -617,7 +694,15 @@
                   <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
                 </div>
               </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="590000"
+            data-guests="1-2" 
+            data-rating="3" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,may-chieu,bep"
+          >
             <img
                   src="images/anh/Phong_8.jpg"
                   alt="Luca Home"
@@ -628,7 +713,7 @@
                   <h4 class="room-price">590.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
                     <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
@@ -637,7 +722,15 @@
                   <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
               </div>
           </div>    
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="690000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,may-chieu,bep"
+          >
                 <img
                   src="images/anh/Phong_10.jpg"
                   alt="Luca Home"
@@ -645,10 +738,10 @@
                 />
                 <div class="room-info">
                   <h3 class="room-name">Warm Home</h3>
-                  <h4 class="room-price">590.000 VNĐ/đêm</h4>
+                  <h4 class="room-price">690.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                     <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -657,7 +750,15 @@
                   <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
                 </div>
               </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="990000" 
+            data-guests="8-10" 
+            data-rating="5" 
+            data-rooms="5" 
+            data-bed-type="giuong-don"
+            data-amenities="be-boi,may-chieu,view-dep,bep"
+          >
                 <img
                   src="images/anh/Phong_16.jpg"
                   alt="Luca Home"
@@ -668,7 +769,7 @@
                   <h4 class="room-price">990.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
                     <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>8-10 người </span>
@@ -680,7 +781,15 @@
                 </div>
               </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="790000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,may-chieu,bep"
+          >
                 <img
                   src="images/anh/Phong_13.jpg"
                   alt="Luca Home"
@@ -691,7 +800,7 @@
                   <h4 class="room-price">790.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                     <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -700,7 +809,15 @@
                  <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
                 </div>
               </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="590000" 
+            data-guests="3-4" 
+            data-rating="3" 
+            data-rooms="2" 
+            data-bed-type="giuong-doi"
+            data-amenities="phong-gym,may-chieu,bep"
+          >
                 <img
                   src="images/anh/Phong_17.jpg"
                   alt="Luca Home"
@@ -711,7 +828,7 @@
                   <h4 class="room-price">590.000 VNĐ/đêm</h4>
                   <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                    <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                    <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                     <span class="amenity"><i class="fa-solid fa-bed"></i> Giường đôi</span>
                     <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -722,7 +839,15 @@
                   <a href="Room/Đại Ngân.html" class="book-btn">Đặt phòng</a>
                 </div>
               </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="890000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="be-boi,view-dep,ban-cong,bon-tam,bep"
+          >
                 <img
                   src="images/Anh/Phong_18.jpg"
                   alt="Fini Home"
@@ -746,7 +871,15 @@
                 </div>
             </div>
           
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="890000" 
+            data-guests="8-10" 
+            data-rating="4" 
+            data-rooms="4" 
+            data-bed-type="giuong-don"
+            data-amenities="be-boi,ban-cong,bep,bon-tam"
+          >
             <img
               src="images/Anh/Phong_19.jpg"
               alt="Secret Home"
@@ -757,7 +890,6 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
               <div class="amenities">
                     <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
-                    <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                     <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                     <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                     <span class="amenity"><i class="fa-solid fa-bath"></i> Bồn tắm</span>
@@ -769,9 +901,17 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="ninh-kieu" 
+            data-price="850000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="be-boi,view-dep,ban-cong,bep,bon-tam"
+          >
             <img
-              src="images/Anh/Phong_4_đoi.jpg"
+              src="images/Anh/Phong_34.jpg"
               alt="Dynamic Game"
               class="room-image"
             />
@@ -794,11 +934,19 @@
         </div>
       </section>
 
-      <!-- Chi nhánh Hồng Phát, Ninh Kiều -->
+      <!-- Chi nhánh Binh Thuy -->
       <section class="branch-section" data-branch="binh-thuy">
         <h2 class="branch-title">Home - Bình Thủy</h2>
         <div class="rooms-grid">
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="1090000" 
+            data-guests="tren-10" 
+            data-rating="5" 
+            data-rooms="5" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,be-boi,may-chieu,view-dep"
+          >
             <img
               src="images/Anh/Phong_31.jpg"
               alt="Ocean City"
@@ -819,7 +967,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="800000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-doi"
+            data-amenities="phong-gym,bep,may-chieu"
+          >
             <img
               src="images/Anh/Phong_32.jpg"
               alt="Ocean City"
@@ -830,7 +986,7 @@
               <h4 class="room-price">800.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -840,7 +996,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="900000" 
+            data-guests="5-7" 
+            data-rating="4" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_33.jpg"
               alt="Ocean City"
@@ -851,7 +1015,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i>Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -863,7 +1027,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="890000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,phong-gym"
+          >
             <img
               src="images/Anh/Phong_34.jpg"
               alt="Ocean City"
@@ -874,7 +1046,7 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                 <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -883,7 +1055,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="1100000" 
+            data-guests="8-10" 
+            data-rating="4" 
+            data-rooms="5" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,ban-cong,be-boi"
+          >
             <img
               src="images/Anh/Phong_35.jpg"
               alt="Ocean City"
@@ -904,7 +1084,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="600000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="phong-gym,may-chieu,bep"
+          >
             <img
               src="images/Anh/Phong_36.jpg"
               alt="Ocean City"
@@ -915,7 +1103,7 @@
               <h4 class="room-price">600.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                 <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -924,7 +1112,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="700000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,bep,ban-cong"
+          >
             <img
                src="images/Anh/Phong_37.jpg"
               alt="Cook & Chill"
@@ -935,7 +1131,7 @@
               <h4 class="room-price">700.000 VNĐ/đêm</h4>
                <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -946,7 +1142,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="990000" 
+            data-guests="5-7" 
+            data-rating="4" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_38.jpg"
               alt="Pink Paradise"
@@ -957,7 +1161,7 @@
               <h4 class="room-price">990.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -968,7 +1172,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="binh-thuy" 
+            data-price="900000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_39.jpg"
               alt="Ball Chill"
@@ -979,7 +1191,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -996,7 +1208,15 @@
       <section class="branch-section" data-branch="o-mon">
         <h2 class="branch-title">Home - Ô Môn</h2>
         <div class="rooms-grid">
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="890000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_40.jpg"
@@ -1008,7 +1228,7 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1019,7 +1239,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="790000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong"
+          >
             <div class="discount">Giảm 30.000 đ</div>
             <img
               src="images/Anh/Phong_41.jpg"
@@ -1031,7 +1259,7 @@
               <h4 class="room-price">790.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
                   <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -1041,7 +1269,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="900000" 
+            data-guests="tren-10" 
+            data-rating="5" 
+            data-rooms="5" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,bep,ban-cong"
+          >
             <div class="discount">Giảm 30.000 đ</div>
             <img
               src="images/Anh/Phong_42.jpg"
@@ -1053,7 +1289,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-bed"></i> Giường đôi</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>Trên 10 người </span>
@@ -1063,7 +1299,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="1090000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_43.jpg"
@@ -1075,10 +1319,9 @@
               <h4 class="room-price">1.090.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
                   <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
                   <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
@@ -1086,7 +1329,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="600000" 
+            data-guests="1-2" 
+            data-rating="4" 
+            data-rooms="1" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_44.jpg"
@@ -1098,7 +1349,7 @@
               <h4 class="room-price">600.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
                   <span class="amenity"> 4 <i class="fa-solid fa-star"></i></span>
                   <span class="amenity"><i class="fa-solid fa-door-open"></i>1 phòng</span>
@@ -1106,7 +1357,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="500000" 
+            data-guests="1-2" 
+            data-rating="3" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,nha-bep,ban-cong"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_45.jpg"
@@ -1127,7 +1386,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="990000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_46.jpg"
@@ -1139,7 +1406,7 @@
               <h4 class="room-price">990.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1149,7 +1416,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="700000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep,phong-gym"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_47.jpg"
@@ -1161,7 +1436,7 @@
               <h4 class="room-price">700.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1171,7 +1446,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="890000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,phong-gym"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_48.jpg"
@@ -1183,7 +1466,7 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-dumbbell"></i> Phòng gym</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1193,7 +1476,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="o-mon" 
+            data-price="500000" 
+            data-guests="1-2" 
+            data-rating="5" 
+            data-rooms="1" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong"
+          >
             <div class="discount">Giảm 20.000 đ</div>
             <img
               src="images/Anh/Phong_49.jpg"
@@ -1205,7 +1496,7 @@
               <h4 class="room-price">500.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> ban công</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
                   <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -1214,12 +1505,21 @@
             </div>
           </div>
         </div>
-        <!--Chi nhánh Thốt Nốt-->
+      
       </section>
+        <!--Chi nhánh Thốt Nốt-->
       <section class="branch-section" data-branch="thot-not">
         <h2 class="branch-title">Home - Thốt Nốt</h2>
         <div class="rooms-grid">
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="1390000" 
+            data-guests="tren-10" 
+            data-rating="5" 
+            data-rooms="4" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,be-boi,view-dep"
+          >
             <img
               src="images/Anh/Phong_50.jpg"
               alt="Ocean City"
@@ -1227,18 +1527,28 @@
             />
             <div class="room-info">
               <h3 class="room-name">Aurora home</h3>
-              <h4 class="room-price">1.090.000 VNĐ/đêm</h4>
+              <h4 class="room-price">1.390.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
+                <span class="amenity"><i class="fa-solid fa-users"></i>Trên 10 người </span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>4 phòng</span>
+                <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
               </div>
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="800000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,bep"
+          >
             <img
               src="images/Anh/Phong_51.jpg"
               alt="Ocean City"
@@ -1249,7 +1559,7 @@
               <h4 class="room-price">800.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
                 <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -1258,7 +1568,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="900000" 
+            data-guests="tren-10" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,bep,view-dep"
+          >
             <img
               src="images/Anh/Phong_52.jpg"
               alt="Ocean City"
@@ -1269,7 +1587,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>Trên 10 người </span>
@@ -1279,7 +1597,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="890000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,phong-gym,bep"
+          >
             <img
               src="images/Anh/Phong_53.jpg"
               alt="Ocean City"
@@ -1290,7 +1616,7 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1300,7 +1626,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="11000000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,be-boi,view-dep"
+          >
             <img
               src="images/Anh/Phong_54.jpg"
               alt="Ocean City"
@@ -1311,18 +1645,26 @@
               <h4 class="room-price">1.100.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i>Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
-                <span class="amenity"><i class="fa-solid fa-users"></i>Trên 10 người </span>
+                <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
                 <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
-                <span class="amenity"><i class="fa-solid fa-door-open"></i>4 phòng</span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
               </div>
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="600000" 
+            data-guests="1-2" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,bep"
+          >
             <img
               src="images/Anh/Phong_55.jpg"
               alt="Ocean City"
@@ -1333,7 +1675,7 @@
               <h4 class="room-price">600.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>1-2 người </span>
                 <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
@@ -1342,7 +1684,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="700000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="2" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,ban-cong,bep"
+          >
             <img
                src="images/Anh/Phong_56.jpg"
               alt="Cook & Chill"
@@ -1353,7 +1703,7 @@
               <h4 class="room-price">700.000 VNĐ/đêm</h4>
                <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
@@ -1364,7 +1714,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="990000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,ban-cong,view-dep,bep"
+          >
             <img
               src="images/Anh/Phong_57.jpg"
               alt="Pink Paradise"
@@ -1375,7 +1733,7 @@
               <h4 class="room-price">990.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1386,7 +1744,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="thot-not" 
+            data-price="900000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-doi"
+            data-amenities="may-chieu,view-dep,bep"
+          >
             <img
               src="images/Anh/Phong_58.jpg"
               alt="Ball Chill"
@@ -1397,7 +1763,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1413,7 +1779,15 @@
       <section class="branch-section" data-branch="phong-dien">
         <h2 class="branch-title">Home - Phong Điền</h2>
         <div class="rooms-grid">
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="1090000" 
+            data-guests="8-10" 
+            data-rating="4" 
+            data-rooms="4" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,be-boi,view-dep"
+          >
             <img
               src="images/Anh/Phong_60.jpg"
               alt="Ocean City"
@@ -1434,7 +1808,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="800000" 
+            data-guests="3-4" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,bep"
+          >
             <img
               src="images/Anh/Phong_61.jpg"
               alt="Ocean City"
@@ -1445,9 +1827,8 @@
               <h4 class="room-price">800.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
-                <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                   <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
                   <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
@@ -1455,7 +1836,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="900000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="bep,phong-gym,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_62.jpg"
               alt="Ocean City"
@@ -1465,18 +1854,26 @@
               <h3 class="room-name">Pure home</h3>
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
               <div class="amenities">
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
-                  <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
-                  <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
+                <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
               </div>
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="890000" 
+            data-guests="3-4" 
+            data-rating="3" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,be-boi,view-dep,fa-bed"
+          >
             <img
               src="images/Anh/Phong_63.jpg"
               alt="Ocean City"
@@ -1487,7 +1884,7 @@
               <h4 class="room-price">890.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
                   <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
@@ -1496,7 +1893,15 @@
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="1100000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,be-boi,view-dep"
+          >
             <img
               src="images/Anh/Phong_64.jpg"
               alt="Ocean City"
@@ -1507,19 +1912,26 @@
               <h4 class="room-price">1.100.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
-                <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                 <span class="amenity"><i class="fa-solid fa-water-ladder"></i> Bể bơi</span >
                 <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
-                  <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
-                  <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
+                <span class="amenity"> 5 <i class="fa-solid fa-star"></i></span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>3 phòng</span>
               </div>
               <button class="book-btn">Đặt phòng</button>
             </div>
           </div>
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="600000" 
+            data-guests="3-4" 
+            data-rating="3" 
+            data-rooms="2" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,phong-gym,be-boi,view-dep,bep"
+          >
             <img
               src="images/Anh/Phong_65.jpg"
               alt="Ocean City"
@@ -1530,12 +1942,12 @@
               <h4 class="room-price">600.000 VNĐ/đêm</h4>
               <div class="amenities">
                 <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                 <span class="amenity"><i class="fa-solid fa-dumbbell"></i> Phòng gym</span>
                 <span class="amenity"><i class="fa-solid fa-bed"></i> Gường đôi</span>
                 <span class="amenity"><i class="fa-solid fa-users"></i>3-4 người </span>
-                  <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
-                  <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
+                <span class="amenity"> 3 <i class="fa-solid fa-star"></i></span>
+                <span class="amenity"><i class="fa-solid fa-door-open"></i>2 phòng</span>
               </div>
               <button class="book-btn">Đặt phòng</button>
             </div>
@@ -1562,7 +1974,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="990000" 
+            data-guests="8-10" 
+            data-rating="4" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_67.jpg"
               alt="Pink Paradise"
@@ -1573,7 +1993,7 @@
               <h4 class="room-price">990.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>8-10 người </span>
@@ -1584,7 +2004,15 @@
             </div>
           </div>
 
-          <div class="room-card">
+          <div class="room-card"
+            data-location="phong-dien" 
+            data-price="900000" 
+            data-guests="5-7" 
+            data-rating="5" 
+            data-rooms="3" 
+            data-bed-type="giuong-don"
+            data-amenities="may-chieu,bep,ban-cong,view-dep"
+          >
             <img
               src="images/Anh/Phong_68.jpg"
               alt="Ball Chill"
@@ -1595,7 +2023,7 @@
               <h4 class="room-price">900.000 VNĐ/đêm</h4>
                 <div class="amenities">
                   <span class="amenity"><i class="fa-solid fa-film"></i> Máy chiếu</span>
-                  <span class="amenity"><i class="fa-solid fa-sink"></i> Nhà bếp</span>
+                  <span class="amenity"><i class="fa-solid fa-sink"></i> Bếp</span>
                   <span class="amenity"><i class="fa-solid fa-cloud"></i> Ban công</span>
                   <span class="amenity"><i class="fas fa-rainbow"></i> view đẹp</span>
                   <span class="amenity"><i class="fa-solid fa-users"></i>5-7 người </span>
@@ -1737,10 +2165,12 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer>   
 
     <!-- Script -->
-    <script src="/js/index.js"></script>
+    
+    <script src="/js/data.js"></script>
+    <script src="js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
