@@ -5,6 +5,27 @@ const mysql = require("mysql2/promise");
 const path = require("path");
 const app = express();
 
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
+
+const sessionStore = new MySQLStore({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+app.use(
+  session({
+    key: "session_cookie_name",
+    secret: "super_session_key",
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 3600000 }
+}));
+
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -60,7 +81,7 @@ app.post("/register", async (req, res) => {
 
 // Route đăng nhập
 app.post("/login", async (req, res) => {
-  const { email, matKhau } = req.body;
+  const { id, ho, ten, email, matKhau } = req.body;
 
   try {
     const [results] = await db.execute("SELECT * FROM users WHERE email = ?", [
@@ -77,6 +98,10 @@ app.post("/login", async (req, res) => {
     if (!match) {
       return res.sendStatus(401); // Mật khẩu sai
     }
+
+    // Lưu thông tin user vào session
+    req.session.user = { id: user.id, email: user.email, ho: user.ho, ten: user.ten };
+
     res.sendStatus(200); // Đăng nhập thành công
   } catch (err) {
     console.error("Lỗi /login:", err);
@@ -97,6 +122,22 @@ app.get("/register", (req, res) => {
 // Trang đăng nhập
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "pages", "login.html"));
+});
+
+// Route logout
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    res.redirect("/login");
+  });
+});
+
+// Check user đăng nhập
+app.get("/current_user", (req, res) => {
+  if (req.session.user) {
+    res.json({ user: req.session.user });
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 // Start server

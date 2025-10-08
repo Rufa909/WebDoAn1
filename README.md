@@ -17,6 +17,7 @@ git pull origin main (để lấy source code của người đã upload trướ
 " npm install --save-dev nodemon ": Cài đặt nodemon và lưu vào mục devDependencies
 " npm install sweetalert2 ": thư viện Sweetaler2 hỗ trợ popup
 " npm install nodemailer ": xác thực mail
+" npm install express-session express-mysql-session ": thư viện session để lưu user đăng nhập
 
 
 " npm run devStart ": chạy thử server với dạng public

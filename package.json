@@ -20,6 +20,8 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.2",
     "mysql2": "^3.14.5",
     "nodemailer": "^7.0.6",
     "sweetalert2": "^11.23.0"

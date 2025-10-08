@@ -24,7 +24,6 @@ function showBranch(branchId) {
   }
 }
 
-// Add CSS animations
 const style = document.createElement("style");
 style.textContent = `
             @keyframes fadeIn {
@@ -41,7 +40,6 @@ style.textContent = `
         `;
 document.head.appendChild(style);
 
-// Smooth scroll for better UX
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -51,7 +49,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// Add some interactive effects
 document.querySelectorAll(".room-card").forEach((card) => {
   card.addEventListener("mouseenter", function () {
     this.style.transform = "translateY(-10px) scale(1.02)";
@@ -68,11 +65,27 @@ function showFilter() {
 function hideFilter() {
     document.getElementById('filterBox').style.display = 'none';
 }
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const filterBox = document.getElementById('filterBox');
     const filterForm = document.getElementById('filterForm');
     const showFilterBtn = document.getElementById('showFilterBtn');
     const closeFilterBtn = document.getElementById('closeFilterBtn');
+
+    const res = await fetch("/current_user");
+
+    if (res.status === 200) {
+      const user = await res.json();
+      document.getElementById("labelLogin").innerHTML = `
+        Hi, ${user.ho} ${user.ten}`;
+      document.querySelector(".dropdown-menu").innerHTML = `
+        <li><a class="dropdown-item" href="/pages/profile.html">Xem hồ sơ</a></li>
+        <li><a class="dropdown-item" id="logoutBtn" href="#">Đăng xuất</a></li>
+      `;
+      document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await fetch("/logout");
+        location.reload();
+      });
+    }
 
     function toggleFilter() {
         if (filterBox) {
