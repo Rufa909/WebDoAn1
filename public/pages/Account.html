@@ -1,408 +1,434 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homestay Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f6fa;
+        color: #2c3e50;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f6fa;
-            color: #2c3e50;
-        }
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
+      .sidebar {
+        width: 240px;
+        background: #1a1d2e;
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
 
-        .sidebar {
-            width: 240px;
-            background: #1a1d2e;
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-     .logo {
+      .logo {
         padding: 0 20px 30px;
         display: flex;
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
         gap: 10px;
         font-size: 20px;
         font-weight: bold;
-    }
-    .logo img {
-        width: 70px; 
+      }
+      .logo img {
+        width: 70px;
         height: 70px;
         object-fit: contain;
         border-radius: 6px;
-    }
+      }
 
-        .logo i {
-            background: #3b82f6;
-            padding: 8px;
-            border-radius: 8px;
-        }
+      .logo i {
+        background: #3b82f6;
+        padding: 8px;
+        border-radius: 8px;
+      }
 
-        .nav-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #8b92a7;
-        }
+      .nav-item {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #8b92a7;
+      }
 
-        .nav-item:hover, .nav-item.active {
-            background: #252940;
-            color: white;
-        }
+      .nav-item:hover,
+      .nav-item.active {
+        background: #252940;
+        color: white;
+      }
 
-        /* Đổi trạng thái active sang 'Nhân sự' (Quản lý tài khoản) */
-        .nav-item.active-management { 
-            background: #252940;
-            color: white;
-            border-left: 3px solid #3b82f6;
-        }
+      .nav-item.active-management {
+        background: #252940;
+        color: white;
+        border-left: 3px solid #3b82f6;
+      }
 
-        .nav-item.active-dashboard {
-            border-left: 3px solid #3b82f6;
-        }
+      .nav-item.active-dashboard {
+        border-left: 3px solid #3b82f6;
+      }
 
-        .main-content {
-            flex: 1;
-            margin-left: 240px;
-            padding: 20px 30px;
-        }
+      .main-content {
+        flex: 1;
+        margin-left: 240px;
+        padding: 20px 30px;
+      }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
 
-        .header h1 {
-            font-size: 28px;
-            color: #1a1d2e;
-        }
+      .header h1 {
+        font-size: 28px;
+        color: #1a1d2e;
+      }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            gap: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        gap: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
 
-        .search-box input {
-            border: none;
-            outline: none;
-            width: 250px;
-        }
+      .search-box input {
+        border: none;
+        outline: none;
+        width: 250px;
+      }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #3b82f6;
-        }
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #3b82f6;
+      }
 
-        .notification-bell {
-            position: relative;
-            cursor: pointer;
-        }
+      .notification-bell {
+        position: relative;
+        cursor: pointer;
+      }
 
-        .notification-bell .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Account Management Styles */
-        .account-list-container {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-top: 20px; 
-        }
+      .notification-bell .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .account-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+      .account-list-container {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-top: 20px;
+      }
 
-        .add-new-button {
-            background-color: #10b981; /* Green 500 */
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            text-align: center;
-            font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      .account-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-        .add-new-button:hover {
-            background-color: #059669; /* Green 600 */
-        }
+      .add-new-button {
+        background-color: #10b981;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        text-align: center;
+        font-size: 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            white-space: nowrap;
-            /* Thay đổi quan trọng: Chỉ cần căn chỉnh các nút bên trong cell */
-            justify-content: flex-end; 
-        }
+      .add-new-button:hover {
+        background-color: #059669;
+      }
 
-        .edit-btn, .delete-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background-color 0.2s, border-color 0.2s;
-            border: 1px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0px 2px rgba(0,0,0,0.05);
-        }
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+        white-space: nowrap;
+        justify-content: flex-end;
+      }
 
-        .edit-btn {
-            background-color: #3b82f6; 
-            color: white;
-            padding: 8px 12px;
-        }
+      .edit-btn,
+      .delete-btn {
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s, border-color 0.2s;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0px 2px rgba(0, 0, 0, 0.05);
+      }
 
-        .edit-btn:hover {
-            background-color: #2563eb; 
-        }
+      .edit-btn {
+        background-color: #3b82f6;
+        color: white;
+        padding: 8px 12px;
+      }
 
-        .delete-btn {
-            background-color: #fee2e2; 
-            color: #ef4444; 
-            border: 1px solid #fca5a5; 
-            width: 38px;
-            padding: 8px; 
-        }
+      .edit-btn:hover {
+        background-color: #2563eb;
+      }
 
-        .delete-btn:hover {
-            background-color: #fecaca; 
-        }
+      .delete-btn {
+        background-color: #fee2e2;
+        color: #ef4444;
+        border: 1px solid #fca5a5;
+        width: 38px;
+        padding: 8px;
+      }
 
-        .role-badge {
-            padding: 5px 10px;
-            border-radius: 9999px; 
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-            display: inline-block;
-        }
+      .delete-btn:hover {
+        background-color: #fecaca;
+      }
 
-        .role-owner {
-            background: #e0f2fe; 
-            color: #0c4a6e; 
-        }
+      .role-badge {
+        padding: 5px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        display: inline-block;
+      }
 
-        .role-full {
-            background: #d1fae5; 
-            color: #065f46; 
-        }
+      .role-owner {
+        background: #e0f2fe;
+        color: #0c4a6e;
+      }
 
-        .role-limited {
-            background: #fef3c7; 
-            color: #b45309; 
-        }
+      .role-full {
+        background: #d1fae5;
+        color: #065f46;
+      }
 
-        .account-list-container td {
-            vertical-align: middle;
-        }
+      .role-limited {
+        background: #fef3c7;
+        color: #b45309;
+      }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
+      .account-list-container td {
+        vertical-align: middle;
+      }
 
-        th, td {
-            padding: 15px;
-            /* Cần thiết lập text-align: left mặc định cho TD, nhưng sẽ ghi đè cho cột cuối */
-            text-align: left; 
-            border-bottom: 1px solid #f3f4f6;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
 
-        th {
-            color: #64748b;
-            font-weight: 500;
-            font-size: 14px;
-            background-color: #f8f9fa; 
-        }
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      th {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 14px;
+        background-color: #f8f9fa;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <img src="../public/images/Logo.png" alt="">
-                <span>Homestay</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-th-large"></i>
-                <span>Bảng Điều Kiển</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-calendar-check"></i>
-                <span>Đặt Phòng</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-door-open"></i>
-                <span>Phòng</span>
-            </div>
-            <div class="nav-item active-management">
-                <i class="fas fa-users"></i>
-                <span>Tài khoản</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Phân tích dữ liệu</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-file-alt"></i>
-                <span>Báo Cáo</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-star"></i>
-                <span>Đánh Giá</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-file-invoice"></i>
-                <span>Hóa Đơn</span>
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-cog"></i>
-                <span>Cài Đặt</span>
-            </div>
+      <div class="sidebar">
+        <div class="logo">
+          <img src="../public/images/Logo.png" alt="" />
+          <span>Homestay</span>
+        </div>
+        <a href="dashboard.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Bảng Điều Kiển</span>
+          </div>
+        </a>
+        <div class="nav-item">
+          <i class="fas fa-calendar-check"></i>
+          <span>Đặt Phòng</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-door-open"></i>
+          <span>Phòng</span>
+        </div>
+        <div class="nav-item active-management">
+          <i class="fas fa-users"></i>
+          <span>Tài khoản</span>
         </div>
 
-        <div class="main-content">
-            <div class="header">
-                <h1>Quản Lý Tài Khoản</h1> 
-                <div class="header-right">
-                    <div class="search-box">
-                        <i class="fas fa-search" style="color: #94a3b8;"></i>
-                        <input type="text" placeholder="Tìm kiếm tài khoản">
-                    </div>
-                    <div class="notification-bell">
-                        <i class="far fa-comment-dots" style="font-size: 20px; color: #64748b;"></i>
-                    </div>
-                    <div class="notification-bell">
-                        <i class="far fa-bell" style="font-size: 20px; color: #64748b;"></i>
-                        <span class="badge">1</span>
-                    </div>
-                    <div class="user-profile">
-                        <div class="user-avatar"></div>
-                        <div>
-                            <div style="font-weight: 600;">Name</div>
-                            <div style="font-size: 12px; color: #94a3b8;">Admin</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="account-list-container">
-                <div class="account-actions">
-                    <div>
-                        <h2 style="font-size: 1.5em; color: #1a1d2e; margin-bottom: 5px;">DANH SÁCH TÀI KHOẢN</h2>
-                        <p style="color: #64748b; font-size: 14px;">Thiết lập tài khoản và quản lý quyền truy cập của nhân viên.</p>
-                    </div>
-                    <button class="add-new-button" onclick="alert('Chức năng Thêm mới Tài khoản')">
-                        <i class="fas fa-plus"></i>
-                        Thêm mới
-                    </button>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tên</th>
-                            <th>Email</th>
-                            <th>Số điện thoại (SĐT)</th> 
-                            <th>Quyền truy cập</th>
-                            <th style="text-align: right;">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Huy</td>
-                            <td>keke@1</td>
-                            <td>123</td> 
-                            <td><span class="role-badge role-owner">Admin</span></td>
-                            <td class="action-buttons" style="text-align: right;">
-                                <button class="edit-btn" onclick="alert('Sửa Tài khoản Suplo')"><i class="fas fa-pen"></i> Sửa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Phuc</td>
-                            <td>keke@2</td>
-                            <td>345</td> 
-                            <td><span class="role-badge role-full">Người dùng</span></td>
-                            <td class="action-buttons" style="text-align: right;">
-                                <button class="delete-btn" title="Xóa" onclick="confirm('Bạn có chắc chắn muốn xóa tài khoản smonv không?')"><i class="fas fa-trash-alt"></i></button>
-                                <button class="edit-btn" onclick="alert('Sửa Tài khoản smonv')"><i class="fas fa-pen"></i> Sửa</button>
-                            </td>
-                        </tr>
-                       
-                    </tbody>
-                </table>
-            </div>
-            
+        <div class="nav-item">
+          <i class="fas fa-file-invoice"></i>
+          <span>Hóa Đơn</span>
         </div>
+        <a href="Setting.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Cài Đặt</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1>Quản Lý Tài Khoản</h1>
+          <div class="header-right">
+            <div class="search-box">
+              <i class="fas fa-search" style="color: #94a3b8"></i>
+              <input type="text" placeholder="Tìm kiếm tài khoản" />
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-comment-dots"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-bell"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+              <span class="badge">1</span>
+            </div>
+            <div class="user-profile">
+              <div class="user-avatar"></div>
+              <div>
+                <div style="font-weight: 600">Name</div>
+                <div style="font-size: 12px; color: #94a3b8">Admin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="account-list-container">
+          <div class="account-actions">
+            <div>
+              <h2 style="font-size: 1.5em; color: #1a1d2e; margin-bottom: 5px">
+                DANH SÁCH TÀI KHOẢN
+              </h2>
+              <p style="color: #64748b; font-size: 14px">
+                Thiết lập tài khoản và quản lý quyền truy cập của nhân viên.
+              </p>
+            </div>
+            <button
+              class="add-new-button"
+              onclick="alert('Chức năng Thêm mới Tài khoản')"
+            >
+              <i class="fas fa-plus"></i>
+              Thêm mới
+            </button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Số điện thoại (SĐT)</th>
+                <th>Quyền truy cập</th>
+                <th style="text-align: right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Huy</td>
+                <td>keke@1</td>
+                <td>123</td>
+                <td><span class="role-badge role-owner">Admin</span></td>
+                <td class="action-buttons" style="text-align: right">
+                  <button
+                    class="edit-btn"
+                   
+                  >
+                    <i class="fas fa-pen"></i> Sửa
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>Phuc</td>
+                <td>keke@2</td>
+                <td>345</td>
+                <td><span class="role-badge role-full">Người dùng</span></td>
+                <td class="action-buttons" style="text-align: right">
+                  <button
+                    class="delete-btn"
+                    title="Xóa"
+                    
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                  <button
+                    class="edit-btn"
+                   
+                  >
+                    <i class="fas fa-pen"></i> Sửa
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

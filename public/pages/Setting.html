@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homestay Dashboard - Cài đặt</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f6fa;
+        color: #2c3e50;
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: #1a1d2e;
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .logo {
+        padding: 0 20px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .logo img {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+        border-radius: 6px;
+      }
+
+      .logo i {
+        background: #3b82f6;
+        padding: 8px;
+        border-radius: 8px;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .nav-item {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #8b92a7;
+      }
+
+      .nav-item:hover {
+        background: #252940;
+        color: white;
+      }
+
+      .nav-item.active-settings {
+        background: #252940;
+        color: white;
+        border-left: 3px solid #3b82f6;
+      }
+
+      .main-content {
+        flex: 1;
+        margin-left: 240px;
+        padding: 20px 30px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        color: #1a1d2e;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        gap: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        width: 250px;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #3b82f6;
+      }
+
+      .notification-bell {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .notification-bell .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .settings-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        display: flex;
+        min-height: 70vh;
+      }
+
+      .settings-nav {
+        width: 250px;
+        border-right: 1px solid #f3f4f6;
+        padding: 20px 0;
+        flex-shrink: 0;
+      }
+
+      .settings-nav-item {
+        padding: 15px 25px;
+        font-weight: 500;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+      }
+
+      .settings-nav-item:hover {
+        color: #3b82f6;
+        background: #f8f9fa;
+      }
+
+      .settings-nav-item.active {
+        color: #3b82f6;
+        background: #f0f4ff;
+        border-left: 3px solid #3b82f6;
+      }
+
+      .settings-content {
+        flex-grow: 1;
+        padding: 30px;
+      }
+
+      .setting-section {
+        margin-bottom: 40px;
+      }
+
+      .setting-section h2 {
+        font-size: 20px;
+        color: #1a1d2e;
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .form-group label {
+        font-weight: 500;
+        color: #475569;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="number"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        outline: none;
+        transition: border-color 0.2s;
+        resize: vertical;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: #3b82f6;
+      }
+
+      .button-group {
+        padding-top: 20px;
+        border-top: 1px solid #f3f4f6;
+        text-align: right;
+      }
+
+      .save-btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.2s;
+      }
+
+      .save-btn:hover {
+        background-color: #2563eb;
+      }
+
+      .setting-description {
+        font-size: 14px;
+        color: #64748b;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <img src="../public/images/Logo.png" alt="" />
+          <span>Homestay</span>
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Bảng Điều Kiển</span>
+          </div>
+        </a>
+
+        <div class="nav-item">
+          <i class="fas fa-calendar-check"></i>
+          <span>Đặt Phòng</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-door-open"></i>
+          <span>Phòng</span>
+        </div>
+        <a href="Account.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Tài Khoản</span>
+          </div>
+        </a>
+
+        <div class="nav-item">
+          <i class="fas fa-file-invoice"></i>
+          <span>Hóa Đơn</span>
+        </div>
+        <div class="nav-item active-settings">
+          <i class="fas fa-cog"></i>
+          <span>Cài Đặt</span>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1>Cài Đặt</h1>
+          <div class="header-right">
+            <div class="search-box">
+              <i class="fas fa-search" style="color: #94a3b8"></i>
+              <input type="text" placeholder="Tìm kiếm cài đặt" />
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-comment-dots"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-bell"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+              <span class="badge">1</span>
+            </div>
+            <div class="user-profile">
+              <div class="user-avatar"></div>
+              <div>
+                <div style="font-weight: 600">Name</div>
+                <div style="font-size: 12px; color: #94a3b8">Admin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-container">
+          <div class="settings-nav">
+            <div class="settings-nav-item active" data-tab="general">
+              <i class="fas fa-home"></i> Thông tin chung
+            </div>
+            <div class="settings-nav-item" data-tab="system">
+              <i class="fas fa-cogs"></i> Cấu hình Hệ thống
+            </div>
+            <div class="settings-nav-item" data-tab="security">
+              <i class="fas fa-shield-alt"></i> Bảo mật
+            </div>
+          </div>
+
+          <div class="settings-content">
+            <div id="general" class="setting-section">
+              <h2>Thông tin chung</h2>
+              <div class="form-group">
+                <label for="homestay_name">Tên Homestay</label>
+                <input
+                  type="text"
+                  id="homestay_name"
+                  value="Homestay Tên Của Bạn"
+                />
+              </div>
+              <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="Số nhà, đường, tỉnh/thành phố"
+                />
+              </div>
+              <div class="form-group">
+                <label for="hotline">Hotline</label>
+                <input type="text" id="hotline" placeholder="09xx xxx xxx" />
+              </div>
+              <div class="form-group">
+                <label for="currency">Đơn vị tiền tệ</label>
+                <select id="currency">
+                  <option value="VND">VND (Việt Nam Đồng)</option>
+                  <option value="USD">USD (Đô la Mỹ)</option>
+                </select>
+              </div>
+
+              <div class="button-group">
+                <button class="save-btn">Lưu thay đổi</button>
+              </div>
+            </div>
+
+            <div id="system" class="setting-section" style="display: none">
+              <h2>Cấu hình Hệ thống</h2>
+              <div class="form-group">
+                <label for="time_zone">Múi giờ</label>
+                <select id="time_zone">
+                  <option value="GMT+7">(GMT+7) Giờ Đông Dương (Hà Nội)</option>
+                  <option value="GMT+0">UTC/GMT</option>
+                </select>
+                <div class="setting-description">
+                  Giờ hiển thị trên lịch, báo cáo và các thông báo tự động.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="auto_backup">Tự động sao lưu dữ liệu</label>
+                <select id="auto_backup">
+                  <option>Hàng ngày</option>
+                  <option>Hàng tuần</option>
+                  <option>Hàng tháng</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="email_sender">Email gửi thông báo</label>
+                <input
+                  type="email"
+                  id="email_sender"
+                  placeholder="noreply@homestaycuaban.com"
+                />
+                <div class="setting-description">
+                  Email được sử dụng để gửi xác nhận đặt phòng và thông báo cho
+                  khách hàng/nhân viên.
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button class="save-btn">Lưu thay đổi</button>
+              </div>
+            </div>
+
+            <div id="security" class="setting-section" style="display: none">
+              <h2>Bảo mật</h2>
+              <div class="form-group">
+                <label for="current_password">Mật khẩu hiện tại</label>
+                <input type="password" id="current_password" />
+              </div>
+              <div class="form-group">
+                <label for="new_password">Mật khẩu mới</label>
+                <input type="password" id="new_password" />
+              </div>
+              <div class="form-group">
+                <label for="confirm_password">Xác nhận mật khẩu mới</label>
+                <input type="password" id="confirm_password" />
+              </div>
+
+              <div class="button-group">
+                <button class="save-btn">Đổi mật khẩu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const navItems = document.querySelectorAll(".settings-nav-item");
+        const sections = document.querySelectorAll(".setting-section");
+
+        navItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            const targetTab = this.getAttribute("data-tab");
+
+            navItems.forEach((nav) => nav.classList.remove("active"));
+            this.classList.add("active");
+
+            sections.forEach((section) => (section.style.display = "none"));
+
+            const targetSection = document.getElementById(targetTab);
+            if (targetSection) {
+              targetSection.style.display = "block";
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
