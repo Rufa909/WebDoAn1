@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Dashboard</title>
+    <link rel="stylesheet" href="../css/roomdiagram.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <img src="../images/Logo.png" alt="" />
+          <span>Homestay</span>
+        </div>
+        <div class="nav-item active">
+          <i class="fas fa-th-large"></i>
+          <span>Bảng Điều Khiển</span>
+        </div>
+       <a href="room.html" class="nav-link">
+        <div class="nav-item">
+          <i class="fas fa-calendar-check"></i>
+          <span>Đặt Phòng</span>
+        </div>
+       </a>
+       <a href="roomdiagram.html" class="nav-link">
+         <div class="nav-item">
+          <i class="fas fa-door-open"></i>
+          <span>Phòng</span>
+        </div>
+       </a>
+        <a href="Account.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Tài Khoản</span>
+          </div>
+        </a>
+
+        <a href="bill.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Hóa Đơn</span>
+          </div>
+        </a>
+        <a href="Setting.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Cài Đặt</span>
+          </div>
+        </a>
+      </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h2>Sơ đồ phòng</h2>
+            </div>
+
+            <div class="room-filters">
+                <div class="status-legend">
+                    <div class="status-item"><span class="status-color-box status-booked"></span> Đã đặt (<span id="count-booked">0</span>)</div>
+                    <div class="status-item"><span class="status-color-box status-vacant"></span> Trống (<span id="count-vacant">0</span>)</div>
+                    <div class="status-item"><span class="status-color-box status-pending"></span> Đang chờ (<span id="count-pending">0</span>)</div>
+                </div>
+            </div>
+
+            <div class="room-grid" id="room-grid-container">
+                </div>
+        </div>
+    </div>
+
+    <script src="../js/roomdiagram.js"></script>
+</body>
+</html>

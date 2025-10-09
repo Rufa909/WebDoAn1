@@ -1,0 +1,57 @@
+/* --- Cài đặt chung & Sidebar --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f6fa; color: #2c3e50; }
+.container { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #1a1d2e; color: white; padding: 20px 0; position: fixed; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+.logo { padding: 0 20px 30px; display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
+.logo img { width: 50px; height: 50px; object-fit: contain; border-radius: 6px; }
+.nav-link { text-decoration: none; color: inherit; display: block; }
+.nav-item { padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; color: #8b92a7; }
+.nav-item:hover, .nav-item.active { background: #252940; color: white; }
+.nav-item.active { border-left: 3px solid #3b82f6; }
+
+/* --- Nội dung chính & Header --- */
+.main-content { margin-left: 240px; padding: 20px 30px; width: calc(100% - 240px); }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.header h1 { font-size: 28px; color: #1a1d2e; }
+.header-right { display: flex; align-items: center; gap: 20px; }
+.search-box { display: flex; align-items: center; background: white; padding: 10px 15px; border-radius: 8px; gap: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+.search-box input { border: none; outline: none; width: 250px; }
+.user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #3b82f6; }
+.notification-bell { position: relative; cursor: pointer; }
+.notification-bell .badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+
+/* --- Lưới hiển thị các phòng đã đặt --- */
+.booking-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+.booking-card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+.booking-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+.card-header { background-color: #7DD8C4; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.card-header h3 { margin: 0; font-size: 18px; }
+.card-header .room-id { font-size: 14px; font-weight: 500; opacity: 0.9; }
+.card-body { padding: 20px; }
+.info-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-row i { color: #94a3b8; width: 16px; text-align: center; }
+.info-row b { color: #1a1d2e; }
+.payment-status { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.payment-paid { background-color: #e9f7f4; color: #1abc9c; }
+.payment-unpaid { background-color: #fef2f2; color: #ef4444; }
+.price { color: #3b82f6; font-weight: bold; }
+
+/* --- Thanh thông báo đẩy --- */
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
+.overlay.show { display: block; opacity: 1; }
+.notification-panel { position: fixed; top: 0; right: 0; width: 360px; height: 100%; background-color: #ffffff; box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); z-index: 1001; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+.notification-panel.open { transform: translateX(0); }
+.panel-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f0f2f5; flex-shrink: 0; }
+.panel-header h2 { font-size: 18px; margin: 0; }
+.close-panel-btn { background: none; border: none; font-size: 28px; color: #94a3b8; cursor: pointer; }
+.panel-body { padding: 10px 0; overflow-y: auto; flex-grow: 1; }
+.notification-item { display: flex; align-items: flex-start; gap: 15px; padding: 15px 20px; border-bottom: 1px solid #f0f2f5; }
+.notification-item:last-child { border-bottom: none; }
+.item-icon { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.item-icon.booking { background-color: #e9f7f4; color: #1abc9c; }
+.item-content p { margin: 0; font-size: 15px; line-height: 1.5; color: #475569; }
+.item-content p b { color: #1a1d2e; }
+.item-timestamp { font-size: 13px; color: #94a3b8; margin-top: 5px; display: block; }

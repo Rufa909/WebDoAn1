@@ -1,0 +1,213 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6fa;
+    color: #2c3e50;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: #1a1d2e;
+    color: white;
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.logo {
+    padding: 0 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.logo img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+.logo i {
+    background: #3b82f6;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.nav-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #8b92a7;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #252940;
+    color: white;
+}
+
+.nav-item.active-management {
+    background: #252940;
+    color: white;
+    border-left: 3px solid #3b82f6;
+}
+
+.nav-item.active-dashboard {
+    border-left: 3px solid #3b82f6;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 20px;
+    width: calc(100% - 240px);
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.room-filters {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.status-legend {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.status-color-box {
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 25px;
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.room-card {
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 120px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.status-booked .room-card {
+    background-color: #36c3a4f4;
+    color: #ffffff;
+    border-color: #7DD8C4;
+}
+
+.status-vacant .room-card {
+    background-color: #ffffff;
+    color: #2c3e50;
+    border-color: #ddd;
+}
+
+.status-pending .room-card {
+    background-color: #cfb253e5;
+    color: #ffffff;
+}
+
+.status-color-box.status-booked {
+    background-color: #7DD8C4;
+}
+
+.status-color-box.status-vacant {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.status-color-box.status-pending {
+    background-color: #cca936b8;
+}
+
+.room-card h3 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.room-card p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.status-icon {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.status-vacant .status-icon {
+    color: #2c3e50;
+}
+
+.status-booked .status-icon {
+    color: #ffffff;
+}
+
+.status-pending .status-icon {
+    color: #ffffff;
+}
