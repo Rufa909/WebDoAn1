@@ -22,9 +22,9 @@ app.use(
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 3600000 }
-}));
-
+    cookie: { maxAge: 3600000 },
+  })
+);
 
 // Middleware
 app.use(express.json());
@@ -81,7 +81,7 @@ app.post("/register", async (req, res) => {
 
 // Route đăng nhập
 app.post("/login", async (req, res) => {
-  const { id, ho, ten, email, matKhau } = req.body;
+  const { id, ten, email, matKhau } = req.body;
 
   try {
     const [results] = await db.execute("SELECT * FROM users WHERE email = ?", [
@@ -100,8 +100,17 @@ app.post("/login", async (req, res) => {
     }
 
     // Lưu thông tin user vào session
-    req.session.user = { id: user.id, email: user.email, ho: user.ho, ten: user.ten };
-
+    req.session.user = {
+      id: user.id,
+      ho: user.ho,
+      ten: user.ten,
+      email: user.email,
+      ngaySinh: user.ngaySinh,
+      gioiTinh: user.gioiTinh,
+      soDienThoai: user.sdt,
+      chucVu: user.chucVu,
+    };
+    // console.log("Đăng nhập thành công:", req.session.user); -- Kiem tra session
     res.sendStatus(200); // Đăng nhập thành công
   } catch (err) {
     console.error("Lỗi /login:", err);
@@ -127,7 +136,9 @@ app.get("/login", (req, res) => {
 // Route logout
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
-    res.redirect("/login");
+    if (err) return res.sendStatus(500);
+    res.clearCookie("session_cookie_name");
+    return res.sendStatus(200);
   });
 });
 

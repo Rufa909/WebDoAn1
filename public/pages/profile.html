@@ -24,7 +24,7 @@
       >
         <a
           class="navbar-brand"
-          href="javascript:void(0)"
+          href="/../index.html"
           style="
             font-weight: bold;
             font-size: 1.5rem;
@@ -32,26 +32,26 @@
             text-decoration: none;
           "
         >
-          <img src="../images/Logo.png" width="70" height="70" /> Alibaba
-          Homestay
+          <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
         </a>
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 10px">
           <button
-              class="btn btn-secondary"
-              type="button"
-              onclick="showFilter()"
-              style="
-                background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
-                border: none;
-                color: #fff;
-                gap: 20px;
-                white-space:nowrap;
-              "
+            class="btn btn-secondary"
+            type="button"
+            onclick="showFilter()"
+            style="
+              background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
+              border: none;
+              color: #fff;
+              gap: 20px;
+              white-space: nowrap;
+            "
           >
             <i class="fa-solid fa-magnifying-glass"></i> Bộ lọc
-         </button>
+          </button>
           <button
             class="btn btn-secondary dropdown-toggle"
+            id="labelLogin"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -61,20 +61,20 @@
               color: #fff;
             "
           >
-            Hi, Alibaba
+            Đăng nhập
             <img
-              src="../images/default-user-image.png"
+              src="/images/default-user-image.png"
               width="30"
               height="30"
               style="border-radius: 50%"
             />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Đăng Nhập</a></li>
+            <li><a class="dropdown-item" href="/pages/login.html">Đăng Nhập</a></li>
             <li>
               <a class="dropdown-item" href="/pages/register.html">Đăng Ký</a>
             </li>
-            <li><a class="dropdown-item" href="#">Đăng Xuất</a></li>
+            <!-- <li><a class="dropdown-item" href="#">Đăng Xuất</a></li> -->
           </ul>
         </div>
       </div>
@@ -185,7 +185,7 @@
         <div class="header" style="position: relative;">
             <!-- <button class="role-btn" onclick="changeRole()">Admin page</button> -->
             <div class="avatar" id="userAvatar">AL</div>
-            <h1 class="user-name" id="userName">Alibaba</h1>
+            <h1 class="user-name" id="username">Alibaba</h1>
             <div class="user-role" id="userRole">Admin</div>
         </div>
 
@@ -196,11 +196,11 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Họ và tên</label>
-                        <input type="text" class="form-input" id="infoName" value="Alibaba" disabled>
+                        <input type="text" class="form-input" id="infoName" value="" disabled>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ngày sinh</label>
-                        <input type="date" class="form-input" id="infoBirth" value="2005-11-09" disabled>
+                        <input type="date" class="form-input" id="infoBirth" value="" disabled>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Giới tính</label>
@@ -212,11 +212,11 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-input" id="infoEmail" value="alibabahome@homestay.com" disabled>
+                        <input type="email" class="form-input" id="infoEmail" value="" disabled>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-input" id="infoPhone" value="+84 123 456 78" disabled>
+                        <input type="text" class="form-input" id="infoPhone" value="" disabled>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
         <p>© 2025 Alibaba Homestay, Inc - Nền tảng đặt Homestay hàng đầu Việt Nam</p>
     </footer>
 
-
+    <script src="/js/data.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

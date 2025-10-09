@@ -71,21 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const showFilterBtn = document.getElementById('showFilterBtn');
     const closeFilterBtn = document.getElementById('closeFilterBtn');
 
-    const res = await fetch("/current_user");
-
-    if (res.status === 200) {
-      const user = await res.json();
-      document.getElementById("labelLogin").innerHTML = `
-        Hi, ${user.ho} ${user.ten}`;
-      document.querySelector(".dropdown-menu").innerHTML = `
-        <li><a class="dropdown-item" href="/pages/profile.html">Xem hồ sơ</a></li>
-        <li><a class="dropdown-item" id="logoutBtn" href="#">Đăng xuất</a></li>
-      `;
-      document.getElementById("logoutBtn").addEventListener("click", async () => {
-        await fetch("/logout");
-        location.reload();
-      });
-    }
 
     function toggleFilter() {
         if (filterBox) {
