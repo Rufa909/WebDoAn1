@@ -183,10 +183,12 @@
 
     <div class="container">
         <div class="header" style="position: relative;">
-            <!-- <button class="role-btn" onclick="changeRole()">Admin page</button> -->
+            <div id="profileHeader">
+                
+            </div>
             <div class="avatar" id="userAvatar">AL</div>
             <h1 class="user-name" id="username">Alibaba</h1>
-            <div class="user-role" id="userRole">Admin</div>
+            <div class="user-role" id="userRole">User</div>
         </div>
 
         <div class="content">
@@ -204,11 +206,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Giới tính</label>
-                        <select class="form-input" id="infoGender" disabled>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
-                        </select>
+                        <input type="text" class="form-input" id="infoGender" value="" disabled>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email</label>

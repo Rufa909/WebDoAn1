@@ -688,6 +688,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       user.user.ten.charAt(0).toUpperCase() + user.user.ho.charAt(0).toUpperCase();
     document.getElementById("username").innerText = user.user.ten + " " + user.user.ho;
     document.getElementById("userRole").innerText = user.user.chucVu;
+
+    if (user.user.chucVu === "Admin") {
+      document.getElementById("profileHeader").innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/dashboard.html'">Admin panel</button>`;
+    }
     
     document.getElementById("infoName").value = user.user.ten + " " + user.user.ho;
     document.getElementById("infoEmail").value = user.user.email;
