@@ -143,13 +143,90 @@ app.post("/logout", (req, res) => {
 });
 
 // Check user đăng nhập
-app.get("/current_user", (req, res) => {
-  if (req.session.user) {
+app.get("/current_user", async (req, res) => {
+  if (!req.session.user) return res.sendStatus(401);
+
+  try {
+    const [rows] = await db.execute("SELECT id FROM users WHERE id = ?", [
+      req.session.user.id,
+    ]);
+    if (rows.length === 0) {
+      // User đã bị xóa
+      req.session.destroy(() => {});
+      return res.sendStatus(401);
+    }
+
     res.json({ user: req.session.user });
-  } else {
-    res.sendStatus(401);
+  } catch (err) {
+    console.error("Lỗi /current_user:", err);
+    res.sendStatus(500);
   }
 });
+
+// Lấy danh sách tất cả user
+app.get("/users", async (req, res) => {
+  try {
+    const [rows] = await db.execute(
+      "SELECT id, ho, ten, email, sdt, chucVu FROM users"
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("Lỗi /users:", err);
+    res.sendStatus(500);
+  }
+});
+
+// Xóa user theo ID + xóa session của user đó
+app.delete("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.execute("DELETE FROM sessions WHERE data LIKE ?", [`%"id":${id}%`]);
+
+    const [sessions] = await db.execute("SELECT session_id, data FROM sessions");
+    for (let s of sessions) {
+      try {
+        const data = JSON.parse(s.data || "{}");
+        if (data.user && data.user.id === parseInt(id)) {
+          await db.execute("DELETE FROM sessions WHERE session_id = ?", [s.session_id]);
+        }
+      } catch (e) {
+        // bỏ qua session lỗi
+      }
+    }
+
+    if (req.session.user && req.session.user.id === parseInt(id)) {
+      req.session.destroy(() => {
+        res.clearCookie("session_cookie_name");
+        return res.sendStatus(200);
+      });
+    } else {
+      res.sendStatus(200);
+    }
+  } catch (err) {
+    console.error("Lỗi /users/:id (DELETE):", err);
+    res.sendStatus(500);
+  }
+});
+
+
+// Cập nhật thông tin user
+app.put("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ho, ten, email, sdt, chucVu } = req.body;
+
+    await db.execute(
+      "UPDATE users SET ho=?, ten=?, email=?, sdt=?, chucVu=? WHERE id=?",
+      [ho, ten, email, sdt, chucVu, id]
+    );
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Lỗi /users/:id (PUT):", err);
+    res.sendStatus(500);
+  }
+});
+
 
 // Start server
 const PORT = process.env.PORT || 3000;

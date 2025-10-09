@@ -662,54 +662,59 @@ const homestays = [
 ];
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const res = await fetch("/current_user", {
+  const resCurrent = await fetch("/current_user", {
     credentials: "include",
   });
 
-  if (res.status === 200) {
-    const user = await res.json();
+  if (resCurrent.status === 200) {
+    const user = await resCurrent.json();
     console.log("User hiện tại:", user);
 
-    
     // Display
     document.getElementById("labelLogin").innerHTML = `
         Hi, ${user.user.ten}`;
     document.querySelector(".dropdown-menu").innerHTML = `
         <li><a class="dropdown-item" href="/pages/profile.html">Xem hồ sơ</a></li>
-        <li><a class="dropdown-item" id="logoutBtn" href="#">Đăng xuất</a></li>
+        <li><a class="dropdown-item" id="logoutBtn" href="../index.html">Đăng xuất</a></li>
       `;
     document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await fetch("/logout");
-      location.reload();
+      const res = await fetch("/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (res.ok) {
+        location.reload();
+      } else {
+        alert("Đăng xuất thất bại!");
+      }
     });
 
     // Hiển thị thông tin người dùng trên trang profile
     document.getElementById("userAvatar").innerText =
-      user.user.ten.charAt(0).toUpperCase() + user.user.ho.charAt(0).toUpperCase();
-    document.getElementById("username").innerText = user.user.ten + " " + user.user.ho;
+      user.user.ten.charAt(0).toUpperCase() +
+      user.user.ho.charAt(0).toUpperCase();
+    document.getElementById("username").innerText =
+      user.user.ten + " " + user.user.ho;
     document.getElementById("userRole").innerText = user.user.chucVu;
 
     if (user.user.chucVu === "Admin") {
-      document.getElementById("profileHeader").innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/dashboard.html'">Admin panel</button>`;
+      document.getElementById(
+        "profileHeader"
+      ).innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/dashboard.html'">Admin panel</button>`;
     }
-    
-    document.getElementById("infoName").value = user.user.ten + " " + user.user.ho;
+
+    document.getElementById("infoName").value =
+      user.user.ten + " " + user.user.ho;
     document.getElementById("infoEmail").value = user.user.email;
     document.getElementById("infoPhone").value = user.user.soDienThoai;
-    document.getElementById("infoBirth").value = user.user.ngaySinh;
-    document.getElementById("infoGender").value = user.user.gioiTinh;
-
-  }
-
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    const res = await fetch("/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    if (res.ok) {
-      location.reload();
+    if (user.user.ngaySinh && !isNaN(Date.parse(user.user.ngaySinh))) {
+      const formattedDate = new Date(user.user.ngaySinh)
+        .toISOString()
+        .split("T")[0];
+      document.getElementById("infoBirth").value = formattedDate;
     } else {
-      alert("Đăng xuất thất bại!");
+      birthInput.value = ""; // để trống nếu undefined hoặc sai định dạng
     }
-  });
+    document.getElementById("infoGender").value = user.user.gioiTinh;
+  }
 });
