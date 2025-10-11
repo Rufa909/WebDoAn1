@@ -10,17 +10,48 @@
     <link rel="stylesheet" href="css/results.css"/>
 </head>
 <body>
-    <header class="header-container">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <a class="navbar-brand fs-4 fw-bold text-dark text-decoration-none" href="index.html">
-                <img src="images/logo.png" width="60" height="60" class="d-inline-block align-text-top" alt="Logo">
-                Alibaba Homestay
-            </a>
-            
-            <a href="index.html" class="btn btn-outline-secondary">Quay lại & Lọc lại</a>
+    <div class="header-container">
+      <div
+        class="container-fluid d-flex justify-content-between align-items-center"
+      >
+        <a
+          class="navbar-brand"
+          href="/index.html"
+          style="
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: black;
+            text-decoration: none;
+          "
+        >
+          <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
+        </a>
+        <div style="display: flex; gap: 10px">
+          <a href="index.html" class="btn btn-outline-secondary">Quay lại & Lọc lại</a>
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            id="labelLogin"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="
+              background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
+              border: none;
+              color: #fff;
+            "
+          ><i class="fa-solid fa-circle-user fa-lg"></i>
+            Đăng nhập
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/pages/login.html"><i class="fa-solid fa-circle-user"></i>Đăng Nhập</a></li>
+            <li>
+              <a class="dropdown-item" href="/pages/register.html"><i class="fa-solid fa-user-plus"></i>Đăng Ký</a>
+            </li>
+            <!-- <li><a class="dropdown-item" href="#">Đăng Xuất</a></li> -->
+          </ul>
         </div>
-        <hr>
-    </header>
+      </div>
+    </div>
     
     <main class="container my-5">
         <h2 class="sreach-title" >Kết quả tìm kiếm của bạn</h2>

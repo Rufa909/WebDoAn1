@@ -17,6 +17,9 @@ body {
   overflow-x: hidden;
 }
 
+hr {
+  margin: 0;
+}
 
 .filter-box {
     position: fixed;
@@ -35,7 +38,6 @@ body {
     overflow-y: auto;   
     padding-left: 50px;
 }
-
 
 .filter-box .card-body::-webkit-scrollbar {
     width: 6px;        
@@ -62,7 +64,6 @@ body {
     background-color: #f8f9fa;
 }
 
-
 .filter-box .filter-options button {
     background-color: #fff;
     border-color: #ced4da;
@@ -72,14 +73,12 @@ body {
     background-color: #e9ecef;
 }
 
-
 .card-header {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 
     padding: 15px;
 }
-
 
 h1 {
     color: rgba(70, 180, 142, 0.866);
@@ -92,7 +91,6 @@ h1 {
     background-color: rgba(252, 252, 252, 0.723);
 }
 
-
 h1 .fa-filter {
     color: rgba(71, 201, 142, 0.793);
     margin-right: 10px;
@@ -104,7 +102,6 @@ h1 .fa-filter {
     color: #fed311;
 }
 
-
 .filter-section h5.title {
     color: #495057;
     font-weight: 600;
@@ -113,7 +110,6 @@ h1 .fa-filter {
     display: flex;
     align-items: center;
 }
-
 
 .filter-section h5.title .fa-location-dot,
 .filter-section h5.title .fa-users,
@@ -129,7 +125,6 @@ h1 .fa-filter {
     color: #ba9b11d3;
 }
 
-
 .btn-outline-secondary {
     border-color: #dacece;
     color: #495057;
@@ -140,13 +135,11 @@ h1 .fa-filter {
     transition: all 0.2s ease-in-out;
 }
 
-
 .btn-outline-secondary:hover {
     border-color: rgba(70, 200, 142, 0.8);
     color: #000;
     background-color: rgba(70, 200, 142, 0.3);
 }
-
 
 .btn-outline-secondary.active,
 .btn-outline-secondary:focus,
@@ -174,7 +167,6 @@ button[type="reset"]:hover {
     color: white;
     
 }
-
 
 button[type="submit"] {
     background-color: rgba(25, 199, 138, 0.721);
@@ -211,9 +203,20 @@ button[type="submit"]:focus {
   display: none !important;
 }
 
-hr {
- border-top: 1px solid rgba(0, 0, 0, 0.547); 
-  margin: 15px 0; 
+.header-container .dropdown-menu {
+  right: auto;
+  left: auto;
+}
+
+.header-container .dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-container .dropdown-menu a:hover {
+  background: #f8f9fa;
+  color: #4ecdc4;
 }
 
 .container {
@@ -228,11 +231,11 @@ hr {
 }
 
 .header {
-  text-align: center;
   padding: 40px 0;
   background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
   border-radius: 15px;
   margin-bottom: 40px;
+  text-align: center;
   color: white;
 }
 

@@ -38,10 +38,20 @@ body {
   display: none !important;
 }
 .header-container .dropdown-menu {
-  right: 0;
+  right: auto;
   left: auto;
 }
 
+.header-container .dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-container .dropdown-menu a:hover {
+  background: #f8f9fa;
+  color: #4ecdc4;
+}
 .dropdown-toggle::after {
   display: none !important;
 }
@@ -423,11 +433,12 @@ hr {
 .footer {
   background: white;
   border-top: 1px solid #e2e8f0;
-  padding: 20px;
+  padding: 5px;
   text-align: center;
   color: #718096;
   font-size: 14px;
 }
+
 
 @keyframes fadeInUp {
   from {

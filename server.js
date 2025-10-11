@@ -147,7 +147,7 @@ app.post("/logout", (req, res) => {
 // Check user đăng nhập
 app.get("/current_user", async (req, res) => {
   if (!req.session.user) return res.sendStatus(401);
-
+  
   try {
     const [rows] = await db.execute("SELECT id FROM users WHERE id = ?", [
       req.session.user.id,
