@@ -365,7 +365,7 @@ button[type="submit"]:focus {
 }
 
 .book-btn:hover {
-  background: linear-gradient(185deg, rgb(68, 240, 180), #c8f7ed);;
+  background: linear-gradient(185deg, rgb(68, 240, 180), #c8f7ed);
   transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }

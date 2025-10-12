@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/logo.png" />
+    <title>Account</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../css/accountManagement.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <a href="../../index.html">
+            <img src="../../images/Logo.png" width="15" height="15" />
+          </a>
+          <span>Aibaba Homestay</span>
+        </div>
+        <a href="dashboard.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Bảng Điều Khiển</span>
+          </div>
+        </a>
+        <div class="nav-item active-management">
+          <i class="fas fa-users"></i>
+          <span>Tài khoản</span>
+        </div>
+        <a href="settings.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Cài Đặt</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1>Quản Lý Tài Khoản</h1>
+          <div class="header-right">
+            <div class="search-box">
+              <i class="fas fa-search" style="color: #94a3b8"></i>
+              <input type="text" placeholder="Tìm kiếm tài khoản" />
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-comment-dots"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+            </div>
+            <div class="notification-bell">
+              <i
+                class="far fa-bell"
+                style="font-size: 20px; color: #64748b"
+              ></i>
+              <span class="badge">1</span>
+            </div>
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              id="backToHome"
+              type="button"
+              onclick="location.href='../../index.html'"
+              style="
+                background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
+                border: none;
+                padding: 8px 12px;
+                border-radius: 5px;
+                font-size: 14px;
+                cursor: pointer;
+                color: #fff;
+              "
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Về trang chủ
+            </button>
+          </div>
+        </div>
+
+        <div class="account-list-container">
+          <div class="account-actions">
+            <div>
+              <h2 style="font-size: 1.5em; color: #1a1d2e; margin-bottom: 5px">
+                DANH SÁCH TÀI KHOẢN
+              </h2>
+              <p style="color: #64748b; font-size: 14px">
+                Thiết lập tài khoản và quản lý quyền truy cập.
+              </p>
+            </div>
+            <button
+              class="add-new-button"
+              id="openPopupBtn"
+            >
+              <i class="fas fa-plus"></i>
+              Thêm tài khoản mới
+            </button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Họ & Tên</th>
+                <th>Email</th>
+                <th>Số điện thoại (SĐT)</th>
+                <th>Vai trò</th>
+                <th style="text-align: right">Hành động</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup thêm tài khoản -->
+    <div id="themTaiKhoan" class="popup">
+      <span class="close">&times;</span>
+      <div class="popup-content" id="add_form">
+        <div class="form-group">
+          <div class="left-space">
+            <label for="ho">Họ</label>
+              <div class="input-wrapper">
+              <input
+                type="text"
+                id="ho"
+                name="ho"
+                required
+                placeholder="Nhập họ của bạn"
+              />
+              </div>
+            <label for="email">Email</label>
+              <div class="input-wrapper">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="Nhập địa chỉ email"
+                />
+                <span class="input-icon">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+            <label for="ngaySinh">Ngày sinh</label>
+              <div class="input-wrapper">
+                <input type="date" id="ngaySinh" name="ngaySinh" required />
+                <span class="input-icon">
+                  <i class="fas fa-calendar"></i>
+                </span>
+              </div>
+            <label for="matKhau">Mật khẩu</label>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  id="matKhau"
+                  name="matKhau"
+                  required
+                  placeholder="Tạo mật khẩu mạnh"
+                />
+                <span class="input-icon">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </div>
+          </div>
+          <div class="right-space">
+            <label for="ten">Tên</label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="ten"
+                name="ten"
+                required
+                placeholder="Nhập tên của bạn"
+              />
+            </div>
+            <label for="sdt">Số điện thoại</label>
+              <div class="input-wrapper">
+                <input
+                  type="tel"
+                  id="sdt"
+                  name="sdt"
+                  required
+                  placeholder="Nhập số điện thoại"
+                />
+                <span class="input-icon">
+                  <i class="fas fa-phone"></i>
+                </span>
+              </div>
+            <label for="gioiTinh">Giới tính</label>
+              <div class="input-wrapper">
+                <select id="gioiTinh" name="gioiTinh" required>
+                  <option value="">Chọn giới tính</option>
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                  <option value="Khác">Khác</option>
+                </select>
+                <span class="input-icon">
+                  <i class="fa-solid fa-venus-mars"></i>
+                </span>
+              </div>
+            <label for="vaiTro">Vai trò</label>
+              <div class="input-wrapper">
+                <select id="vaiTro" name="vaiTro" required>
+                  <option value="">Chọn vai trò</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Doanh nhân">Doanh nhân</option>
+                  <option value="Người dùng">Người dùng</option>
+                </select>
+                <span class="input-icon">
+                  <i class="fa-solid fa-user-shield"></i>
+                </span>
+              </div>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" id="themTaiKhoanBtn">
+              <i class="fas fa-user-plus"></i> Thêm tài khoản
+        </button>
+      </div>
+    </div>
+        
+       
+      <button
+          id="closePopupBtn"
+          style="
+            padding: 8px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+          "
+        >
+          Đóng
+        </button>
+    </div>
+    <script src="/js/accountManagement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>

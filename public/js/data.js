@@ -700,7 +700,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user.user.chucVu === "Admin") {
       document.getElementById(
         "profileHeader"
-      ).innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/dashboard.html'">Admin panel</button>`;
+      ).innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/Admin_Dashboard/dashboard.html'">Admin panel</button>`;
+    } else if (user.user.chucVu === "Business") { 
+      document.getElementById(
+        "profileHeader"
+      ).innerHTML = `<button class="role-btn" id="businessButton" onclick="location.href='/pages/BusinessPersonal_Dashboard/dashboard.html'">Business panel</button>`;
     }
 
     document.getElementById("infoName").value =
