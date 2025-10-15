@@ -697,11 +697,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       user.user.ho + " " + user.user.ten;
     document.getElementById("userRole").innerText = user.user.chucVu;
 
-    if (user.user.chucVu === "Admin") {
+    if (user.user.chucVu === "Admin") {  
       document.getElementById(
         "profileHeader"
       ).innerHTML = `<button class="role-btn" id="adminButton" onclick="location.href='/pages/Admin_Dashboard/dashboard.html'">Admin panel</button>`;
-    } else if (user.user.chucVu === "Business") { 
+    } else if (user.user.chucVu === "Doanh Nghiệp") { 
       document.getElementById(
         "profileHeader"
       ).innerHTML = `<button class="role-btn" id="businessButton" onclick="location.href='/pages/BusinessPersonal_Dashboard/dashboard.html'">Business panel</button>`;
