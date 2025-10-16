@@ -119,6 +119,38 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Check email user
+app.post("/checkEmail", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const [user] = await db.execute("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (user.length === 0) {
+      return res.sendStatus(404);
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Lỗi /checkEmail:", err);
+    res.sendStatus(500);
+  }
+});
+// Route quên mật khẩu
+app.post("/forgotPassword", async (req, res) => {
+  const { email, matKhau } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(matKhau, 10);
+    await db.execute("UPDATE users SET matKhau = ? WHERE email = ?", [hashedPassword, email]);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Lỗi /resetPassword:", err);
+    res.sendStatus(500);
+  }
+});
+
 // Trang chủ
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
