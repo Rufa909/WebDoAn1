@@ -50,7 +50,7 @@ let db;
 })();
 // Route đăng ký
 app.post("/register", async (req, res) => {
-  const { ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, xacNhanmatKhau } =
+  const { ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, xacNhanmatKhau, chucVu } =
     req.body;
 
   if (matKhau !== xacNhanmatKhau) {
@@ -70,8 +70,8 @@ app.post("/register", async (req, res) => {
 
     // Lưu vào DB
     const [result] = await db.execute(
-      "INSERT INTO users (ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [ho, ten, email, sdt, ngaySinh, gioiTinh, hashedPassword]
+      "INSERT INTO users (ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, chucVu) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [ho, ten, email, sdt, ngaySinh, gioiTinh, hashedPassword, chucVu || "Người Dùng"]
     );
 
     res.sendStatus(201);
@@ -101,7 +101,6 @@ app.post("/login", async (req, res) => {
       return res.sendStatus(401); // Mật khẩu sai
     }
 
-    // Lưu thông tin user vào session
     req.session.user = {
       id: user.id,
       ho: user.ho,
@@ -112,11 +111,11 @@ app.post("/login", async (req, res) => {
       soDienThoai: user.sdt,
       chucVu: user.chucVu,
     };
-    // console.log("Đăng nhập thành công:", req.session.user); -- Kiem tra session
-    res.sendStatus(200); // Đăng nhập thành công
+    // console.log("Đăng nhập thành công:", req.session.user);
+    res.sendStatus(200);
   } catch (err) {
     console.error("Lỗi /login:", err);
-    res.status(500); // Lỗi server
+    res.status(500);
   }
 });
 
@@ -153,7 +152,6 @@ app.get("/current_user", async (req, res) => {
       req.session.user.id,
     ]);
     if (rows.length === 0) {
-      // User đã bị xóa
       req.session.destroy(() => {});
       return res.sendStatus(401);
     }
@@ -178,10 +176,26 @@ app.get("/users", async (req, res) => {
   }
 });
 
+
+
 // Xóa user theo ID + xóa session của user đó
+const requireAdmin = (req, res, next) => {
+  if (!req.session?.user || req.session.user.chucVu !== "Admin") {
+    return res.status(403).json({ message: "Chỉ admin mới xóa được!" });
+  }
+  next();
+};
+
 app.delete("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    const [userResult] = await db.execute("DELETE FROM users WHERE id = ?", [parseInt(id)]);
+    if (userResult.affectedRows === 0) {
+      console.log("Không tìm thấy user để xóa:", id);
+      return res.sendStatus(404);
+    }
+
     await db.execute("DELETE FROM sessions WHERE data LIKE ?", [`%"id":${id}%`]);
 
     const [sessions] = await db.execute("SELECT session_id, data FROM sessions");
@@ -228,7 +242,6 @@ app.put("/users/:id", async (req, res) => {
     res.sendStatus(500);
   }
 });
-
 
 // Start server
 const PORT = process.env.PORT || 3000;

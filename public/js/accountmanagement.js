@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${u.sdt || ""}</td>
         <td>
           <span class="role-badge ${
-            u.chucVu === "admin" ? "role-owner" : "role-full"
+            u.chucVu === "Admin" ? "role-owner" : "role-full"
           }">${u.chucVu}</span>
         </td>
         <td class="action-buttons" style="text-align: center">
@@ -36,16 +36,57 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      if (confirm("Bạn có chắc muốn xóa tài khoản này?")) {
-        const id = btn.dataset.id;
-        const delRes = await fetch(`/users/${id}`, { method: "DELETE", credentials: "include"});
-        if (delRes.ok) {
-          alert("Đã xóa thành công!");
-          location.reload();
-        } else {
-          alert("Xóa thất bại!");
+      Swal.fire({
+        title: "Xác nhận?",
+        text: "Bạn có chắc muốn xóa tài khoản này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy",
+        backdrop: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const id = btn.dataset.id;
+          try {
+            const delRes = await fetch(`/users/${id}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
+            console.log("Delete status:", delRes.status); // Debug
+            if (delRes.ok) {
+              Swal.fire({
+                icon: "success",
+                title: "Thành công",
+                text: "Đã xóa!",
+                backdrop: true,
+              });
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
+            } else {
+              let errorMsg = `Lỗi ${delRes.status}`;
+              try {
+                const errorData = await delRes.json();
+                errorMsg = errorData.message || errorMsg;
+              } catch {}
+              Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: errorMsg,
+                backdrop: true,
+              });
+            }
+          } catch (err) {
+            console.error("Delete error:", err);
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi kết nối",
+              text: "Không thể xóa.",
+              backdrop: true,
+            });
+          }
         }
-      }
+      });
     });
   });
 
@@ -69,7 +110,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     popup.style.display = "none";
   };
 
-
   window.onclick = function (event) {
     if (event.target == popup) {
       popup.style.display = "none";
@@ -88,9 +128,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const ngaySinh = document.getElementById("ngaySinh")?.value;
       const gioiTinh = document.getElementById("gioiTinh")?.value;
       const matKhau = document.getElementById("matKhau")?.value;
-      const vaiTro = document.getElementById("vaiTro")?.value;
+      const vaiTro = document.getElementById("vaiTro")?.value?.trim();
 
-      if (!ho || !ten || !email || !matKhau || !vaiTro) {
+      if (!ho || !ten || !email || !matKhau || !vaiTro || vaiTro === "") {
         Swal.fire({
           icon: "warning",
           title: "Cảnh báo",
@@ -111,6 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
+      const validVaiTro = ["Admin", "Doanh Nghiệp", "Người Dùng"];
+    let finalVaiTro = validVaiTro.includes(vaiTro) ? vaiTro : "Người Dùng";
+    console.log("Vai trò final gửi:", finalVaiTro);  // Log debug
+
       const data = {
         ho,
         ten,
@@ -119,8 +163,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         ngaySinh,
         gioiTinh,
         matKhau,
-        xacNhanmatKhau: matKhau, 
-        chucVu: vaiTro,
+        xacNhanmatKhau: matKhau,
+        chucVu: finalVaiTro,
       };
 
       console.log("Data gửi:", data);
@@ -128,6 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const res = await fetch("/register", {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
@@ -151,6 +196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
           form.reset();
           popup.style.display = "none";
+          setTimeout(() => location.reload(), 1500);
         } else if (res.status === 400) {
           Swal.fire({
             icon: "error",
@@ -197,12 +243,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       const newTen = prompt("Tên:", user.ten);
       const newEmail = prompt("Email:", user.email);
       const newSdt = prompt("Số điện thoại:", user.sdt);
-      const newChucVu = prompt("Chức vụ (admin / Người dùng / Doanh Nghiệp):", user.chucVu);
+      const newChucVu = prompt(
+        "Chức vụ (Admin / Người Dùng / Doanh Nghiệp):",
+        user.chucVu
+      );
 
       if (newHo && newTen && newEmail) {
         const putRes = await fetch(`/users/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             ho: newHo,
             ten: newTen,
