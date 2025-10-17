@@ -275,6 +275,54 @@ app.put("/users/:id", async (req, res) => {
   }
 });
 
+
+// ✅ API: Lấy danh sách phòng, nhóm theo mã doanh nghiệp
+app.get('/api/rooms-grouped-by-company', async (req, res) => {
+  if (!db) {
+    return res.status(500).json({ error: "Chưa kết nối được với database." });
+  }
+
+  try {
+    const sql = "SELECT * FROM thongTinPhong ORDER BY maDoanhNghiep";
+    const [results] = await db.execute(sql);
+
+    // ✅ Nhóm dữ liệu theo mã doanh nghiệp
+    const groupedData = results.reduce((acc, room) => {
+      const maDN = room.maDoanhNghiep;
+      const tenHomestay = room.tenHomestay || `Doanh nghiệp ${maDN}`;
+
+      if (!acc[maDN]) {
+        acc[maDN] = {
+          maDoanhNghiep: maDN,
+          tenHomestay,
+          phong: [],
+        };
+      }
+
+      acc[maDN].phong.push({
+        maPhong: room.maPhong,
+        tenPhong: room.tenPhong,
+        hinhAnh: room.hinhAnh,
+        diaChi: room.diaChi,
+        loaiGiuong: room.loaiGiuong,
+        gia: room.gia,
+        danhGia: room.danhGia,
+        soLuongKhach: room.soLuongKhach,
+        tienIch: room.tienIch,
+      });
+
+      return acc;
+    }, {});
+
+    res.json(Object.values(groupedData));
+  } catch (err) {
+    console.error("Lỗi /api/rooms-grouped-by-company:", err);
+    res.status(500).json({ error: "Lỗi truy vấn thông tin phòng" });
+  }
+});
+
+
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>

@@ -132,3 +132,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', async () => {
+  const amenitiesIconMap = {
+    'be boi': 'fa-swimming-pool',
+    'view dep': 'fa-mountain-sun',
+    'phong gym': 'fa-dumbbell',
+    'may chieu': 'fa-film',
+    'ban cong': 'fa-wind',
+    'bep': 'fa-kitchen-set',
+    'bon tam': 'fa-bath'
+  };
+
+  // 🔹 Tạo HTML tiện ích
+  function createAmenitiesHtml(room) {
+    const amenitiesText = room.tienIch || '';
+    const amenitiesList = amenitiesText.split(',');
+    const itemsHtml = amenitiesList.map(item => {
+      const text = item.trim();
+      if (!text) return '';
+      const key = text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace('đ', 'd');
+      const icon = amenitiesIconMap[key] || 'fa-check-circle';
+      return `<li><i class="fa-solid ${icon}"></i> ${text}</li>`;
+    });
+
+    itemsHtml.push(`<li><i class="fa-solid fa-star"></i> ${room.danhGia}/5</li>`);
+    itemsHtml.push(`<li><i class="fa-solid fa-bed"></i> ${room.loaiGiuong}</li>`);
+    itemsHtml.push(`<li><i class="fa-solid fa-users"></i> ${room.soLuongKhach} khách</li>`);
+
+    return `<ul class="room-amenities">${itemsHtml.join('')}</ul>`;
+  }
+
+  // 🔹 Tạo thẻ card phòng
+  function createRoomCardHtml(room) {
+    const imageUrl = `http://localhost:3000/${room.hinhAnh}`;
+    const amenities = createAmenitiesHtml(room);
+
+    return `
+      <div class="card room-card">
+        <div class="room-image" style="background-image: url('${imageUrl}')"></div>
+        <div class="card-body">
+          <h5 class="card-title">${room.tenPhong}</h5>
+          <p class="room-price">
+            ${new Intl.NumberFormat('vi-VN').format(room.gia)} VNĐ/đêm
+          </p>
+          ${amenities}
+          <button class="btn btn-datphong">Đặt phòng</button>
+        </div>
+      </div>`;
+  }
+
+  // 🔹 Gọi API
+  try {
+    const response = await fetch('http://localhost:3000/api/rooms-grouped-by-company');
+    if (!response.ok) throw new Error(`Lỗi HTTP: ${response.status}`);
+
+    const groupedData = await response.json(); // là một MẢNG
+
+    let finalHtml = '';
+
+    // ✅ Lặp đúng theo mảng
+    for (const doanhNghiep of groupedData) {
+      const roomsHtml = doanhNghiep.phong.map(createRoomCardHtml).join('');
+      finalHtml += `
+        <div class="enterprise-block">
+          <h3 class="address-header">${doanhNghiep.tenHomestay}</h3>
+          <div class="scroll-container">
+            <div class="rooms-grid">${roomsHtml}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('homestay-sections').innerHTML = finalHtml;
+  } catch (error) {
+    console.error('Lỗi:', error);
+    document.getElementById('homestay-sections').innerHTML =
+      '<p class="text-danger text-center">Không thể tải dữ liệu phòng.</p>';
+  }
+});
