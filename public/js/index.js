@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ${new Intl.NumberFormat('vi-VN').format(room.gia)} VNĐ/đêm
           </p>
           ${amenities}
-          <button class="btn btn-datphong">Đặt phòng</button>
+         <button class="btn btn-datphong">Đặt phòng</button>
         </div>
       </div>`;
   }

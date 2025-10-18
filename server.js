@@ -3,10 +3,43 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
 const path = require("path");
+const fs = require("fs");
 const app = express();
 
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
+
+// Thêm multer để xử lý upload file hình ảnh
+const multer = require("multer");
+
+// Cấu hình multer: lưu file vào public/uploads/images/
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, "public", "uploads", "images");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Chỉ chấp nhận file hình ảnh!'), false);
+  }
+};
+
+const upload = multer({ 
+  storage: storage, 
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: fileFilter 
+});
 
 const sessionStore = new MySQLStore({
   host: process.env.DB_HOST,
@@ -48,27 +81,179 @@ let db;
     console.error("lỗi kết nối db:", err);
   }
 })();
+
+app.get('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const sql = "SELECT id, ho, ten, email, sdt, chucVu FROM users WHERE id = ?";
+    const [users] = await db.execute(sql, [id]);
+
+    if (users.length > 0) {
+      res.json(users[0]);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy người dùng." });
+    }
+  } catch (err) {
+    console.error("Lỗi khi truy vấn người dùng:", err);
+    res.status(500).json({ error: "Lỗi máy chủ" });
+  }
+});
+
+const requireLogin = (req, res, next) => {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ message: "Yêu cầu đăng nhập." });
+  }
+  next();
+};
+
+// API Endpoint chính cho trang sơ đồ phòng của doanh nghiệp
+app.get('/api/my-business-rooms', requireLogin, async (req, res) => {
+  if (!db) {
+    return res.status(500).json({ error: "Chưa kết nối được với database." });
+  }
+
+  try {
+    const businessId = req.session.user.id;
+    const sql = "SELECT * FROM thongTinPhong WHERE maDoanhNghiep = ? ORDER BY tenPhong ASC";
+    const [roomResults] = await db.execute(sql, [businessId]);
+
+    res.json(roomResults);
+  } catch (err) {
+    console.error("Lỗi /api/my-business-rooms:", err);
+    res.status(500).json({ error: "Lỗi truy vấn thông tin phòng" });
+  }
+});
+
+// API: CẬP NHẬT PHÒNG (PUT) - Hỗ trợ upload hình mới nếu có
+app.put('/api/my-business-rooms/:maPhong', requireLogin, upload.single('hinhAnh'), async (req, res) => {
+  const maDoanhNghiep = req.session.user.id;
+  const { maPhong } = req.params;
+  const { tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia } = req.body;
+
+  if (!tenPhong || !gia) {
+    if (req.file) fs.unlinkSync(req.file.path);
+    return res.status(400).json({ error: "Tên phòng và giá là bắt buộc." });
+  }
+
+  try {
+    // Lấy hình cũ để xóa nếu upload mới
+    const [oldRoom] = await db.execute("SELECT hinhAnh FROM thongTinPhong WHERE maPhong = ? AND maDoanhNghiep = ?", [maPhong, maDoanhNghiep]);
+    const oldHinhAnh = oldRoom[0]?.hinhAnh;
+
+    let hinhAnhUpdate = oldHinhAnh;
+    if (req.file) {
+      hinhAnhUpdate = `uploads/images/${req.file.filename}`;
+      // Xóa file cũ nếu không phải default
+      if (oldHinhAnh && oldHinhAnh !== 'images/default-room.png') {
+        const oldFilePath = path.join(__dirname, "public", oldHinhAnh);
+        if (fs.existsSync(oldFilePath)) fs.unlinkSync(oldFilePath);
+      }
+    }
+
+    const sql = `
+      UPDATE thongTinPhong 
+      SET tenPhong = ?, tenHomestay = ?, diaChi = ?, loaiGiuong = ?, soLuongKhach = ?, tienIch = ?, gia = ?, hinhAnh = ?
+      WHERE maPhong = ? AND maDoanhNghiep = ?`;
+    
+    const [result] = await db.execute(sql, [
+      tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnhUpdate, maPhong, maDoanhNghiep
+    ]);
+
+    if (result.affectedRows === 0) {
+      if (req.file) fs.unlinkSync(req.file.path);
+      return res.status(404).json({ message: "Không tìm thấy phòng hoặc bạn không có quyền sửa." });
+    }
+
+    res.status(200).json({ message: "Cập nhật thông tin phòng thành công!", hinhAnh: hinhAnhUpdate });
+  } catch (err) {
+    console.error("Lỗi khi cập nhật phòng:", err);
+    if (req.file) fs.unlinkSync(req.file.path);
+    res.status(500).json({ error: "Lỗi máy chủ khi cập nhật phòng." });
+  }
+});
+
+// API: XÓA PHÒNG (DELETE) - Xóa file hình nếu tồn tại
+app.delete('/api/my-business-rooms/:maPhong', requireLogin, async (req, res) => {
+  const maDoanhNghiep = req.session.user.id;
+  const { maPhong } = req.params;
+
+  try {
+    // Lấy đường dẫn hình trước khi xóa
+    const [room] = await db.execute("SELECT hinhAnh FROM thongTinPhong WHERE maPhong = ? AND maDoanhNghiep = ?", [maPhong, maDoanhNghiep]);
+    if (room.length > 0 && room[0].hinhAnh && room[0].hinhAnh !== 'images/default-room.png') {
+      const filePath = path.join(__dirname, "public", room[0].hinhAnh);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    const sql = "DELETE FROM thongTinPhong WHERE maPhong = ? AND maDoanhNghiep = ?";
+    const [result] = await db.execute(sql, [maPhong, maDoanhNghiep]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Không tìm thấy phòng hoặc bạn không có quyền xóa." });
+    }
+
+    res.status(200).json({ message: "Xóa phòng thành công!" });
+  } catch (err) {
+    console.error("Lỗi khi xóa phòng:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi xóa phòng." });
+  }
+});
+
+// API: THÊM PHÒNG MỚI (POST) - Hỗ trợ upload hình
+app.post('/api/my-business-rooms', requireLogin, upload.single('hinhAnh'), async (req, res) => {
+  const maDoanhNghiep = req.session.user.id;
+  const { tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, maPhong } = req.body;
+
+  if (!tenPhong || !gia) {
+    if (req.file) fs.unlinkSync(req.file.path);
+    return res.status(400).json({ error: "Tên phòng và giá là bắt buộc." });
+  }
+
+  try {
+    let hinhAnh = 'images/default-room.png';
+    if (req.file) {
+      hinhAnh = `uploads/images/${req.file.filename}`;
+    }
+
+    const sql = `
+      INSERT INTO thongTinPhong 
+      (maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const [result] = await db.execute(sql, [
+      maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
+    ]);
+
+    res.status(201).json({ 
+      message: "Thêm phòng thành công!",
+      newRoom: {
+        maPhong: result.insertId,
+        maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
+      }
+    });
+  } catch (err) {
+    console.error("Lỗi khi thêm phòng mới:", err);
+    if (req.file) fs.unlinkSync(req.file.path);
+    res.status(500).json({ error: "Lỗi máy chủ khi thêm phòng." });
+  }
+});
+
 // Route đăng ký
 app.post("/register", async (req, res) => {
-  const { ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, xacNhanmatKhau, chucVu } =
-    req.body;
+  const { ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, xacNhanmatKhau, chucVu } = req.body;
 
   if (matKhau !== xacNhanmatKhau) {
     return res.sendStatus(401);
   }
   try {
-    // Kiểm tra email tồn tại
-    const [existing] = await db.execute("SELECT id FROM users WHERE email=?", [
-      email,
-    ]);
+    const [existing] = await db.execute("SELECT id FROM users WHERE email=?", [email]);
     if (existing.length > 0) {
       return res.sendStatus(409);
     }
 
-    // Mã hoá mật khẩu
     const hashedPassword = await bcrypt.hash(matKhau, 10);
 
-    // Lưu vào DB
     const [result] = await db.execute(
       "INSERT INTO users (ho, ten, email, sdt, ngaySinh, gioiTinh, matKhau, chucVu) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       [ho, ten, email, sdt, ngaySinh, gioiTinh, hashedPassword, chucVu || "Người Dùng"]
@@ -86,19 +271,17 @@ app.post("/login", async (req, res) => {
   const { id, ten, email, matKhau } = req.body;
 
   try {
-    const [results] = await db.execute("SELECT * FROM users WHERE email = ?", [
-      email,
-    ]);
+    const [results] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
 
     if (results.length === 0) {
-      return res.sendStatus(401); // Email không tồn tại
+      return res.sendStatus(401);
     }
 
     const user = results[0];
     const match = await bcrypt.compare(matKhau, user.matKhau);
 
     if (!match) {
-      return res.sendStatus(401); // Mật khẩu sai
+      return res.sendStatus(401);
     }
 
     req.session.user = {
@@ -111,7 +294,6 @@ app.post("/login", async (req, res) => {
       soDienThoai: user.sdt,
       chucVu: user.chucVu,
     };
-    // console.log("Đăng nhập thành công:", req.session.user);
     res.sendStatus(200);
   } catch (err) {
     console.error("Lỗi /login:", err);
@@ -124,9 +306,7 @@ app.post("/checkEmail", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const [user] = await db.execute("SELECT * FROM users WHERE email = ?", [
-      email,
-    ]);
+    const [user] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
 
     if (user.length === 0) {
       return res.sendStatus(404);
@@ -137,6 +317,7 @@ app.post("/checkEmail", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 // Route quên mật khẩu
 app.post("/forgotPassword", async (req, res) => {
   const { email, matKhau } = req.body;
@@ -180,9 +361,7 @@ app.get("/current_user", async (req, res) => {
   if (!req.session.user) return res.sendStatus(401);
   
   try {
-    const [rows] = await db.execute("SELECT id FROM users WHERE id = ?", [
-      req.session.user.id,
-    ]);
+    const [rows] = await db.execute("SELECT id FROM users WHERE id = ?", [req.session.user.id]);
     if (rows.length === 0) {
       req.session.destroy(() => {});
       return res.sendStatus(401);
@@ -198,17 +377,13 @@ app.get("/current_user", async (req, res) => {
 // Lấy danh sách tất cả user
 app.get("/users", async (req, res) => {
   try {
-    const [rows] = await db.execute(
-      "SELECT id, ho, ten, email, sdt, chucVu FROM users"
-    );
+    const [rows] = await db.execute("SELECT id, ho, ten, email, sdt, chucVu FROM users");
     res.json(rows);
   } catch (err) {
     console.error("Lỗi /users:", err);
     res.sendStatus(500);
   }
 });
-
-
 
 // Xóa user theo ID + xóa session của user đó
 const requireAdmin = (req, res, next) => {
@@ -218,7 +393,7 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", requireAdmin, async (req, res) => { // Thêm requireAdmin
   try {
     const { id } = req.params;
 
@@ -256,9 +431,8 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-
 // Cập nhật thông tin user
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", requireAdmin, async (req, res) => { // Thêm requireAdmin nếu cần
   try {
     const { id } = req.params;
     const { ho, ten, email, sdt, chucVu } = req.body;
@@ -275,8 +449,7 @@ app.put("/users/:id", async (req, res) => {
   }
 });
 
-
-// ✅ API: Lấy danh sách phòng, nhóm theo mã doanh nghiệp
+// API: Lấy danh sách phòng, nhóm theo mã doanh nghiệp
 app.get('/api/rooms-grouped-by-company', async (req, res) => {
   if (!db) {
     return res.status(500).json({ error: "Chưa kết nối được với database." });
@@ -286,7 +459,6 @@ app.get('/api/rooms-grouped-by-company', async (req, res) => {
     const sql = "SELECT * FROM thongTinPhong ORDER BY maDoanhNghiep";
     const [results] = await db.execute(sql);
 
-    // ✅ Nhóm dữ liệu theo mã doanh nghiệp
     const groupedData = results.reduce((acc, room) => {
       const maDN = room.maDoanhNghiep;
       const tenHomestay = room.tenHomestay || `Doanh nghiệp ${maDN}`;
@@ -320,8 +492,6 @@ app.get('/api/rooms-grouped-by-company', async (req, res) => {
     res.status(500).json({ error: "Lỗi truy vấn thông tin phòng" });
   }
 });
-
-
 
 // Start server
 const PORT = process.env.PORT || 3000;
