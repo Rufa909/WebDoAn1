@@ -52,9 +52,6 @@ body {
   background: #f8f9fa;
   color: #4ecdc4;
 }
-.dropdown-toggle::after {
-  display: none !important;
-}
 
 hr {
   margin: 0;

@@ -19,6 +19,29 @@ body {
   overflow-x: hidden;
 }
 
+.header-container .dropdown-menu {
+  right: auto;
+  left: auto;
+}
+
+.header-container .dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-container .dropdown-menu a:hover {
+  background: #f8f9fa;
+  color: #4ecdc4;
+}
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+hr {
+  margin: 0;
+}
+
 /* --- Filter Box --- */
 .filter-box {
   position: fixed;
@@ -155,6 +178,7 @@ button[type="submit"]:hover {
 }
 
 .branch-btn {
+  margin-top: 20px;
   padding: 10px 20px;
   border: none;
   border-radius: 25px;
