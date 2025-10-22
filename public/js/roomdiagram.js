@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   // === KIỂM TRA ELEMENTS CƠ BẢN ===
   const requiredElements = [
-    "room-grid-container", "room-modal", "modal-title", "room-form", "cancel-button", "maPhong-input"
+    "room-grid-container", "room-modal", "modal-title", "room-form", "cancel-button",
+    "tienIch-input-visual", "tienIch-input", "tienIch-options-container" 
   ];
   const missingElements = requiredElements.filter(id => !document.getElementById(id));
   if (missingElements.length > 0) {
@@ -16,11 +17,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalTitle = document.getElementById("modal-title");
   const roomForm = document.getElementById("room-form");
   const cancelButton = document.getElementById("cancel-button");
-  const maPhongInput = document.getElementById("maPhong-input");
   const fileInput = document.getElementById("hinhAnh-input");
 
   let allRoomsData = []; // Lưu trữ dữ liệu phòng để chỉnh sửa
-  let isEditingMode = false; // Biến riêng cho mode: true = edit, false = add new (fix bug !!maPhong)
+  let isEditingMode = false;
+  let currentEditingMaPhong = null; 
+  const tienIchPillContainer = document.getElementById("tienIch-input-visual");
+  const tienIchHiddenInput = document.getElementById("tienIch-input"); 
+  const tienIchOptionsContainer = document.getElementById("tienIch-options-container");
+  const ALL_AMENITIES = [
+    "Bể bơi", "Bồn tắm", "Phòng gym",
+    "Bếp", "Ban công", "View đẹp", "Máy chiếu"
+  ];
+
+  // Map icon cho từng tiện ích (sử dụng Font Awesome) - Chỉ thêm mới
+  const AMENITY_ICONS = {
+    "Bể bơi": "fa-swimming-pool",
+    "Bồn tắm": "fa-bath",
+    "Phòng gym": "fa-dumbbell",
+    "Bếp": "fa-solid fa-utensils",
+    "Ban công": "fa-rainbow",
+    "View đẹp": "fa-cloud",
+    "Máy chiếu": "fa-film"
+  };
 
   // === CÁC HÀM TIỆN ÍCH ===
   const formatCurrency = (number) => {
@@ -33,6 +52,71 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const safeSelector = (value) => CSS.escape(value);
+  const updateHiddenInputAndButtons = () => {
+    const pills = tienIchPillContainer.querySelectorAll('.tienIch-pill');
+    const values = Array.from(pills).map(pill => pill.dataset.value);
+    tienIchHiddenInput.value = values.join(',');
+    const optionButtons = tienIchOptionsContainer.querySelectorAll('.tienIch-option');
+    optionButtons.forEach(btn => {
+      btn.classList.toggle('selected', values.includes(btn.dataset.value));
+    });
+  };
+
+  const removePill = (pillElement) => {
+    pillElement.remove();
+    updateHiddenInputAndButtons();
+    // Hiện lại option tương ứng khi xóa pill - Chỉ thêm mới
+    const amenityValue = pillElement.dataset.value;
+    const optionButtons = tienIchOptionsContainer.querySelectorAll('.tienIch-option');
+    optionButtons.forEach(btn => {
+      if (btn.dataset.value === amenityValue) {
+        btn.style.display = 'inline-block'; // Hiện lại
+      }
+    });
+  };
+
+  const addPill = (amenity) => {
+    const trimmedAmenity = amenity.trim();
+    if (!trimmedAmenity) return;
+    const existingValues = tienIchHiddenInput.value.split(',').map(v => v.trim()).filter(Boolean);
+    if (existingValues.includes(trimmedAmenity)) return;
+    const pill = document.createElement('span');
+    pill.className = 'tienIch-pill';
+    pill.dataset.value = trimmedAmenity;
+    const iconClass = AMENITY_ICONS[trimmedAmenity] || 'fa-star'; // Thêm icon - Chỉ chỉnh mới
+    pill.innerHTML = `<i class="fas ${iconClass}"></i> ${trimmedAmenity} <span class="tienIch-pill-delete" data-value="${trimmedAmenity}">&times;</span>`;
+    pill.querySelector('.tienIch-pill-delete').addEventListener('click', () => {
+      removePill(pill);
+    });
+    tienIchPillContainer.appendChild(pill);
+    // Ẩn option tương ứng sau khi thêm pill - Chỉ thêm mới
+    const optionButtons = tienIchOptionsContainer.querySelectorAll('.tienIch-option');
+    optionButtons.forEach(btn => {
+      if (btn.dataset.value === trimmedAmenity) {
+        btn.style.display = 'none'; // Ẩn option đã chọn
+      }
+    });
+    updateHiddenInputAndButtons();
+  };
+
+  const renderTienIchOptions = () => {
+    tienIchOptionsContainer.innerHTML = '';
+    ALL_AMENITIES.forEach(amenity => {
+      const btn = document.createElement('span');
+      btn.className = 'tienIch-option';
+      btn.textContent = amenity;
+      btn.dataset.value = amenity;
+      const iconClass = AMENITY_ICONS[amenity] || 'fa-star'; // Thêm icon cho option - Chỉ chỉnh mới
+      btn.innerHTML = `<i class="fas ${iconClass}"></i> ${amenity}`;
+      btn.addEventListener('click', () => {
+        if (!btn.classList.contains('selected')) {
+          addPill(amenity);
+          updateHiddenInputAndButtons();
+        }
+      });
+      tienIchOptionsContainer.appendChild(btn);
+    });
+  };
 
   // Preview ảnh
   const previewImg = document.createElement('img');
@@ -86,7 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
       roomCard.classList.add("status-vacant");
     }
     roomCard.dataset.maPhong = room.maPhong;
-
+    const amenities = (room.tienIch || '').split(',')
+                      .map(item => item.trim())
+                      .filter(Boolean);
+   const amenitiesHTML = amenities.length > 0
+      ? amenities.map(a => `<span class="card-amenity-pill">${a}</span>`).join(', ')
+      : '<span>N/A</span>';
     roomCard.innerHTML = `
       <div class="room-image-container">
         <img 
@@ -104,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="info-line"><strong>Địa chỉ:</strong> <span>${room.diaChi || 'N/A'}</span></p>
           <p class="info-line"><strong>Số khách:</strong> <span>${room.soLuongKhach || 'N/A'}</span></p>
           <p class="info-line"><strong>Loại Giường:</strong> <span>${room.loaiGiuong || 'N/A'}</span></p>
-          <p class="info-line"><strong>Tiện ích:</strong> <span>${room.tienIch || 'N/A'}</span></p>
+          <p class="info-line"><strong>Tiện ích:</strong> <span>${amenitiesHTML}</span></p>
           <p class="info-line"><strong>Giá:</strong> <span class="price">${formatCurrency(room.gia)}</span></p>
         </div>
         <div class="room-actions">
@@ -131,23 +220,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === CÁC HÀM XỬ LÝ MODAL ===
   const showModal = (room) => {
-    roomForm.reset(); // Reset form
-    previewImg.style.display = 'none'; // Ẩn preview
-    fileInput.value = ''; // Reset file input
+    roomForm.reset(); 
+    previewImg.style.display = 'none';
+    fileInput.value = ''; 
+    tienIchPillContainer.innerHTML = '';
+    tienIchHiddenInput.value = ''; 
+    renderTienIchOptions(); 
 
     if (room) {
       // Chế độ edit
       isEditingMode = true;
+      currentEditingMaPhong = room.maPhong
       modalTitle.textContent = "Chỉnh sửa thông tin phòng";
-      maPhongInput.value = String(room.maPhong || '');
-      maPhongInput.readOnly = true;
       document.getElementById('tenPhong-input').value = room.tenPhong || '';
       document.getElementById('tenHomestay-input').value = room.tenHomestay || '';
       document.getElementById('diaChi-input').value = room.diaChi || '';
       document.getElementById('loaiGiuong-input').value = room.loaiGiuong || '';
       document.getElementById('soLuongKhach-input').value = room.soLuongKhach || '';
-      document.getElementById('tienIch-input').value = room.tienIch || '';
       document.getElementById('gia-input').value = room.gia || '';
+      if (room.tienIch) { // Thêm logic addPill
+        const existingTienIch = room.tienIch.split(',').map(item => item.trim()).filter(Boolean);
+        existingTienIch.forEach(amenity => addPill(amenity)); // Sẽ ẩn options tương ứng
+      }
       // Hiển thị ảnh cũ
       if (room.hinhAnh) {
         previewImg.src = '/' + room.hinhAnh;
@@ -156,19 +250,23 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Chế độ thêm mới (fix: set false rõ ràng)
       isEditingMode = false;
+      currentEditingMaPhong = null;
       modalTitle.textContent = "Thêm phòng mới";
-      maPhongInput.value = '';
-      maPhongInput.readOnly = false;
     }
+    updateHiddenInputAndButtons();
     modal.style.display = "flex";
   };
 
   const hideModal = () => {
     modal.style.display = "none";
     isEditingMode = false; // Reset mode
-    maPhongInput.readOnly = false;
+    currentEditingMaPhong = null;
     previewImg.style.display = 'none';
     fileInput.value = '';
+    tienIchPillContainer.innerHTML = '';
+    tienIchHiddenInput.value = '';
+    // Reset options display khi đóng modal - Chỉ thêm mới
+    renderTienIchOptions();
   };
 
   // === CÁC HÀM GỌI API ===
@@ -196,21 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
       roomGridContainer.innerHTML = `<p class="error-message">Không thể tải dữ liệu: ${error.message}. Vui lòng thử lại.</p>`;
     }
   };
-
-  // Check maPhong unique cho thêm mới
-  const checkMaPhongUnique = async (maPhong) => {
-    try {
-      const response = await fetch('/api/my-business-rooms', { credentials: 'include' });
-      const rooms = await response.json();
-      return !rooms.some(r => r.maPhong === maPhong);
-    } catch {
-      return false; // Giả sử không unique nếu lỗi
-    }
-  };
-
+  
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const maPhong = maPhongInput.value.trim();
     const tenPhong = document.getElementById('tenPhong-input').value.trim();
     const gia = parseFloat(document.getElementById('gia-input').value);
 
@@ -219,29 +305,20 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!isEditingMode) { // Thêm mới: check unique maPhong
-      const isUnique = await checkMaPhongUnique(maPhong);
-      if (!isUnique) {
-        alert("Mã phòng đã tồn tại. Vui lòng chọn mã khác.");
-        return;
-      }
-    }
-
+   
     const formData = new FormData();
-    formData.append('maPhong', maPhong);
     formData.append('tenPhong', tenPhong);
     formData.append('tenHomestay', document.getElementById('tenHomestay-input').value.trim());
     formData.append('diaChi', document.getElementById('diaChi-input').value.trim());
     formData.append('loaiGiuong', document.getElementById('loaiGiuong-input').value.trim());
     formData.append('soLuongKhach', document.getElementById('soLuongKhach-input').value);
-    formData.append('tienIch', document.getElementById('tienIch-input').value.trim());
     formData.append('gia', gia);
-
+    formData.append('tienIch', tienIchHiddenInput.value); // <-- Lấy từ input ẩn
     if (fileInput.files[0]) {
       formData.append('hinhAnh', fileInput.files[0]); // Upload file
     }
 
-    const url = isEditingMode ? `/api/my-business-rooms/${encodeURIComponent(maPhong)}` : '/api/my-business-rooms';
+    const url = isEditingMode ? `/api/my-business-rooms/${encodeURIComponent(currentEditingMaPhong)}` : '/api/my-business-rooms';
     const method = isEditingMode ? 'PUT' : 'POST';
 
     try {

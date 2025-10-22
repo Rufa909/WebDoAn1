@@ -79,52 +79,17 @@
         <div class="row justify-content-center">
           <div class="col-lg-10 col-sm-12">
             <div class="card shadow-sm">
-              <div class="card-header text-center">
-                <h1><i class="fa-solid fa-filter"></i> Bộ lọc</h1>
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="mb-0"><i class="fa-solid fa-filter"></i> Bộ lọc</h1>
+                <button type="button" class="btn-close" id="closeFilterBtn" aria-label="Đóng">&times;</button>
               </div>
               <div class="card-body">
-                <form  id="filterForm" action="">
+                <form id="filterForm">
                   <div class="filter-section mb-2">
                     <h5 class="title mb-3">
                       <i class="fa-solid fa-location-dot"></i> Điểm đến
                     </h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="ninh-kieu"
-                      >
-                        Ninh Kiều
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="cai-rang"
-                      >
-                        Cái Răng
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="binh-thuy"
-                      >
-                        Bình Thủy
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="o-mon"
-                      >
-                        Ô Môn
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="thot-not"
-                      >
-                        Thốt Nốt
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-location="phong-dien"
-                      >
-                        Phong Điền
-                      </button>
+                    <div id="location-buttons" class="filter-options">
                     </div>
                   </div>
                   <hr />
@@ -132,37 +97,7 @@
                     <h5 class="title mb-3">
                       <i class="fa-solid fa-users"></i> Số Lượng khách
                     </h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-guests="1-2"
-                      >
-                        1-2
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-guests="3-4"
-                      >
-                        3-4
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-guests="5-7"
-                      >
-                        5-7
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-guests="8-10"
-                      >
-                        8-10
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-guests="tren-10"
-                      >
-                        Trên 10
-                      </button>
+                    <div id="guest-buttons" class="filter-options">
                     </div>
                   </div>
                   <hr />
@@ -170,19 +105,7 @@
                     <h5 class="title">
                       <i class="fa-solid fa-bed"></i> Loại Giường
                     </h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-don"
-                      >
-                        Giường Đơn
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-doi"
-                      >
-                        Giường đôi
-                      </button>
+                    <div id="bed-buttons" class="filter-options">
                     </div>
                   </div>
                   <hr />
@@ -190,121 +113,15 @@
                     <h5 class="title">
                       <i class="fa-solid fa-door-open"></i> Số phòng
                     </h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="1"
-                      >
-                        1
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="2"
-                      >
-                        2
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="3"
-                      >
-                        3
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="4"
-                      >
-                        4
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rooms="5"
-                      >
-                        5
-                      </button>
+                    <div id="room-buttons" class="filter-options">
                     </div>
                   </div>
                   <hr />
                   <div class="filter-section mb-2">
-                    <h5 class="title">Đánh giá</h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rating="5"
-                      >
-                        5 <i class="fa-solid fa-star"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rating="4"
-                      >
-                        4 <i class="fa-solid fa-star"></i> trở lên
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rating="3"
-                      >
-                        3 <i class="fa-solid fa-star"></i> trở lên
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-rating="2"
-                      >
-                        2 <i class="fa-solid fa-star"></i> trở lên
-                      </button>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-2">
-                    <h5 class="title">Tiện ích</h5>
-                    <div class="filter-options">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="be-boi"
-                      >
-                        <i class="fa-solid fa-water-ladder"></i> Bể bơi
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="view-dep"
-                      >
-                        <i class="fa-solid fa-rainbow"></i> View đẹp
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="phong-gym"
-                      >
-                        <i class="fa-solid fa-dumbbell"></i> Phòng gym
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="may-chieu"
-                      >
-                        <i class="fa-solid fa-film"></i> Máy chiếu
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="bep"
-                      >
-                        <i class="fa-solid fa-kitchen-set"></i> Bếp
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="bon-tam"
-                      >
-                        <i class="fa-solid fa-bath"></i> Bồn tắm
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="ban-cong"
-                      >
-                        <i class="fa-solid fa-cloud"></i> Ban công
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary me-2 mb-2" data-ameity="san-vuon"
-                      >
-                        <i class="fa-solid fa-tree"></i> Sân vườn
-                      </button>
+                    <h5 class="title">
+                     <i class="fa-solid fa-layer-group"></i> 
+                      Tiện ích</h5>
+                    <div id="amenity-buttons" class="filter-options">
                     </div>
                   </div>
                   <hr />
@@ -312,43 +129,18 @@
                     <h5>Khoảng giá (VND) <i class="fa-solid fa-coins"></i></h5>
                     <div class="row">
                       <div class="col-md-6 mb-2">
-                        <label for="min-price" class="form-label"
-                          >Tối thiểu</label
-                        >
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="min-price"
-                          placeholder="0"
-                          min="0"
-                        />
+                        <label for="min-price" class="form-label">Tối thiểu</label>
+                        <input type="number" class="form-control" id="min-price" placeholder="0" min="0" />
                       </div>
                       <div class="col-md-6 mb-2">
                         <label for="max-price" class="form-label">Tối đa</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="max-price"
-                          placeholder="5,000,000"
-                          min="0"
-                        />
+                        <input type="number" class="form-control" id="max-price" placeholder="5,000,000" min="0" />
                       </div>
                     </div>
                   </div>
                   <div class="d-flex justify-content-end">
-                    <button
-                      type="reset"
-                      class="btn me-2 mb-2"
-                     
-                    >
-                      Xóa bộ lọc
-                    </button>
-                    <button
-                      type="submit"
-                      class="btn me-2 mb-2"
-                    >
-                      Áp dụng
-                    </button>
+                    <button type="reset" class="btn btn-outline-secondary me-2 mb-2" onclick="resetFilters()">Xóa bộ lọc</button>
+                    <button type="button" class="btn btn-primary me-2 mb-2" onclick="applyFilters()">Áp dụng</button>
                   </div>
                 </form>
               </div>

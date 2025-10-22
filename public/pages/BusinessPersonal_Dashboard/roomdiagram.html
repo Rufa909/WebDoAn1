@@ -58,11 +58,11 @@
       </div>
 
       <div class="main-content">
-        
         <div class="header">
           <h2>Danh sách phòng của bạn</h2>
           <button id="sidebar-toggle" class="sidebar-toggle" style="display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: #333;">
-          <i class="fas fa-bars"></i> <!-- Hamburger icon -->
+            <i class="fas fa-bars"></i> <!-- Hamburger icon -->
+          </button>
         </div>
 
         <main class="room-grid" id="room-grid-container">
@@ -76,46 +76,56 @@
       <div class="modal-content">
         <h2 id="modal-title">Thêm phòng mới</h2>
         <form id="room-form">
-          <!-- Fix: Đổi thành type="text" để user nhập maPhong khi add, readOnly khi edit -->
           <div class="form-group">
-            <label for="maPhong-input">Mã phòng *</label>
-            <input type="text" id="maPhong-input" required placeholder="Ví dụ: V01" />
+            <label for="tenPhong-input">Tên phòng * </label>
+            <input type="text" id="tenPhong-input" required placeholder="VD: Fini Room"/>
           </div>
-          <!-- Thêm input upload ảnh (optional) -->
+
+          <!-- Input upload ảnh (optional) -->
           <div class="form-group">
             <label for="hinhAnh-input">Ảnh phòng (tùy chọn)</label>
             <input type="file" id="hinhAnh-input" accept="image/*" />
             <small>Upload ảnh minh họa phòng (JPG/PNG)</small>
           </div>
-          <div class="form-group">
-            <label for="tenPhong-input">Tên phòng *</label>
-            <input type="text" id="tenPhong-input" required />
-          </div>
+
           <div class="form-group">
             <label for="tenHomestay-input">Tên Homestay</label>
-            <input type="text" id="tenHomestay-input" />
+            <input type="text" id="tenHomestay-input" value="Vista Home"/>
           </div>
+
           <div class="form-group">
-            <label for="diaChi-input">Địa chỉ</label>
-            <input type="text" id="diaChi-input" />
+            <label for="diaChi-input">Địa chỉ *</label>
+            <input type="text" id="diaChi-input" required placeholder="VD: 17a, Nguyễn Văn Linh, An Khánh, Ninh Kiều" />
           </div>
+
           <div class="form-group">
-            <label for="loaiGiuong-input">Loại giường</label>
-            <input type="text" id="loaiGiuong-input" />
+            <label for="loaiGiuong-input">Loại giường *</label>
+            <input type="text" id="loaiGiuong-input" required placeholder="VD: Giường đơn hoặc Giường đôi"/>
           </div>
+
           <div class="form-group">
-            <label for="soLuongKhach-input">Số khách tối đa</label>
-            <input type="number" id="soLuongKhach-input" min="1" />
+            <label for="soLuongKhach-input">Số khách tối đa *</label>
+            <input type="number" id="soLuongKhach-input" min="1" max="4" required placeholder="VD: 1-4"/>
           </div>
+
+          <!-- Phần Tiện ích (sửa cấu trúc để rõ ràng hơn) -->
           <div class="form-group">
-            <label for="tienIch-input">Tiện ích (cách nhau bởi dấu phẩy)</label>
-            <input type="text" id="tienIch-input" />
-            <small>Ví dụ: WiFi, Điều hòa, TV</small>
+            <label>Tiện ích</label>
+            <div id="tienIch-input-visual" class="tienIch-pill-container">
+              <!-- Pills sẽ được render bởi JS -->
+            </div>
+            <input type="hidden" id="tienIch-input" name="tienIch" />
+            <label style="margin-top: 10px; font-weight: normal; font-size: 14px;">Chọn tiện ích:</label>
+            <div id="tienIch-options-container" class="tienIch-options">
+              <!-- Options sẽ được render bởi JS -->
+            </div>
           </div>
+
           <div class="form-group">
             <label for="gia-input">Giá mỗi đêm (VND) *</label>
             <input type="number" id="gia-input" required min="0" step="1000" />
           </div>
+
           <div class="form-actions">
             <button type="button" id="cancel-button" class="btn-secondary">Hủy</button>
             <button type="submit" class="btn-primary">Lưu</button>

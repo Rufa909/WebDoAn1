@@ -203,7 +203,7 @@ app.delete('/api/my-business-rooms/:maPhong', requireLogin, async (req, res) => 
 // API: THÊM PHÒNG MỚI (POST) - Hỗ trợ upload hình
 app.post('/api/my-business-rooms', requireLogin, upload.single('hinhAnh'), async (req, res) => {
   const maDoanhNghiep = req.session.user.id;
-  const { tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, maPhong } = req.body;
+  const { tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia } = req.body;
 
   if (!tenPhong || !gia) {
     if (req.file) fs.unlinkSync(req.file.path);
@@ -218,18 +218,18 @@ app.post('/api/my-business-rooms', requireLogin, upload.single('hinhAnh'), async
 
     const sql = `
       INSERT INTO thongTinPhong 
-      (maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const [result] = await db.execute(sql, [
-      maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
+      maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
     ]);
 
     res.status(201).json({ 
       message: "Thêm phòng thành công!",
       newRoom: {
         maPhong: result.insertId,
-        maDoanhNghiep, maPhong, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
+        maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh
       }
     });
   } catch (err) {
@@ -478,7 +478,6 @@ app.get('/api/rooms-grouped-by-company', async (req, res) => {
         diaChi: room.diaChi,
         loaiGiuong: room.loaiGiuong,
         gia: room.gia,
-        danhGia: room.danhGia,
         soLuongKhach: room.soLuongKhach,
         tienIch: room.tienIch,
       });

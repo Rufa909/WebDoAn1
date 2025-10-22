@@ -360,14 +360,14 @@ body {
 
 .modal-content {
   background-color: white;
-  padding: 25px; /* Giảm padding từ 30px để khung nhỏ hơn */
+  padding: 25px; 
   border-radius: 8px;
-  width: 85%; /* Giảm từ 90% xuống 85% */
-  max-width: 450px; /* Giảm từ 500px để phù hợp 85% */
-  max-height: 650px; /* Giới hạn chiều cao 85% viewport để tránh tràn */
+  width: 85%; 
+  max-width: 450px; 
+  max-height: 90vh; 
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   margin: 20px 0;
-  overflow-y: auto; /* Scroll nội dung nếu dài */
+  overflow-y: auto; 
 }
 .modal-content h2 {
   margin-top: 0;
@@ -431,15 +431,89 @@ body {
   color: white;
 }
 
-/* --- Media Query cho Responsive (Mobile) --- */
+/* --- Tiện ích (Amenities) Styles --- */
+.tienIch-pill-container {
+  display: flex; /* Bỏ none để hiện container pills */
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  min-height: 40px; /* Để tránh layout nhảy khi empty */
+}
+
+.tienIch-pill {
+  display: inline-flex;
+  align-items: center;
+  background-color: #3b82f6;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 6px;
+}
+
+.tienIch-pill-delete {
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tienIch-pill-delete:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tienIch-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.tienIch-option {
+  padding: 8px 12px;
+  background-color: #ffffff;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tienIch-option:hover {
+  background-color: #e9ecef;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.tienIch-option.selected {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%); /* Ẩn sidebar mặc định trên mobile */
+    transform: translateX(-100%);
     transition: transform 0.3s;
   }
 
   .sidebar.open {
-    transform: translateX(0); /* Mở sidebar khi cần */
+    transform: translateX(0);
   }
 
   .main-content {
@@ -453,5 +527,20 @@ body {
     padding: 10px;
   }
 
- 
+  .tienIch-pill-container,
+  .tienIch-options {
+    gap: 6px;
+    padding: 6px;
+  }
+  
+  .tienIch-pill,
+  .tienIch-option {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-height: 85vh; 
+  }
 }

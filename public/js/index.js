@@ -135,11 +135,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.addEventListener('DOMContentLoaded', async () => {
   const amenitiesIconMap = {
     'be boi': 'fa-swimming-pool',
-    'view dep': 'fa-mountain-sun',
+    'view dep': 'fa-rainbow',
     'phong gym': 'fa-dumbbell',
     'may chieu': 'fa-film',
-    'ban cong': 'fa-wind',
-    'bep': 'fa-kitchen-set',
+    'ban cong': 'fa-cloud',
+    'bep': 'fa-utensils',
     'bon tam': 'fa-bath'
   };
 
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `<li><i class="fa-solid ${icon}"></i> ${text}</li>`;
     });
 
-    itemsHtml.push(`<li><i class="fa-solid fa-star"></i> ${room.danhGia}/5</li>`);
+
     itemsHtml.push(`<li><i class="fa-solid fa-bed"></i> ${room.loaiGiuong}</li>`);
     itemsHtml.push(`<li><i class="fa-solid fa-users"></i> ${room.soLuongKhach} khách</li>`);
 
