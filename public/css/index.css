@@ -40,6 +40,7 @@ body {
 
 hr {
   margin: 0;
+  padding: 10px;
 }
 
 /* --- Filter Box --- */
@@ -50,15 +51,16 @@ hr {
   transform: translate(-50%, -55%);
   background: transparent;
   z-index: 1000;
-  width: 55%;
-  max-height: 90%;
+  width: 50%;
+  max-height: 85%;
   border-radius: 12px;
+  
 }
 
 .filter-box .card-body {
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
-  padding-left: 50px;
+  padding-left: 50px; 
 }
 
 .filter-box .card-body::-webkit-scrollbar {
@@ -81,18 +83,20 @@ hr {
 .card-header {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  padding: 15px;
-  background-color: #f8f9fa;
+  padding: 30px;
+  background: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8ca);
+ 
+  
 }
-
-.filter-section .fa-star {
-  color: #fed311;
+.filterBox .card-header h1 {
+  font-size: 1.75rem; 
+  text-align: center;
 }
 
 .filter-section h5.title {
   color: #495057;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 15px;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -101,35 +105,46 @@ hr {
 .filter-section h5.title i {
   color: rgb(70, 180, 142);
   margin-right: 8px;
-  font-size: 20px;
+  font-size: 18px;
 }
 
-/* --- Buttons --- */
+
+
+
+.card-header h1 {
+  font-size: 30px;               
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.card-header .btn-close {
+  position: absolute;
+  right: 10px; 
+ 
+  
+}
 .btn-outline-secondary {
-  border-color: #dacece;
-  color: #495057;
-  background-color: #ededed;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 15px;
-  transition: all 0.2s ease-in-out;
+  color: #0b1310c2;               
+  border-color: #2ace8f6b;         
+  background-color: rgba(238, 250, 246, 0.673);    
+   transition: background-color 0.2s, color 0.2s;
 }
-
-.btn-outline-secondary:hover {
-  border-color: rgba(70, 200, 142, 0.8);
-  color: #000;
-  background-color: rgba(70, 200, 142, 0.3);
-}
-
-.btn-outline-secondary.active,
+.btn-outline-secondary:hover,
 .btn-outline-secondary:focus,
-.btn-outline-secondary:active {
-  background-color: rgb(70, 200, 142) !important;
-  color: #fff !important;
-  border-color: rgb(70, 200, 142) !important;
-  box-shadow: 0 0 0 0.25rem rgba(70, 200, 142, 0.4);
-  outline: none;
+.btn-outline-secondary.active {
+  background-color: #43cbb2d6 !important; 
+  color: #fff!important;                
+  border-color: #2ac4a7!important;
+  box-shadow: 0 0 6px #2ac4a766!important;
+ 
+  
+ 
 }
+
 
 /* --- Form Controls --- */
 button[type="reset"] {
@@ -224,17 +239,19 @@ button[type="submit"]:hover {
   display: none;
 }
 
+
 .room-card {
   flex: 0 0 auto;
-  width: 380px;
-  max-height: 500px;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: #f8f9fa;
+  width: 400px;
+  height:480px;
   border: none;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
+}
 .room-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -289,17 +306,7 @@ button[type="submit"]:hover {
   background-color: rgba(32, 201, 151, 1);
 }
 
-.room-card {
-  flex: 0 0 auto;
-  width: 400px;
-  height:480px;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-}
 
 .room-card:hover {
   transform: translateY(-5px);
@@ -364,6 +371,9 @@ button[type="submit"]:hover {
   transition: opacity 0.3s ease;
   margin-top: auto;
 }
+
+
+
 
 .btn-datphong:hover {
   opacity: 0.9;

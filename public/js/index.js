@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const showFilterBtn = document.getElementById('showFilterBtn');
     const closeFilterBtn = document.getElementById('closeFilterBtn');
 
+   if (filterBox) {
+        filterBox.style.display = 'none';
+    }
 
     function toggleFilter() {
         if (filterBox) {
@@ -78,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             filterBox.style.display = isVisible ? 'none' : 'block';
         }
     }
-
+    
     if (showFilterBtn) showFilterBtn.addEventListener('click', toggleFilter);
     if (closeFilterBtn) closeFilterBtn.addEventListener('click', toggleFilter);
 
@@ -89,19 +92,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const parentSection = button.closest('.filter-section');
                 const isMultiSelect = parentSection.querySelector('h5').innerText.includes('Tiện ích');
 
+                // 🔹 Loại bỏ focus ngay sau khi click để không bị kẹt trạng thái
+                button.blur();
+
                 if (!isMultiSelect) {
                     if (button.classList.contains('active')) {
                         button.classList.remove('active');
-                    } 
-                    else {
+                    } else {
                         parentSection.querySelectorAll('.btn.active').forEach(b => b.classList.remove('active'));
                         button.classList.add('active');
                     }
-                } 
-                else {
+                } else {
                     button.classList.toggle('active');
                 }
-            }
+}
         });
 
         filterForm.addEventListener('submit', (e) => {
@@ -112,17 +116,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             filterForm.querySelectorAll('[data-location].active').forEach(btn => params.append('location', btn.dataset.location));
             filterForm.querySelectorAll('[data-guests].active').forEach(btn => params.append('guests', btn.dataset.guests));
             filterForm.querySelectorAll('[data-bed-type].active').forEach(btn => params.append('bedType', btn.dataset.bedType));
-            filterForm.querySelectorAll('[data-rooms].active').forEach(btn => params.append('rooms', btn.dataset.rooms));
-            filterForm.querySelectorAll('[data-rating].active').forEach(btn => params.append('rating', btn.dataset.rating));
-            filterForm.querySelectorAll('[data-ameity].active').forEach(btn => params.append('amenities', btn.dataset.ameity));
-            
+            filterForm.querySelectorAll('[data-amenity].active').forEach(btn => params.append('amenities', btn.dataset.amenity));
             const minPrice = document.getElementById('min-price').value;
             const maxPrice = document.getElementById('max-price').value;
 
             if (minPrice) params.append('minPrice', minPrice);
             if (maxPrice) params.append('maxPrice', maxPrice);
 
-            window.location.href = `results.html?${params.toString()}`;
+            window.location.href = `/pages/results.html?${params.toString()}`;
+
         });
 
         filterForm.addEventListener('reset', () => {
@@ -130,6 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
            
         });
+        
     }
 });
 document.addEventListener('DOMContentLoaded', async () => {

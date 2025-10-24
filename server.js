@@ -491,8 +491,78 @@ app.get('/api/rooms-grouped-by-company', async (req, res) => {
     res.status(500).json({ error: "Lỗi truy vấn thông tin phòng" });
   }
 });
+app.use(express.static('public'));
+app.use('/pages', express.static('pages'));
+app.get('/api/filter-rooms', async (req, res) => {
+  if (!db) {
+    return res.status(500).json({ error: "Chưa kết nối được với database." });
+  }
 
-// Start server
+  // 1. Lấy các tham số từ query string (ví dụ: /api/filter-rooms?location=Ninh Kiều&guests=2)
+  const { location, guests, bedType, amenities, minPrice, maxPrice } = req.query;
+
+  // 2. Bắt đầu câu SQL
+  let sql = "SELECT * FROM thongTinPhong WHERE 1=1";
+  const params = [];
+
+  try {
+    // 3. Xây dựng câu SQL động dựa trên tham số
+    
+    // Lọc theo Điểm đến (diaChi)
+    if (location) {
+      sql += " AND diaChi LIKE ?";
+      params.push(`%${location}%`);
+    }
+
+    // Lọc theo Số lượng khách (soLuongKhach)
+    if (guests) {
+      sql += " AND soLuongKhach >= ?";
+      params.push(parseInt(guests));
+    }
+
+    // Lọc theo Loại giường (loaiGiuong)
+    if (bedType) {
+      // Chuyển 'giuong-don' -> 'Giường đơn', 'giuong-doi' -> 'Giường đôi'
+      const loaiGiuongDB = bedType === 'giuong-don' ? 'Giường đơn' : 'Giường đôi';
+      sql += " AND loaiGiuong = ?";
+      params.push(loaiGiuongDB);
+    }
+
+    // Lọc theo Giá (gia)
+    if (minPrice) {
+      sql += " AND gia >= ?";
+      params.push(parseFloat(minPrice));
+    }
+    if (maxPrice) {
+      sql += " AND gia <= ?";
+      params.push(parseFloat(maxPrice));
+    }
+
+    // Lọc theo Tiện ích (tienIch)
+    if (amenities) {
+      // Đảm bảo 'amenities' luôn là một mảng (nếu người dùng chọn nhiều)
+      const amenitiesList = Array.isArray(amenities) ? amenities : [amenities];
+      
+      amenitiesList.forEach(item => {
+        // SỬA LỖI: Dùng LOWER() để truy vấn không phân biệt chữ hoa/thường
+        // (Giá trị 'item' từ frontend đã là chữ thường, ví dụ: "bể bơi")
+        sql += " AND LOWER(tienIch) LIKE ?"; 
+        params.push(`%${item}%`); // 'item' đã là chữ thường rồi
+      });
+    }
+
+    
+    const [results] = await db.execute(sql, params);
+
+    // 5. Trả về kết quả JSON
+    res.json(results);
+
+  } catch (err) {
+    console.error("Lỗi /api/filter-rooms:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi lọc phòng." });
+  }
+});
+/// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`Server đang chạy ở http://localhost:${PORT}`)

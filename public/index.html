@@ -15,7 +15,7 @@
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="css/index.css" />
   </head>
   <body>
     <!-- Header -->
@@ -48,7 +48,7 @@
               white-space: nowrap;
             "
           >
-            <i class="fa-solid fa-magnifying-glass"></i> Bộ lọc
+            <i class="fa-solid fa-magnifying-glass "></i> Bộ lọc
           </button>
           <button
             class="btn btn-secondary dropdown-toggle"
@@ -75,79 +75,81 @@
       </div>
     </div>
 
-    <div id="filterBox" class="filter-box" style="display: none">
+    <div id="filterBox" class="filter-box">
         <div class="row justify-content-center">
-          <div class="col-lg-10 col-sm-12">
-            <div class="card shadow-sm">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h1 class="mb-0"><i class="fa-solid fa-filter"></i> Bộ lọc</h1>
-                <button type="button" class="btn-close" id="closeFilterBtn" aria-label="Đóng">&times;</button>
-              </div>
-              <div class="card-body">
-                <form id="filterForm">
-                  <div class="filter-section mb-2">
-                    <h5 class="title mb-3">
-                      <i class="fa-solid fa-location-dot"></i> Điểm đến
-                    </h5>
-                    <div id="location-buttons" class="filter-options">
+            <div class="col-lg-10 col-sm-12">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h1 class="mb-0"><i class="fa-solid fa-filter" ></i> Bộ lọc</h1>
+                        <button type="button" class="btn-close" id="closeFilterBtn"></button>
                     </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-2">
-                    <h5 class="title mb-3">
-                      <i class="fa-solid fa-users"></i> Số Lượng khách
-                    </h5>
-                    <div id="guest-buttons" class="filter-options">
+                    <div class="card-body">
+                        <form id="filterForm">
+                            <div class="filter-section mb-2">
+                                <h5 class="title mb-3"><i class="fa-solid fa-location-dot"></i> Điểm đến</h5>
+                                <div id="location-buttons" class="filter-options">
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Ninh Kiều">Ninh Kiều</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Cái Răng">Cái Răng</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Ô Môn">Ô Môn</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Thốt Nốt">Thốt Nốt</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Bình Thủy">Bình Thủy</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-location="Phong Điền">Phong Điền</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="filter-section mb-2">
+                                <h5 class="title mb-3"><i class="fa-solid fa-users"></i> Số Lượng khách</h5>
+                                <div id="guest-buttons" class="filter-options">
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-guests="1">1 khách</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-guests="2">2 khách</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-guests="3">3 khách</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-guests="4">4 khách</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="filter-section mb-2">
+                                <h5 class="title"><i class="fa-solid fa-bed"></i> Loại Giường</h5>
+                                <div id="bed-buttons" class="filter-options">
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-don">Giường đơn</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-bed-type="giuong-doi">Giường đôi</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="filter-section mb-2">
+                                <h5 class="title"><i class="fa-solid fa-layer-group"></i> Tiện ích</h5>
+                                <div id="amenity-buttons" class="filter-options">
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="bể bơi"><i class="fa-solid fa-swimming-pool"></i> Bể bơi</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="view đẹp"><i class="fa-solid fa-rainbow"></i> View đẹp</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="ban công"><i class="fa-solid fa-cloud"></i> Ban công</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="phòng gym"><i class="fa-solid fa-dumbbell"></i> Phòng gym</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="bếp"><i class="fa-solid fa-utensils"></i> Bếp</button>
+                                    <button type="button" class="btn btn-outline-secondary me-2 mb-2" data-amenity="bồn tắm"><i class="fa-solid fa-bath"></i> Bồn tắm</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="filter-section mb-4">
+                                <h5>Khoảng giá (VND) <i class="fa-solid fa-coins"></i></h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <label for="min-price" class="form-label">Tối thiểu</label>
+                                        <input type="number" class="form-control" id="min-price" placeholder="0" min="0">
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <label for="max-price" class="form-label">Tối đa</label>
+                                        <input type="number" class="form-control" id="max-price" placeholder="5,000,000" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                              <button type="reset" class="btn btn-outline-secondary me-2 mb-2">Xóa bộ lọc</button>
+                              
+                              <button type="submit" class="btn btn-outline-secondary me-2 mb-2">Áp dụng</button>
+                            </div>
+                        </form>
                     </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-2">
-                    <h5 class="title">
-                      <i class="fa-solid fa-bed"></i> Loại Giường
-                    </h5>
-                    <div id="bed-buttons" class="filter-options">
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-2">
-                    <h5 class="title">
-                      <i class="fa-solid fa-door-open"></i> Số phòng
-                    </h5>
-                    <div id="room-buttons" class="filter-options">
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-2">
-                    <h5 class="title">
-                     <i class="fa-solid fa-layer-group"></i> 
-                      Tiện ích</h5>
-                    <div id="amenity-buttons" class="filter-options">
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="filter-section mb-4">
-                    <h5>Khoảng giá (VND) <i class="fa-solid fa-coins"></i></h5>
-                    <div class="row">
-                      <div class="col-md-6 mb-2">
-                        <label for="min-price" class="form-label">Tối thiểu</label>
-                        <input type="number" class="form-control" id="min-price" placeholder="0" min="0" />
-                      </div>
-                      <div class="col-md-6 mb-2">
-                        <label for="max-price" class="form-label">Tối đa</label>
-                        <input type="number" class="form-control" id="max-price" placeholder="5,000,000" min="0" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-end">
-                    <button type="reset" class="btn btn-outline-secondary me-2 mb-2" onclick="resetFilters()">Xóa bộ lọc</button>
-                    <button type="button" class="btn btn-primary me-2 mb-2" onclick="applyFilters()">Áp dụng</button>
-                  </div>
-                </form>
-              </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
     <hr />
 
