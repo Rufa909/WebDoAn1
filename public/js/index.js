@@ -55,17 +55,19 @@ function hideFilter() {
 }
 
 const amenitiesIconMap = {
-  "be boi": "fa-swimming-pool",
-  "view dep": "fa-rainbow",
-  "phong gym": "fa-dumbbell",
-  "may chieu": "fa-film",
-  "ban cong": "fa-cloud",
+  "beboi": "fa-swimming-pool",
+  "viewdep": "fa-rainbow",
+  "phonggym": "fa-dumbbell",
+  "maychieu": "fa-film",
+  "bancong": "fa-cloud",
   "bep": "fa-utensils",
-  "bon tam": "fa-bath",
+  "bontam": "fa-bath",
 };
 
 function createAmenitiesHtml(room) {
-  const amenitiesText = room.tienIch || "";
+  const amenitiesText =
+    room.tienIch ||
+    "Bể bơi, Bếp, Bồn tắm, Máy chiếu, Phòng gym, Ban công, View đẹp";
   const amenitiesList = amenitiesText.split(",");
   const itemsHtml = amenitiesList.map((item) => {
     const text = item.trim();

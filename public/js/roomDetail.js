@@ -1,23 +1,29 @@
 const API_BASE_URL = "http://localhost:3000";
 
 const amenitiesIconMap = {
-  "beboi": "fa-swimming-pool",
-  "viewdep": "fa-rainbow",
-  "phonggym": "fa-dumbbell",
-  "maychieu": "fa-film",
-  "bancong": "fa-cloud",
-  "bep": "fa-utensils",
-  "bontam": "fa-bath",
+  beboi: "fa-swimming-pool",
+  viewdep: "fa-rainbow",
+  phonggym: "fa-dumbbell",
+  maychieu: "fa-film",
+  bancong: "fa-cloud",
+  bep: "fa-utensils",
+  bontam: "fa-bath",
 };
 
 function createAmenitiesHtml(room) {
   const amenitiesText =
-    room.tienIch || "Bể bơi, Bếp, Bồn tắm, Máy chiếu, Phòng gym, Ban công, View đẹp";
+    room.tienIch ||
+    "Bể bơi, Bếp, Bồn tắm, Máy chiếu, Phòng gym, Ban công, View đẹp";
   const amenitiesList = amenitiesText.split(",");
   const itemsHtml = amenitiesList.map((item) => {
     const text = item.trim();
     if (!text) return "";
-    const key = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace("đ", "d").replace(/\s/g, "");
+    const key = text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace("đ", "d")
+      .replace(/\s/g, "");
     const icon = amenitiesIconMap[key] || "fa-check-circle";
     return `<div class="amenity-item"><i class="fa-solid ${icon}"></i><span>${text}</span></div>`;
   });
@@ -195,7 +201,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // Format icons
-    
 
     // Info Phòng
     const infoValues = document.querySelectorAll(".info-value");
@@ -208,12 +213,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Booking Button onclick (ghi đè event)
     const bookingBtn = document.querySelector(".booking-btn");
-    bookingBtn.onclick = (e) => {
-      e.preventDefault();
-      window.location.href = `../pages/booking.html?room_id=${roomId}`; // Redirect với ID
+    bookingBtn.onclick = async (e) => {
+      const resCurrent = await fetch("/current_user", {
+        credentials: "include",
+      });
+      if (!resCurrent.ok) {
+        alert("Vui lòng đăng nhập để đặt phòng!");
+        return;
+      } else {
+        e.preventDefault();
+        window.location.href = `../pages/booking.html?room_id=${roomId}`; // Redirect với ID
+      }
     };
   } catch (error) {
     console.error("Lỗi load phòng:", error);
-    // Giữ hardcode, không thay đổi gì
   }
 });
