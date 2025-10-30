@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
   const forgotPasswordForm = document.getElementById("forgotPasswordForm");
-
+  
   if (loginForm) {
     loginForm.addEventListener("submit", async function (e) {
       e.preventDefault();

@@ -384,7 +384,9 @@
               </div>
 
               <div class="button-group">
-                <button class="save-btn">Lưu thay đổi</button>
+                <button type="submit" class="save-btn" id="save-changes">
+                  Lưu thay đổi
+                </button>
               </div>
             </div>
 
@@ -413,7 +415,7 @@
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", async function () {
         const navItems = document.querySelectorAll(".settings-nav-item");
         const sections = document.querySelectorAll(".setting-section");
 

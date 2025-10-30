@@ -4,14 +4,12 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
 const app = express();
 const bookingRouter = require("./public/js/booking");
 
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
-
-// Thêm multer để xử lý upload file hình ảnh
-const multer = require("multer");
 
 // Cấu hình multer: lưu file vào public/uploads/images/
 const storage = multer.diskStorage({
@@ -66,6 +64,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bookingRouter);
+app.use(express.static("public"));
+app.use("/pages", express.static("pages"));
 
 // Kết nối DB
 let db;
@@ -616,8 +616,35 @@ app.get("/api/rooms-grouped-by-company", async (req, res) => {
     res.status(500).json({ error: "Lỗi truy vấn thông tin phòng" });
   }
 });
-app.use(express.static("public"));
-app.use("/pages", express.static("pages"));
+
+// API: Lấy chi tiết 1 phòng theo maPhong
+app.get("/api/rooms/:maPhong", async (req, res) => {
+  if (!db) {
+    return res.status(500).json({ error: "Chưa kết nối được với database." });
+  }
+
+  try {
+    const { maPhong } = req.params;
+    const sql = "SELECT * FROM thongTinPhong WHERE maPhong = ?";
+    const [results] = await db.execute(sql, [parseInt(maPhong)]);
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Không tìm thấy phòng." });
+    }
+
+    const room = results[0];
+    // Mock thêm nếu DB chưa có (rating, reviews, moTa)
+    room.rating = room.rating || 4.8;
+    room.reviewsCount = room.reviewsCount || 124;
+    room.moTa = room.moTa || `Phòng ${room.tenPhong} sang trọng tại ${room.diaChi}. Đầy đủ tiện nghi cho chuyến đi của bạn.`;
+
+    res.json(room);
+  } catch (err) {
+    console.error("Lỗi /api/rooms/:maPhong:", err);
+    res.status(500).json({ error: "Lỗi truy vấn phòng" });
+  }
+});
+
 app.get("/api/filter-rooms", async (req, res) => {
   if (!db) {
     return res.status(500).json({ error: "Chưa kết nối được với database." });

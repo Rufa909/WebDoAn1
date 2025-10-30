@@ -14,7 +14,7 @@ function redirectToBooking(roomId) {
     return;
   }
 
-  const bookingUrl = `pages/Booking.html?room_id=${id}`;
+  const bookingUrl = `pages/RoomDetail.html?room_id=${id}`;
   window.location.href = bookingUrl;
 }
 
@@ -60,7 +60,7 @@ const amenitiesIconMap = {
   "phong gym": "fa-dumbbell",
   "may chieu": "fa-film",
   "ban cong": "fa-cloud",
-  bep: "fa-utensils",
+  "bep": "fa-utensils",
   "bon tam": "fa-bath",
 };
 
