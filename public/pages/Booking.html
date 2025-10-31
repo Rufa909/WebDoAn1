@@ -4,308 +4,113 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đặt Phòng - Alibaba Homestay</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f8f9fa;
+      body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+      .header-container { background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
+      .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+      .booking-section, .booking-form-section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+      .booking-title, .form-title { font-size: 24px; font-weight: bold; color: #2c3e50; margin-bottom: 25px; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+      table { border-collapse: collapse; width: 100%; text-align: center; font-size: 14px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      thead { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+      th, td { border: 1px solid #e0e0e0; padding: 15px 10px; cursor: pointer; transition: all 0.3s ease; vertical-align: top; }
+      .price { display: block; font-size: 17px; font-weight: 600; color: #ff5722; margin-top: 5px; }
+
+      /* TRẠNG THÁI */
+      .slot.past { background: #ffebee; color: #c62828; cursor: not-allowed; opacity: 0.6; }
+      .slot.booked { background: #fff3e0; border: 2px solid #ff9800 !important; font-weight: bold; cursor: not-allowed; color: #ef6c00; }
+      .slot.available { background: #e8f5e8; color: #2e7d32; }
+      .slot.available:hover { background: #c8e6c9; transform: scale(1.02); }
+      .slot.selected { background: #4caf50 !important; color: white; font-weight: bold; transform: scale(1.05); box-shadow: 0 4px 8px rgba(76,175,80,0.3); }
+
+      /* ĐANG CHỜ XÁC NHẬN */
+      .slot.pending {
+        background: #fff8e1 !important;
+        border: 2px dashed #ffb300 !important;
+        color: #ff8f00;
+        font-weight: bold;
+        position: relative;
+        cursor: not-allowed;
+        opacity: 0.9;
       }
-      .header-container {
-        background: white;
-        padding: 20px 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-      }
-      .main-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-        margin-bottom: 40px;
-      }
-      .booking-section,
-      .booking-form-section {
-        background: white;
-        padding: 30px;
+      .slot.pending::after {
+        content: "Đang chờ";
+        position: absolute;
+        top: -8px; right: -8px;
+        background: #ffb300; color: white;
+        font-size: 10px; padding: 2px 6px;
         border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-      .booking-title,
-      .form-title {
-        font-size: 24px;
         font-weight: bold;
-        color: #2c3e50;
-        margin-bottom: 25px;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 10px;
       }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      thead {
-        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-        color: white;
-      }
-      th,
-      td {
-        border: 1px solid #e0e0e0;
-        padding: 12px 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .price {
-        display: block;
-        font-size: 12px;
-        font-weight: normal;
-        color: #e74c3c;
-        margin-top: 5px;
-      }
-      .slot.past {
-        background: #ffebee;
-        color: #c62828;
-        cursor: not-allowed;
-        opacity: 0.6;
-      }
-      .slot.booked {
-        background: #fff3e0;
-        border: 2px solid #ff9800 !important;
-        font-weight: bold;
-        cursor: not-allowed;
-        color: #ef6c00;
-      }
-      .slot.available {
-        background: #e8f5e8;
-        color: #2e7d32;
-      }
-      .slot.available:hover {
-        background: #c8e6c9;
-        transform: scale(1.02);
-      }
-      .slot.selected {
-        background: #4caf50 !important;
-        color: white;
-        font-weight: bold;
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
-      }
-      #bookingInfo {
-        text-align: center;
-        padding: 20px;
-        background: #e8f5e8;
-        border-radius: 8px;
-        border: 2px solid #4caf50;
-        margin-top: 25px;
-      }
-      .form-input,
-      .form-select,
-      .form-textarea {
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 16px;
-        width: 100%;
-        margin-bottom: 10px;
-      }
-      .form-input:focus,
-      .form-select:focus {
-        outline: none;
-        border-color: #3498db;
-      }
-      .submit-btn {
-        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-        color: white;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 15px;
-      }
-      .submit-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-      }
-      .submit-btn:disabled {
-        background: #95a5a6;
-        cursor: not-allowed;
-        transform: none;
-      }
-      .loading {
-        text-align: center;
-        padding: 50px;
-        font-size: 18px;
-        color: #666;
-      }
-      .error {
-        background: #ffebee;
-        color: #c62828;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-        border-left: 4px solid #f44336;
-      }
-      .success {
-        background: #e8f5e9;
-        color: #2e7d32;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-        border-left: 4px solid #4caf50;
-      }
-      @media (max-width: 768px) {
-        .main-content {
-          grid-template-columns: 1fr;
-        }
-      }
+
+      #bookingInfo { text-align: center; padding: 20px; background: #e8f5e8; border-radius: 8px; border: 2px solid #4caf50; margin-top: 25px; }
+      .form-input, .form-select, .form-textarea { padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
+      .form-input:focus, .form-select:focus { outline: none; border-color: #3498db; }
+      .submit-btn { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+      .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(231,76,60,0.4); }
+      .submit-btn:disabled { background: #95a5a6; cursor: not-allowed; transform: none; }
+      .loading { text-align: center; padding: 50px; font-size: 18px; color: #666; }
+      .error { background: #ffebee; color: #c62828; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f44336; }
+      .success { background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4caf50; }
+      .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 15px 20px; border-radius: 8px; z-index: 1000; animation: fadeInOut 3s forwards; }
+      @keyframes fadeInOut { 0%, 100% { opacity: 0; } 10%, 90% { opacity: 1; } }
+      @media (max-width: 768px) { .main-content { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
+    <!-- HEADER -->
     <div class="header-container">
-      <div
-        class="container-fluid d-flex justify-content-between align-items-center"
-      >
-        <a
-          class="navbar-brand"
-          href="/"
-          style="
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: black;
-            text-decoration: none;
-          "
-        >
+      <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="/" style="font-weight: bold; font-size: 1.5rem; color: black; text-decoration: none;">
           <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
         </a>
       </div>
       <hr />
     </div>
 
+    <!-- MAIN -->
     <div class="main-content">
       <div class="booking-section">
         <h2 class="booking-title">Chọn thời gian</h2>
-
-        <div id="loadingSchedule" class="loading" style="display: none">
-          <i class="fas fa-spinner fa-spin"></i> Đang tải lịch phòng...
-        </div>
-
+        <div id="loadingSchedule" class="loading" style="display: none"><i class="fas fa-spinner fa-spin"></i> Đang tải lịch...</div>
         <div id="errorMessage" class="error" style="display: none"></div>
 
         <table id="bookingTable">
           <thead>
             <tr>
               <th>Ngày</th>
-              <th>
-                10:00 - 13:00<br /><span class="price" id="price-1"></span>
-              </th>
-              <th>
-                13:30 - 16:30<br /><span class="price" id="price-2"></span>
-              </th>
-              <th>
-                17:00 - 20:00<br /><span class="price" id="price-3"></span>
-              </th>
-              <th>
-                20:30 - 09:30<br /><span class="price" id="price-4"></span>
-              </th>
+              <th class="time-slot-header">10:00 - 13:00 <span class="price" id="price-1"></span></th>
+              <th class="time-slot-header">13:30 - 16:30 <span class="price" id="price-2"></span></th>
+              <th class="time-slot-header">17:00 - 20:00 <span class="price" id="price-3"></span></th>
+              <th class="time-slot-header">20:30 - 09:30 <span class="price" id="price-4"></span></th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
 
         <div id="bookingInfo">
-          <strong>Chọn khung giờ:</strong>
-          <span id="selectedCount">0</span> khung giờ<br />
+          <strong>Chọn khung giờ:</strong> <span id="selectedCount">0</span> khung giờ<br />
           <strong>Tổng tiền:</strong> <span id="totalPrice">0</span>đ
         </div>
 
-        <button type="button" id="bookNowBtn" class="submit-btn" disabled>
-          Đặt phòng
-        </button>
+        <button type="button" id="bookNowBtn" class="submit-btn" disabled>Đặt phòng</button>
       </div>
 
       <div class="booking-form-section">
         <h2 class="form-title">Thông tin Đặt phòng</h2>
-
         <div id="successMessage" class="success" style="display: none"></div>
 
-        <form id="bookingForm" class="booking-form">
-          <div class="form-group">
-            <label>Họ và tên *</label>
-            <input
-              type="text"
-              id="hoTen"
-              placeholder="Nhập họ và tên"
-              class="form-input"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Số điện thoại *</label>
-            <input
-              type="tel"
-              id="sdt"
-              placeholder="Nhập số điện thoại"
-              class="form-input"
-              required
-            />
-            <small style="color: #666; font-size: 13px"
-              >* Thông tin sẽ được gửi qua Zalo</small
-            >
-          </div>
-
-          <div class="form-group">
-            <label>Số lượng khách</label>
-            <select id="soLuongKhach" class="form-select">
-              <option value="2">2 khách</option>
-              <option value="3">3 khách</option>
-              <option value="4">4 khách</option>
-            </select>
-            <small style="color: #666; font-size: 13px"
-              >* Phụ thu 50k/khách nếu > 2 người</small
-            >
-          </div>
-
-          <div class="form-group">
-            <label>Ghi chú</label>
-            <textarea
-              id="ghiChu"
-              placeholder="Nhập ghi chú..."
-              class="form-textarea"
-              rows="3"
-            ></textarea>
-          </div>
-
-          <div
-            style="
-              background: #f8f9fa;
-              padding: 15px;
-              border-radius: 8px;
-              font-size: 14px;
-              color: #666;
-            "
-          >
-            <p><strong style="color: #e74c3c">Lưu ý:</strong></p>
-            <p>- Xác nhận đủ tuổi vị thành niên (≥18 tuổi)</p>
-            <p>- Muốn hủy/đổi lịch vui lòng báo trước 3 tiếng</p>
-            <p>
-              - Đồng ý với
-              <a href="#" style="color: #007bff">Nội quy & Chính sách</a>
-            </p>
+        <form id="bookingForm">
+          <div class="form-group"><label>Họ và tên *</label><input type="text" id="hoTen" class="form-input" required /></div>
+          <div class="form-group"><label>Số điện thoại *</label><input type="tel" id="sdt" class="form-input" required /><small style="color:#666;font-size:13px">* Gửi qua Zalo</small></div>
+          <div class="form-group"><label>Số lượng khách</label><select id="soLuongKhach" class="form-select"><option value="2">2 khách</option><option value="3">3 khách</option><option value="4">4 khách</option></select></div>
+          <div class="form-group"><label>Ghi chú</label><textarea id="ghiChu" class="form-textarea" rows="3"></textarea></div>
+          <div style="background:#f8f9fa;padding:15px;border-radius:8px;font-size:14px;color:#666;">
+            <p><strong style="color:#e74c3c">Lưu ý:</strong></p>
+            <p>- Xác nhận ≥18 tuổi</p>
+            <p>- Hủy/đổi trước 3 tiếng</p>
+            <p>- Đồng ý <a href="#" style="color:#007bff">Nội quy</a></p>
           </div>
         </form>
       </div>
@@ -313,301 +118,211 @@
 
     <script>
       const API_BASE_URL = "http://localhost:3000";
-      function getRoomIdFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const roomId = urlParams.get("room_id");
-
-        if (roomId) {
-          return parseInt(roomId);
-        }
-
-        console.warn(
-          "Không tìm thấy tham số room_id trên URL. Đang sử dụng MA_PHONG mặc định là 1."
-        );
-        return 1;
-      }
-
-      const MA_PHONG = getRoomIdFromUrl();
+      const MA_PHONG = new URLSearchParams(window.location.search).get("room_id") ? parseInt(new URLSearchParams(window.location.search).get("room_id")) : 1;
 
       let roomData = null;
       let scheduleData = [];
       let selectedSlots = [];
+      let currentUserId = null;
 
       const loadingEl = document.getElementById("loadingSchedule");
       const errorEl = document.getElementById("errorMessage");
 
-      function formatPrice(price) {
-        return new Intl.NumberFormat("vi-VN").format(price);
-      }
+      function formatPrice(p) { return new Intl.NumberFormat("vi-VN").format(p); }
+      function formatDateVN(d) { const date = new Date(d); return `${String(date.getDate()).padStart(2,"0")}/${String(date.getMonth()+1).padStart(2,"0")}/${date.getFullYear()}`; }
 
-      function formatDateVN(dateStr) {
-        const date = new Date(dateStr);
-        const dd = String(date.getDate()).padStart(2, "0");
-        const mm = String(date.getMonth() + 1).padStart(2, "0");
-        const yyyy = date.getFullYear();
-        return `${dd}/${mm}/${yyyy}`;
-      }
-
-      function updatePriceHeaders() {
-        if (!scheduleData || scheduleData.length === 0) return;
-
-        const firstDaySlots = scheduleData[0].slots;
-
-        const khungGioList = [
-          "10:00-13:00",
-          "13:30-16:30",
-          "17:00-20:00",
-          "20:30-09:30",
-        ];
-
-        khungGioList.forEach((slot, index) => {
-          const priceSpan = document.getElementById(`price-${index + 1}`);
-          if (priceSpan && firstDaySlots[slot]) {
-            priceSpan.textContent = `(${formatPrice(
-              firstDaySlots[slot].price
-            )}đ)`;
+      // LẤY USER HIỆN TẠI
+      async function getCurrentUser() {
+        try {
+          const res = await fetch(`${API_BASE_URL}/current_user`, { credentials: 'include' });
+          if (res.ok) {
+            const data = await res.json();
+            currentUserId = data.user?.id || null;
           }
-        });
-
-        if (roomData) {
-          document.title = `${roomData.tenPhong} - ${
-            roomData.tenHomestay || "Homestay"
-          }`;
-        }
+        } catch (e) { console.error(e); }
       }
+
+      // TẢI LỊCH TỪ API (BACKEND ĐÃ TRẢ VỀ userId)
       async function loadRoomSchedule() {
         loadingEl.style.display = "block";
         errorEl.style.display = "none";
 
+        await getCurrentUser();
+
         try {
-          const response = await fetch(
-            `${API_BASE_URL}/api/booking/available/${MA_PHONG}`
-          );
+          const res = await fetch(`${API_BASE_URL}/api/booking/available/${MA_PHONG}`);
+          if (!res.ok) throw new Error("Lỗi tải lịch");
+          const data = await res.json();
+          roomData = data.room;
+          scheduleData = data.schedule;
 
-          const contentType = response.headers.get("content-type");
-
-          if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
-
-            if (!response.ok) {
-              throw new Error(
-                data.error || `Lỗi tải lịch (${response.status})`
-              );
-            }
-
-            roomData = data.room;
-            scheduleData = data.schedule;
-
-            updatePriceHeaders();
-
-            renderScheduleTable();
-          } else {
-            const errorText = await response.text();
-            console.error(
-              "Phản hồi không phải JSON. Có thể là trang lỗi HTML:",
-              errorText.substring(0, 100) + "..."
-            );
-            throw new Error(
-              `Lỗi server (${response.status}): Endpoint không trả về JSON hoặc lỗi cú pháp JSON.`
-            );
-          }
-
-          loadingEl.style.display = "none";
-        } catch (error) {
-          console.error("Lỗi khi tải:", error);
-
-          errorEl.textContent = error.message;
+          updatePriceHeaders();
+          renderScheduleTable();
+        } catch (e) {
+          errorEl.textContent = e.message;
           errorEl.style.display = "block";
+        } finally {
           loadingEl.style.display = "none";
         }
       }
 
+      function updatePriceHeaders() {
+        if (!scheduleData.length) return;
+        const slots = scheduleData[0].slots;
+        ["10:00-13:00","13:30-16:30","17:00-20:00","20:30-09:30"].forEach((s,i) => {
+          const el = document.getElementById(`price-${i+1}`);
+          if (el && slots[s]) el.textContent = `(${formatPrice(slots[s].price)}đ)`;
+        });
+        if (roomData) document.title = `${roomData.tenPhong} - ${roomData.tenHomestay || "Homestay"}`;
+      }
+
+      // RENDER BẢNG - DỰA VÀO userId TỪ BACKEND
       function renderScheduleTable() {
+        const bookingSection = document.querySelector(".booking-section");
+        const scrollPosition = bookingSection.scrollTop;
         const tbody = document.querySelector("#bookingTable tbody");
         tbody.innerHTML = "";
+        const list = ["10:00-13:00","13:30-16:30","17:00-20:00","20:30-09:30"];
 
-        const khungGioList = [
-          "10:00-13:00",
-          "13:30-16:30",
-          "17:00-20:00",
-          "20:30-09:30",
-        ];
-
-        scheduleData.forEach((day) => {
-          let row = `<tr><td style="font-weight: bold; background: #f5f5f5;">${formatDateVN(
-            day.date
-          )}</td>`;
-
-          khungGioList.forEach((slot) => {
+        scheduleData.forEach(day => {
+          let row = `<tr><td style="font-weight:bold;background:#f5f5f5;">${formatDateVN(day.date)}</td>`;
+          list.forEach(slot => {
             const slotData = day.slots[slot];
-            let className = "slot";
-            let status = "Trống";
+            let className = "slot", statusText = "Trống";
+            let isSelectable = false;
 
-            if (slotData.status === "booked") {
-              className += " booked";
-              status = "Đã đặt";
+            const isOwnPending = slotData.userId != null && currentUserId != null && slotData.userId === currentUserId;
+
+            if (isOwnPending) {
+              className = "slot pending"; statusText = "Đang chờ"; isSelectable = true;
+            } else if (slotData.status === "booked") {
+              className = "slot booked"; statusText = "Đã đặt";
             } else if (slotData.status === "pending") {
-              className += " booked";
-              status = "Chờ xác nhận";
+              className = "slot pending"; statusText = "Đang chờ";
             } else if (slotData.status === "past") {
-              className += " past";
-              status = "Đã qua";
-            } else if (slotData.status === "available") {
-              className += " available";
+              className = "slot past"; statusText = "Đã qua";
+            } else {
+              className = "slot available"; statusText = "Trống"; isSelectable = true;
             }
 
-            const isSelected = selectedSlots.some(
-              (s) => s.date === day.date && s.slot === slot
-            );
-            if (isSelected) {
+            if (isSelectable && selectedSlots.some(s => s.date === day.date && s.slot === slot)) {
               className += " selected";
             }
 
             row += `<td class="${className}" 
-                            data-date="${day.date}" 
-                            data-slot="${slot}" 
-                            data-price="${slotData.price}">
-                            ${status}
-                        </td>`;
+                        data-date="${day.date}" 
+                        data-slot="${slot}" 
+                        data-price="${slotData.price}"
+                        ${!isSelectable ? 'style="pointer-events:none;"' : ''}>
+                      ${statusText}
+                    </td>`;
           });
-
-          row += "</tr>";
+          row += `</tr>`;
           tbody.innerHTML += row;
         });
-
         attachSlotClickEvents();
+
+        // KHÔI PHỤC SCROLL + SCROLL ĐẾN Ô VỪA ĐẶT + NHẤP NHÁY
+        requestAnimationFrame(() => {
+          bookingSection.scrollTop = scrollPosition;
+          if (window.lastBookedSlot) {
+            const cell = document.querySelector(`[data-date="${window.lastBookedSlot.date}"][data-slot="${window.lastBookedSlot.slot}"]`);
+            if (cell) {
+              cell.scrollIntoView({ behavior: "smooth", block: "center" });
+              cell.style.transition = "background 0.5s";
+              cell.style.background = "#ffeb3b";
+              setTimeout(() => cell.style.background = "", 1000);
+            }
+            delete window.lastBookedSlot;
+          }
+        });
       }
 
       function attachSlotClickEvents() {
-        document.querySelectorAll(".slot.available").forEach((cell) => {
-          cell.removeEventListener("click", handleSlotClick);
-          cell.addEventListener("click", handleSlotClick);
+        document.querySelectorAll(".slot.available, .slot.pending").forEach(cell => {
+          cell.onclick = () => {
+            const date = cell.dataset.date, slot = cell.dataset.slot, price = parseFloat(cell.dataset.price);
+            const slotData = scheduleData.find(d => d.date === date)?.slots[slot];
+            const isOwnPending = slotData?.userId != null && currentUserId != null && slotData.userId === currentUserId;
+            if (!cell.classList.contains("available") && !isOwnPending) return;
+
+            const idx = selectedSlots.findIndex(s => s.date === date && s.slot === slot);
+            if (idx > -1) {
+              selectedSlots.splice(idx, 1);
+              cell.classList.remove("selected");
+            } else {
+              selectedSlots.push({ date, slot, price });
+              cell.classList.add("selected");
+            }
+            updateBookingInfo();
+          };
         });
       }
 
-      function handleSlotClick() {
-        const date = this.dataset.date;
-        const slot = this.dataset.slot;
-        const price = parseFloat(this.dataset.price);
-
-        const index = selectedSlots.findIndex(
-          (s) => s.date === date && s.slot === slot
-        );
-
-        if (index > -1) {
-          selectedSlots.splice(index, 1);
-          this.classList.remove("selected");
-        } else {
-          selectedSlots.push({ date, slot, price });
-          this.classList.add("selected");
-        }
-
-        updateBookingInfo();
-      }
-
-      // Cập nhật thông tin booking
       function updateBookingInfo() {
         const count = selectedSlots.length;
-        const total = selectedSlots.reduce((sum, s) => sum + s.price, 0);
-
+        const total = selectedSlots.reduce((s, p) => s + p.price, 0);
         document.getElementById("selectedCount").textContent = count;
         document.getElementById("totalPrice").textContent = formatPrice(total);
-
         document.getElementById("bookNowBtn").disabled = count === 0;
       }
 
-      // Xử lý đặt phòng
-      document
-        .getElementById("bookNowBtn")
-        .addEventListener("click", async function () {
-          // ... (Logic đặt phòng của bạn đã đúng, giữ nguyên)
-          const hoTen = document.getElementById("hoTen").value.trim();
-          const sdt = document.getElementById("sdt").value.trim();
-          const soLuongKhach = document.getElementById("soLuongKhach").value;
-          const ghiChu = document.getElementById("ghiChu").value.trim();
-          const bookNowBtn = this;
+      // ĐẶT PHÒNG - LƯU SLOT TRƯỚC KHI XÓA
+      document.getElementById("bookNowBtn").onclick = async () => {
+        const hoTen = document.getElementById("hoTen").value.trim();
+        const sdt = document.getElementById("sdt").value.trim();
+        const soLuongKhach = document.getElementById("soLuongKhach").value;
+        const ghiChu = document.getElementById("ghiChu").value.trim();
 
-          if (!hoTen || !sdt || selectedSlots.length === 0) {
-            alert("Vui lòng nhập đủ thông tin và chọn ít nhất một khung giờ!");
-            return;
-          }
+        if (!hoTen || !sdt || selectedSlots.length === 0) return alert("Vui lòng nhập đủ thông tin!");
 
-          const totalPrice = selectedSlots.reduce((sum, s) => sum + s.price, 0);
-          const confirmMsg = `Xác nhận đặt ${
-            selectedSlots.length
-          } khung giờ cho phòng ID ${MA_PHONG}?\nTổng tiền: ${formatPrice(
-            totalPrice
-          )}đ`;
+        const total = selectedSlots.reduce((s, p) => s + p.price, 0);
+        if (!confirm(`Xác nhận đặt ${selectedSlots.length} khung giờ?\nTổng: ${formatPrice(total)}đ`)) return;
 
-          if (!confirm(confirmMsg)) {
-            return;
-          }
+        const btn = document.getElementById("bookNowBtn");
+        btn.disabled = true; btn.innerHTML = "Đang đặt...";
 
-          bookNowBtn.disabled = true;
-          bookNowBtn.innerHTML =
-            '<i class="fas fa-spinner fa-spin"></i> Đang đặt phòng...';
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/booking/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              maPhong: MA_PHONG, hoTen, sdt,
+              soLuongKhach: parseInt(soLuongKhach), ghiChu,
+              idNguoiDung: currentUserId || null,
+              slots: selectedSlots.map(s => ({ ngayDat: s.date, khungGio: s.slot, giaKhungGio: s.price }))
+            })
+          });
 
-          document.getElementById("successMessage").style.display = "none";
-          document.getElementById("errorMessage").style.display = "none";
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Đặt thất bại");
 
-          try {
-            const response = await fetch(`${API_BASE_URL}/api/booking/create`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                maPhong: MA_PHONG,
-                hoTen,
-                sdt,
-                soLuongKhach: parseInt(soLuongKhach),
-                ghiChu,
-                slots: selectedSlots.map((s) => ({
-                  ngayDat: s.date,
-                  khungGio: s.slot,
-                  giaKhungGio: s.price,
-                })),
-              }),
-            });
+          // LƯU SLOT VỪA ĐẶT TRƯỚC KHI XÓA
+          const justBookedSlot = selectedSlots.length > 0 ? { ...selectedSlots[0] } : null;
 
-            const result = await response.json();
+          document.getElementById("successMessage").textContent = "Đặt thành công! Đang chờ xác nhận.";
+          document.getElementById("successMessage").style.display = "block";
+          document.getElementById("bookingForm").reset();
+          selectedSlots = [];
 
-            if (!response.ok) {
-              throw new Error(result.error || "Đặt phòng thất bại");
-            }
+          window.lastBookedSlot = justBookedSlot;
 
-            document.getElementById("successMessage").textContent =
-              "✓ Đặt phòng thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.";
-            document.getElementById("successMessage").style.display = "block";
+          await loadRoomSchedule();
+          updateBookingInfo();
 
-            document.getElementById("bookingForm").reset();
-            selectedSlots = [];
+          setTimeout(() => document.getElementById("successMessage").style.display = "none", 5000);
+        } catch (e) {
+          errorEl.textContent = "Lỗi: " + e.message;
+          errorEl.style.display = "block";
+        } finally {
+          btn.disabled = false; btn.innerHTML = "Đặt phòng";
+        }
+      };
 
-            await loadRoomSchedule();
-            updateBookingInfo();
-
-            document
-              .getElementById("successMessage")
-              .scrollIntoView({ behavior: "smooth" });
-            setTimeout(() => {
-              document.getElementById("successMessage").style.display = "none";
-            }, 5000);
-          } catch (error) {
-            document.getElementById("errorMessage").textContent =
-              "Lỗi: " + error.message;
-            document.getElementById("errorMessage").style.display = "block";
-            document
-              .getElementById("errorMessage")
-              .scrollIntoView({ behavior: "smooth" });
-          } finally {
-            bookNowBtn.disabled = false;
-            bookNowBtn.innerHTML = "Đặt phòng";
-          }
-        });
-
+      // KHỞI ĐỘNG + AUTO REFRESH
       window.addEventListener("DOMContentLoaded", () => {
         loadRoomSchedule();
-
-        // Auto refresh mỗi 2 phút
-        setInterval(loadRoomSchedule, 120000);
+        setInterval(loadRoomSchedule, 15000);
       });
     </script>
   </body>

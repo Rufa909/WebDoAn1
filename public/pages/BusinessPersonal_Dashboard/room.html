@@ -4,21 +4,153 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/images/logo.png" />
-    <title>Homestay - Phòng Đã Đặt</title>
-    <link rel="stylesheet" href="../../css/room.css" />
+    <title>Homestay - Quản Lý Đặt Phòng</title>
+    <link rel="stylesheet" href="/css/room.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <style>
+      .booking-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+      }
+      .booking-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+      .booking-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+      .booking-status {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .status-pending {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .status-confirmed {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .booking-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 15px;
+      }
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+      .info-item i {
+        color: #3498db;
+        width: 20px;
+      }
+      .booking-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .btn-confirm {
+        flex: 1;
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .btn-confirm:hover {
+        background: #218838;
+      }
+      .btn-reject {
+        flex: 1;
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .btn-reject:hover {
+        background: #c82333;
+      }
+      .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+      }
+      .filter-tab {
+        padding: 8px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .filter-tab.active {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+      .empty-state i {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+      .loading {
+        text-align: center;
+        padding: 40px;
+        font-size: 18px;
+      }
+      .time-slot-info {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 6px;
+        margin: 10px 0;
+      }
+      .price-highlight {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <div class="sidebar">
         <div class="logo">
-          <a href="../../index.html">
-            <img src="../../images/Logo.png" width="15" height="15" />
+          <a href="/index.html">
+            <img src="/images/Logo.png" width="15" height="15" />
           </a>
-          <span>Aibaba Homestay</span>
+          <span>Alibaba Homestay</span>
         </div>
 
         <a href="dashboard.html" class="nav-link">
@@ -27,48 +159,44 @@
             <span>Bảng Điều Khiển</span>
           </div>
         </a>
-        <a href="room.html" class="nav-link"
-          ><div class="nav-item active">
+        <a href="room.html" class="nav-link">
+          <div class="nav-item active">
             <i class="fas fa-calendar-check"></i><span>Đặt Phòng</span>
-          </div></a
-        >
-        <a href="roomdiagram.html" class="nav-link"
-          ><div class="nav-item">
+          </div>
+        </a>
+        <a href="roomdiagram.html" class="nav-link">
+          <div class="nav-item">
             <i class="fas fa-door-open"></i><span>Phòng</span>
-          </div></a
-        >
-        <a href="bill.html" class="nav-link"
-          ><div class="nav-item">
+          </div>
+        </a>
+        <a href="bill.html" class="nav-link">
+          <div class="nav-item">
             <i class="fas fa-file-invoice"></i><span>Hóa Đơn</span>
-          </div></a
-        >
-        <a href="setting.html" class="nav-link"
-          ><div class="nav-item">
+          </div>
+        </a>
+        <a href="setting.html" class="nav-link">
+          <div class="nav-item">
             <i class="fas fa-cog"></i><span>Cài Đặt</span>
-          </div></a
-        >
+          </div>
+        </a>
       </div>
 
       <div class="main-content">
         <div class="header">
-          <h1>Phòng đã đặt</h1>
+          <h1>Quản Lý Đặt Phòng</h1>
           <div class="header-right">
             <div class="search-box">
               <i class="fas fa-search" style="color: #94a3b8"></i>
-              <input type="text" placeholder="Tìm kiếm phòng đã đặt" />
+              <input type="text" placeholder="Tìm kiếm theo tên, SĐT..." id="searchInput" />
             </div>
             <div class="notification-bell" id="open-notification-panel">
-              <i
-                class="far fa-bell"
-                style="font-size: 20px; color: #64748b"
-              ></i>
-              <span class="badge">3</span>
+              <i class="far fa-bell" style="font-size: 20px; color: #64748b"></i>
+              <span class="badge" id="notificationBadge">0</span>
             </div>
             <button
               class="btn btn-secondary dropdown-toggle"
-              id="backToHome"
               type="button"
-              onclick="location.href='../../index.html'"
+              onclick="location.href='/index.html'"
               style="
                 background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
                 border: none;
@@ -85,19 +213,38 @@
           </div>
         </div>
 
+        <div class="filter-tabs">
+          <div class="filter-tab active" data-status="all">
+            <i class="fas fa-list"></i> Tất cả
+          </div>
+          <div class="filter-tab" data-status="choXacNhan">
+            <i class="fas fa-clock"></i> Chờ xác nhận
+          </div>
+          <div class="filter-tab" data-status="daXacNhan">
+            <i class="fas fa-check-circle"></i> Đã xác nhận
+          </div>
+          <div class="filter-tab" data-status="daHuy">
+            <i class="fas fa-times-circle"></i> Đã hủy
+          </div>
+        </div>
+
+        <div id="loadingContainer" class="loading" style="display: none;">
+          <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+        </div>
+
         <div class="booking-grid" id="booking-grid-container"></div>
       </div>
     </div>
 
     <div class="notification-panel" id="notification-panel">
       <div class="panel-header">
-        <h2>Thông báo</h2>
+        <h2>Thông báo đặt phòng mới</h2>
         <button class="close-panel-btn" id="close-panel-btn">&times;</button>
       </div>
       <div class="panel-body" id="notification-panel-body"></div>
     </div>
     <div class="overlay" id="overlay"></div>
 
-    <script src="../js/room.js"></script>
+    <script src="/js/room.js"></script>
   </body>
 </html>
