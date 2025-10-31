@@ -164,9 +164,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Ghi đè Title Section
     document.querySelector(".location span").textContent = room.diaChi;
-    document.querySelector(
-      ".rating span"
-    ).textContent = `${room.rating} (${room.reviewsCount} đánh giá)`;
 
     // Ghi đè tên phòng
     document.querySelector(".homestay-title").textContent = room.tenPhong;
@@ -242,10 +239,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const data = await resDanhGia.json();
 
         if (data.daDanhGia) {
-          alert("Bạn đã đánh giá phòng này rồi!");
+          Swal.fire({
+            icon: "error",
+            title: "Thông báo",
+            text: "Bạn đã đánh giá phòng này rồi.",
+          });
         } else {
           if (parseInt(danhGia) === 0) {
-            alert("Vui lòng chọn số sao!");
+            Swal.fire({
+              icon: "warning",
+              title: "Thông báo",
+              text: "Vui lòng chọn số sao mà bạn muốn đánh giá.",
+            });
             return;
           }
 
@@ -260,15 +265,30 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
 
           if (res.status === 401) {
-            alert("Bạn cần đăng nhập để đánh giá!");
+            Swal.fire({
+              icon: "warning",
+              title: "Thông báo",
+              text: "Bạn cần đăng nhập để đánh giá!",
+            });
             window.location.href = "/pages/login.html";
             return;
           }
 
           if (res.ok) {
-            alert("Đánh giá thành công!");
+            Swal.fire({
+              icon: "success",
+              title: "Thông báo",
+              text: "Đánh giá thành công",
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
           } else {
-            alert("Có lỗi xảy ra!");
+           Swal.fire({
+              icon: "error",
+              title: "Thông báo",
+              text: "Có lỗi xảy ra!",
+            });
           }
         }
       });
@@ -332,7 +352,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Render stars dynamic
         const ratingDiv = document.querySelector(".rating");
         if (ratingDiv) {
-          ratingDiv.innerHTML = "";
           const fullStars = Math.floor(average);
           const hasHalf = average % 1 >= 0.5;
           const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
@@ -354,7 +373,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         console.error("Lỗi fetch rating:", resRating.status);
       }
-
     } catch (error) {
       console.error("Lỗi load reviews:", error);
     }
@@ -366,7 +384,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         credentials: "include",
       });
       if (!resCurrent.ok) {
-        alert("Vui lòng đăng nhập để đặt phòng!");
+        Swal.fire({
+              icon: "warning",
+              title: "Thông báo",
+              text: "Vui lòng đăng nhập để đặt phòng!",
+            });
         return;
       } else {
         e.preventDefault();
