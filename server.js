@@ -145,6 +145,8 @@ app.put(
       soLuongKhach,
       tienIch,
       gia,
+      moTa,
+      diaChiChiTiet
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -172,7 +174,7 @@ app.put(
 
       const sql = `
       UPDATE thongTinPhong 
-      SET tenPhong = ?, tenHomestay = ?, diaChi = ?, loaiGiuong = ?, soLuongKhach = ?, tienIch = ?, gia = ?, hinhAnh = ?
+      SET tenPhong = ?, tenHomestay = ?, diaChi = ?, loaiGiuong = ?, soLuongKhach = ?, tienIch = ?, gia = ?, hinhAnh = ?,moTa=?, diaChiChiTiet=?
       WHERE maPhong = ? AND maDoanhNghiep = ?`;
 
       const [result] = await db.execute(sql, [
@@ -184,6 +186,8 @@ app.put(
         tienIch,
         gia,
         hinhAnhUpdate,
+        moTa,
+        diaChiChiTiet,
         maPhong,
         maDoanhNghiep,
       ]);
@@ -269,6 +273,8 @@ app.post(
       soLuongKhach,
       tienIch,
       gia,
+      moTa,
+      diaChiChiTiet
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -284,8 +290,8 @@ app.post(
 
       const sql = `
       INSERT INTO thongTinPhong 
-      (maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh,moTa,diaChiChiTiet) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
     `;
       const [result] = await db.execute(sql, [
         maDoanhNghiep,
@@ -297,6 +303,8 @@ app.post(
         tienIch,
         gia,
         hinhAnh,
+        moTa,
+        diaChiChiTiet
       ]);
 
       res.status(201).json({

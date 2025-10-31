@@ -504,7 +504,74 @@ body {
   color: white;
   border-color: #3b82f6;
 }
+#loaiGiuong-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333eb;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
 
+#soLuongKhach-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333f2;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
+#diaChi-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333f2;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
+
+#moTa-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333f2;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
+#diaChiChiTiet-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333f2;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
+#diaChi-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  color: #333333f2;
+  transition: all 0.2s ease;
+  appearance: none;           
+ 
+}
 
 @media (max-width: 768px) {
   .sidebar {

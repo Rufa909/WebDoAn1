@@ -237,6 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('diaChi-input').value = room.diaChi || '';
       document.getElementById('loaiGiuong-input').value = room.loaiGiuong || '';
       document.getElementById('soLuongKhach-input').value = room.soLuongKhach || '';
+      document.getElementById('diaChiChiTiet-input').value = room.diaChiChiTiet || '';
+      document.getElementById('moTa-input').value = room.moTa || '';
       document.getElementById('gia-input').value = room.gia || '';
       if (room.tienIch) { // Thêm logic addPill
         const existingTienIch = room.tienIch.split(',').map(item => item.trim()).filter(Boolean);
@@ -314,6 +316,9 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append('soLuongKhach', document.getElementById('soLuongKhach-input').value);
     formData.append('gia', gia);
     formData.append('tienIch', tienIchHiddenInput.value); // <-- Lấy từ input ẩn
+    formData.append('diaChiChiTiet', document.getElementById('diaChiChiTiet-input').value.trim());
+    formData.append('moTa', document.getElementById('moTa-input').value.trim());
+
     if (fileInput.files[0]) {
       formData.append('hinhAnh', fileInput.files[0]); // Upload file
     }

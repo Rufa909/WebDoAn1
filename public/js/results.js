@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     const params = new URLSearchParams(window.location.search);
-   // Tệp: js/results.js
+
 
     const amenitiesIconMap = {
     'be boi': 'fa-swimming-pool',
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Biến params (từ bước 1) chứa tất cả tham số
             // params.toString() sẽ là "location=Ninh+Ki%E1%BB%81u&guests=2"
             
-            // ❗️ GỌI API MỚI ĐÃ TẠO TRONG SERVER.JS
+            //  GỌI API MỚI ĐÃ TẠO TRONG SERVER.JS
             const response = await fetch(`/api/filter-rooms?${params.toString()}`);
 
             if (!response.ok) {
