@@ -200,16 +200,164 @@ document.addEventListener("DOMContentLoaded", async () => {
       el.textContent = room.moTa; // Fallback nếu DB rỗng
     });
 
-    // Format icons
-
     // Info Phòng
     const infoValues = document.querySelectorAll(".info-value");
     if (infoValues[0]) infoValues[0].textContent = room.soLuongKhach;
     if (infoValues[2]) infoValues[2].textContent = room.loaiGiuong;
 
-    // Reviews Count
-    const reviewsH2 = document.querySelector(".reviews-section h2");
-    reviewsH2.innerHTML = `<i class="fa-solid fa-star"></i> Đánh Giá (${room.reviewsCount})`;
+    // Đánh giá
+    const stars = document.querySelectorAll(".rating-container span");
+    const soSao = document.getElementById("ratingValue");
+
+    stars.forEach((star) => {
+      star.addEventListener("click", function () {
+        const danhGia = this.getAttribute("data-value");
+        soSao.value = danhGia;
+
+        // reset tất cả sao về rỗng
+        stars.forEach((s) => {
+          s.querySelector("i").classList.remove("fa-solid");
+          s.querySelector("i").classList.add("fa-regular");
+        });
+
+        // tô vàng đến sao được nhấn
+        stars.forEach((s) => {
+          if (s.getAttribute("data-value") <= danhGia) {
+            s.querySelector("i").classList.remove("fa-regular");
+            s.querySelector("i").classList.add("fa-solid");
+          }
+        });
+      });
+    });
+    // guiDanhGia
+    document
+      .getElementById("submitReview")
+      .addEventListener("click", async () => {
+        const danhGia = soSao.value;
+        const binhLuan = document.getElementById("reviewComment").value;
+
+        const resDanhGia = await fetch(`/danhGia/kiemTra/${roomId}`, {
+          credentials: "include",
+        });
+        const data = await resDanhGia.json();
+
+        if (data.daDanhGia) {
+          alert("Bạn đã đánh giá phòng này rồi!");
+        } else {
+          if (parseInt(danhGia) === 0) {
+            alert("Vui lòng chọn số sao!");
+            return;
+          }
+
+          const res = await fetch("/danhGia", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              maPhong: roomId,
+              danhGia: danhGia,
+              comment: binhLuan,
+            }),
+          });
+
+          if (res.status === 401) {
+            alert("Bạn cần đăng nhập để đánh giá!");
+            window.location.href = "/pages/login.html";
+            return;
+          }
+
+          if (res.ok) {
+            alert("Đánh giá thành công!");
+          } else {
+            alert("Có lỗi xảy ra!");
+          }
+        }
+      });
+
+    // Danh sách đánh giá
+    try {
+      const resReviews = await fetch(`../api/reviews/${roomId}`);
+      if (resReviews.ok) {
+        const reviews = await resReviews.json();
+        console.log("Reviews từ DB:", reviews.length); // Check số lượng
+
+        const reviewsSection = document.querySelector(".reviews-section");
+        if (reviewsSection && reviews.length > 0) {
+          // Update count
+          const reviewsH2 = reviewsSection.querySelector("h2");
+          reviewsH2.innerHTML = `<i class="fa-solid fa-star" style = "color: #FFD43B"></i> Đánh Giá (${reviews.length})`;
+
+          // Clear all existing .review-item (xóa 3 hardcode)
+          const existingItems = reviewsSection.querySelectorAll(".review-item");
+          existingItems.forEach((item) => item.remove());
+
+          // Append all reviews as dãy (loop full)
+          reviews.forEach((review) => {
+            const newItem = document.createElement("div");
+            newItem.className = "review-item";
+            const starsHtml = Array.from({ length: 5 }, (_, i) =>
+              i < review.rating
+                ? '<i class="fa-solid fa-star"></i>'
+                : '<i class="fa-regular fa-star"></i>'
+            ).join("");
+            const dateFormatted = new Date(
+              review.review_date
+            ).toLocaleDateString("vi-VN");
+            const hoNguoiDung = review.hoNguoiDung;
+            const tenNguoiDung = review.tenNguoiDung;
+            newItem.innerHTML = `
+        <div class="review-header">
+          <span class="reviewer-name">${hoNguoiDung} ${tenNguoiDung}</span>
+          <span class="review-date">${dateFormatted}</span>
+        </div>
+        <div class="review-rating">${starsHtml}</div>
+        <p class="review-text">${review.comment_text || "No comment"}</p>
+      `;
+            reviewsSection.appendChild(newItem); // Append để thành dãy
+          });
+        }
+      }
+
+      const resRating = await fetch(`/api/reviews-danhgia/${roomId}`);
+      if (resRating.ok) {
+        const ratingData = await resRating.json();
+
+        const average = parseFloat(ratingData.average_rating) || 5.0;
+        const count = ratingData.total_count || 0;
+
+        // Show span text
+        const ratingSpan = document.querySelector(".rating span");
+        if (ratingSpan)
+          ratingSpan.textContent = `${average.toFixed(1)} (${count} đánh giá)`;
+
+        // Render stars dynamic
+        const ratingDiv = document.querySelector(".rating");
+        if (ratingDiv) {
+          ratingDiv.innerHTML = "";
+          const fullStars = Math.floor(average);
+          const hasHalf = average % 1 >= 0.5;
+          const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+          let starsHtml = "";
+          for (let i = 0; i < fullStars; i++)
+            starsHtml += '<i class="fa-solid fa-star"></i>';
+          if (hasHalf)
+            starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
+          for (let i = 0; i < emptyStars; i++)
+            starsHtml += '<i class="fa-regular fa-star"></i>';
+
+          ratingDiv.innerHTML =
+            starsHtml +
+            `<span style="color: #333; margin-left: 10px;">${average.toFixed(
+              1
+            )} (${count} đánh giá)</span>`;
+        }
+      } else {
+        console.error("Lỗi fetch rating:", resRating.status);
+      }
+
+    } catch (error) {
+      console.error("Lỗi load reviews:", error);
+    }
 
     // Booking Button onclick (ghi đè event)
     const bookingBtn = document.querySelector(".booking-btn");

@@ -64,7 +64,7 @@
               <i class="fa-solid fa-star"></i>
               <i class="fa-solid fa-star-half-stroke"></i>
               <span style="color: #333; margin-left: 10px"
-                >4.8 (124 đánh giá)</span
+                ></span
               >
             </div>
           </div>
@@ -248,65 +248,33 @@
       <!-- Reviews Section -->
       <div class="reviews-section">
         <h2 class="section-title">
-          <i class="fa-solid fa-star"></i> Đánh Giá (124)
+          <i class="fa-solid fa-star" style="color: #FFD43B"></i> Đánh Giá (0)
         </h2>
 
-        <div class="review-item">
-          <div class="review-header">
-            <span class="reviewer-name">Minh Tuấn</span>
-            <span class="review-date">15/10/2025</span>
-          </div>
-          <div class="review-rating">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-          </div>
-          <p class="review-text">
-            Căn hộ rất đẹp và sạch sẽ, view từ ban công tuyệt vời! Chủ nhà nhiệt
-            tình và chu đáo. Sẽ quay lại lần sau khi đến Cần Thơ.
-          </p>
-        </div>
-
-        <div class="review-item">
-          <div class="review-header">
-            <span class="reviewer-name">Thị Lan</span>
-            <span class="review-date">10/10/2025</span>
-          </div>
-          <div class="review-rating">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-regular fa-star"></i>
-          </div>
-          <p class="review-text">
-            Vị trí thuận tiện, gần chợ và các điểm tham quan. Phòng rộng rãi,
-            đầy đủ tiện nghi. Giá cả hợp lý so với chất lượng.
-          </p>
-        </div>
-
-        <div class="review-item">
-          <div class="review-header">
-            <span class="reviewer-name">Văn Hùng</span>
-            <span class="review-date">05/10/2025</span>
-          </div>
-          <div class="review-rating">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-          </div>
-          <p class="review-text">
-            Trải nghiệm tuyệt vời! Chủ nhà rất thân thiện, nhiệt tình hướng dẫn
-            và giới thiệu các địa điểm ăn uống, tham quan xung quanh. Rất đáng
-            tiền!
-          </p>
-        </div>
       </div>
-    </div>
+      <!-- Form đánh giá-->
+        <div class="review-form">
+          <div class="review-title">
+            Để lại đánh giá của bạn 
+          </div> 
+          <div class="form-group">
+            <label for="reviewRating">Đánh giá:</label>
+            <div class="rating-container">
+              <span data-value="1"><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+              <span data-value="2"><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+              <span data-value="3"><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+              <span data-value="4"><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+              <span data-value="5"><i class="fa-regular fa-star" style="color: #FFD43B;"></i></span>
+
+              <input type="hidden" id="ratingValue" value="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reviewComment">Nhận xét:</label>
+            <textarea id="reviewComment" placeholder="Mô tả trải nghiệm của bạn (không bắt buộc)"></textarea>
+          </div>
+          <button type="submit" id="submitReview">Gửi đánh giá</button>
+        </div>
 
     <script src="../js/roomDetail.js"></script>
     <!-- Load JS mới, path từ /pages/ -->

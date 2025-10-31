@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // Hiển thị thông tin người dùng trên trang profile
-    document.getElementById("userAvatar").innerText =
-      user.user.ho.charAt(0).toUpperCase() +
+    document.getElementById("userAvatar").innerText = user.user.ho.charAt(0).toUpperCase() +
       user.user.ten.charAt(0).toUpperCase();
     document.getElementById("username").innerText =
       user.user.ho + " " + user.user.ten;

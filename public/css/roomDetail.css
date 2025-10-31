@@ -347,7 +347,7 @@ hr {
   background: white;
   border-radius: 10px;
   padding: 30px;
-  margin-top: 20px;
+  margin-top: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -430,3 +430,70 @@ hr {
     grid-template-columns: 1fr;
   }
 }
+
+/* Đánh giá */
+
+.review-form {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-form .review-title {
+  width: 100%;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.review-form .form-group {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-container span {
+  cursor: pointer;
+  font-size: 22px;
+  margin-right: 3px;
+}
+
+.rating-container span:hover i {
+  transform: scale(1.1);
+}
+
+.review-form #reviewComment {
+  width: 100%;
+  gap: 20px;
+  border-radius: 5px;
+}
+
+.review-form #reviewComment:focus {
+  outline: none;
+  border-color: #4ecdc4;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+#submitReview {
+  width: 100%;
+  background: #4ecdc4;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#submitReview:hover {
+  background: #45b8b0;
+  transform: translateY(-2px);
+}
+

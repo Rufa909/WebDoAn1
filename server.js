@@ -641,9 +641,6 @@ app.get("/api/rooms/:maPhong", async (req, res) => {
     }
 
     const room = results[0];
-    // Mock thêm nếu DB chưa có (rating, reviews, moTa)
-    room.rating = room.rating || 4.8;
-    room.reviewsCount = room.reviewsCount || 124;
     room.moTa = room.moTa || `Phòng ${room.tenPhong} sang trọng tại ${room.diaChi}. Đầy đủ tiện nghi cho chuyến đi của bạn.`;
 
     res.json(room);
@@ -723,7 +720,107 @@ app.get("/api/filter-rooms", async (req, res) => {
   }
 });
 
+// Thêm đánh giá mới
+app.post("/danhGia", async (req, res) => {
+  const idNguoiDung = req.session?.user?.id;
+  const { maPhong, danhGia, comment } = req.body;
 
+  if (!idNguoiDung) {
+    return res.status(401).json({ error: "Bạn phải đăng nhập để đánh giá!" });
+  }
+
+  try {
+    await db.execute(
+      "INSERT INTO danhgia (maPhong, idNguoiDung, danhGia, comment) VALUES (?, ?, ?, ?)",
+      [maPhong, idNguoiDung, danhGia, comment]
+    );
+    res.status(201).json({ message: "Đánh giá đã được thêm." });
+  } catch (err) {
+    console.error("Lỗi /danhGia:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi thêm đánh giá." });
+  }
+});
+
+// Lấy danh sách người dùng đã đánh giá phòng
+app.get("/danhGia/daDanhGia/:maPhong", async (req, res) => {
+  const { maPhong } = req.params;
+
+  try {
+    const [rows] = await db.execute(
+      "SELECT idNguoiDung FROM danhgia WHERE maPhong = ?",
+      [maPhong]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Lỗi /danhGia/:maPhong:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi lấy đánh giá." });
+  }
+});
+
+// Kiểm tra người dùng đã đánh giá phòng chưa
+app.get("/danhGia/kiemTra/:maPhong", async (req, res) => {
+  const idNguoiDung = req.session?.user?.id;
+  const { maPhong, danhGia, comment, created_at } = req.params;
+
+  if (!idNguoiDung) {
+    return res.status(401).json({ error: "Bạn phải đăng nhập!" });
+  }
+
+  try {
+    const [rows] = await db.execute(
+      "SELECT * FROM danhgia WHERE maPhong = ? AND idNguoiDung = ?",
+      [maPhong, idNguoiDung]
+    );
+
+    if (rows.length > 0) {
+      return res.json({ daDanhGia: true, review: rows[0] });
+    }
+
+    res.json({ daDanhGia: false });
+  } catch (err) {
+    console.error("Lỗi kiểm tra đánh giá:", err);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+app.get("/api/reviews/:maPhong", async (req, res) => {
+  if (!db) return res.status(500).json({ error: "DB error" });
+  try {
+    const { maPhong } = req.params;
+    const sql = `
+      SELECT u.ho as hoNguoiDung, u.ten as tenNguoiDung, d.created_at as review_date, d.danhGia as rating, d.comment as comment_text 
+      FROM danhGia d 
+      JOIN users u ON d.idNguoiDung = u.id 
+      WHERE d.maPhong = ? 
+      ORDER BY d.created_at DESC 
+      LIMIT 10
+    `;
+    const [results] = await db.execute(sql, [parseInt(maPhong)]);
+    res.json(results);
+  } catch (err) {
+    console.error("Lỗi API reviews:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// trung bình sao
+app.get("/api/reviews-danhgia/:maPhong", async (req, res) => {
+  if (!db) return res.status(500).json({ error: "DB not connected" });
+  try {
+    const { maPhong } = req.params;
+    const [avgResult] = await db.execute(
+      "SELECT COALESCE(AVG(danhGia), 0) as average_rating, COUNT(*) as total_count FROM danhGia WHERE maPhong = ?",
+      [parseInt(maPhong)]
+    );
+    const average = parseFloat(avgResult[0].average_rating) || 5.0;
+    const count = avgResult[0].total_count || 0;
+    res.json({ average_rating: average.toFixed(1), total_count: count });
+  } catch (err) {
+    console.error("Lỗi API reviews-danhgia:", err.message);
+    res.status(500).json({ error: "Query error: " + err.message });
+  }
+});
 
 
 
