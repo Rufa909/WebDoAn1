@@ -93,7 +93,7 @@ function createAmenitiesHtml(room) {
 function createRoomCardHtml(room, homestayName) {
   const imageUrl = `/${room.hinhAnh}`;
   const amenities = createAmenitiesHtml(room);
-
+  
   return `
         <div class="card room-card">
             <div class="room-image" style="background-image: url('${imageUrl}')"></div>
