@@ -12,16 +12,20 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  timezone: "+07:00", // Đảm bảo múi giờ Việt Nam
+  timezone: "+07:00",
 });
 
-/* ========================================
-   HELPER: Đặt múi giờ cho mỗi kết nối
-   ======================================== */
 async function getConnectionWithTimezone() {
   const connection = await pool.getConnection();
   await connection.execute("SET time_zone = '+07:00'");
   return connection;
+}
+
+function formatDateLocal(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 /* ========================================
@@ -59,24 +63,34 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     );
 
     const schedule = [];
-    const khungGioList = ["10:00-13:00", "13:30-16:30", "17:00-20:00", "20:30-09:30"];
+    const khungGioList = [
+      "10:00-13:00",
+      "13:30-16:30",
+      "17:00-20:00",
+      "20:30-09:30",
+    ];
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 00:00:00 hôm nay
 
     for (let i = 0; i < 7; i++) {
-      const checkDate = new Date(today);
-      checkDate.setDate(today.getDate() + i);
-      const dateStr = checkDate.toISOString().split("T")[0]; // YYYY-MM-DD
+      const checkDate = new Date(now);
+      checkDate.setDate(now.getDate() + i);
+
+      // SỬ DỤNG LOCAL TIME thay vì UTC
+      const dateStr = formatDateLocal(checkDate);
 
       const daySchedule = { date: dateStr, slots: {} };
 
       for (const slot of khungGioList) {
-        const price = prices.find(p => p.khungGio === slot)?.gia || 0;
+        const price = prices.find((p) => p.khungGio === slot)?.gia || 0;
 
-        const booking = bookings.find(b => {
-          const bDate = b.ngayDat instanceof Date
-            ? b.ngayDat.toISOString().split("T")[0]
-            : String(b.ngayDat).split("T")[0];
+        const booking = bookings.find((b) => {
+          // So sánh với dateStr (đã là local time)
+          let bDate;
+          if (b.ngayDat instanceof Date) {
+            bDate = formatDateLocal(b.ngayDat);
+          } else {
+            bDate = String(b.ngayDat).split("T")[0];
+          }
           return bDate === dateStr && b.khungGio === slot;
         });
 
@@ -85,7 +99,8 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
         if (i === 0) {
           const [start] = slot.split("-");
           const [h, m] = start.split(":").map(Number);
-          const slotTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+          const slotTime = new Date(checkDate);
+          slotTime.setHours(h, m, 0, 0);
           if (now >= slotTime) isPast = true;
         }
 
@@ -120,7 +135,8 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
    API: TẠO BOOKING MỚI
    ======================================== */
 router.post("/api/booking/create", async (req, res) => {
-  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } = req.body;
+  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } =
+    req.body;
 
   if (!maPhong || !hoTen || !sdt || !slots || slots.length === 0) {
     return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
@@ -171,7 +187,11 @@ router.post("/api/booking/create", async (req, res) => {
     }
 
     await connection.commit();
-    res.json({ success: true, message: "Đặt thành công, đang chờ xác nhận", bookingIds });
+    res.json({
+      success: true,
+      message: "Đặt thành công, đang chờ xác nhận",
+      bookingIds,
+    });
   } catch (error) {
     if (connection) await connection.rollback();
     console.error("Error in /api/booking/create:", error);
@@ -184,28 +204,31 @@ router.post("/api/booking/create", async (req, res) => {
 /* ========================================
    API: DỌN PENDING CŨ (15 PHÚT)
    ======================================== */
-router.get("/api/booking/cleanup-old-pending/:idNguoiDung", async (req, res) => {
-  const { idNguoiDung } = req.params;
-  let connection;
-  try {
-    connection = await getConnectionWithTimezone();
-    const [result] = await connection.execute(
-      `UPDATE datPhongTheoGio 
+router.get(
+  "/api/booking/cleanup-old-pending/:idNguoiDung",
+  async (req, res) => {
+    const { idNguoiDung } = req.params;
+    let connection;
+    try {
+      connection = await getConnectionWithTimezone();
+      const [result] = await connection.execute(
+        `UPDATE datPhongTheoGio 
        SET trangThai = 'daHuy',
            ghiChu = CONCAT(COALESCE(ghiChu, ''), '\n[Tự động] Hủy do quá 15 phút không xác nhận')
        WHERE idNguoiDung = ? 
          AND trangThai = 'choXacNhan'
          AND ngayTao < DATE_SUB(NOW(), INTERVAL 15 MINUTE)`,
-      [idNguoiDung]
-    );
-    res.json({ success: true, cancelled: result.affectedRows });
-  } catch (error) {
-    console.error("Error in cleanup-old-pending:", error);
-    res.status(500).json({ error: "Lỗi server" });
-  } finally {
-    if (connection) connection.release();
+        [idNguoiDung]
+      );
+      res.json({ success: true, cancelled: result.affectedRows });
+    } catch (error) {
+      console.error("Error in cleanup-old-pending:", error);
+      res.status(500).json({ error: "Lỗi server" });
+    } finally {
+      if (connection) connection.release();
+    }
   }
-});
+);
 
 /* ========================================
    API: HỦY PENDING (USER)
@@ -228,11 +251,13 @@ router.put("/api/booking/cancel-pending", async (req, res) => {
                      ghiChu = CONCAT(COALESCE(ghiChu, ''), '\nHủy bởi khách hàng')
                  WHERE maPhong = ? AND ngayDat = ? AND khungGio = ? 
                    AND trangThai = 'choXacNhan'
-                   ${idNguoiDung ? 'AND idNguoiDung = ?' : ''}`;
+                   ${idNguoiDung ? "AND idNguoiDung = ?" : ""}`;
 
     const [result] = await connection.execute(sql, params);
     if (result.affectedRows === 0) {
-      return res.status(400).json({ error: "Không tìm thấy hoặc không thể hủy" });
+      return res
+        .status(400)
+        .json({ error: "Không tìm thấy hoặc không thể hủy" });
     }
     res.json({ success: true, message: "Đã hủy đặt phòng" });
   } catch (error) {
@@ -269,7 +294,7 @@ router.get("/api/booking/user/:idNguoiDung", async (req, res) => {
 });
 
 /* ========================================
-   API: HỦY BOOKING (USER - CÓ KIỂM TRA 3 TIẾNG)
+   API: HỦY BOOKING 
    ======================================== */
 router.put("/api/booking/cancel/:bookingId", async (req, res) => {
   const { bookingId } = req.params;
@@ -281,7 +306,8 @@ router.put("/api/booking/cancel/:bookingId", async (req, res) => {
       "SELECT * FROM datPhongTheoGio WHERE id = ?",
       [bookingId]
     );
-    if (booking.length === 0) return res.status(404).json({ error: "Không tìm thấy" });
+    if (booking.length === 0)
+      return res.status(404).json({ error: "Không tìm thấy" });
 
     const [start] = booking[0].khungGio.split("-");
     const [h] = start.split(":").map(Number);
@@ -290,7 +316,9 @@ router.put("/api/booking/cancel/:bookingId", async (req, res) => {
     const hoursDiff = (checkinTime - new Date()) / (1000 * 60 * 60);
 
     if (hoursDiff < 3) {
-      return res.status(400).json({ error: "Không thể hủy trong vòng 3 tiếng" });
+      return res
+        .status(400)
+        .json({ error: "Không thể hủy trong vòng 3 tiếng" });
     }
 
     await connection.execute(
