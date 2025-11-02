@@ -95,8 +95,6 @@ body {
   font-size: 18px;
 }
 
-
-
 .status-legend {
   display: flex;
   gap: 15px;
@@ -126,8 +124,8 @@ body {
   padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(40, 145, 127, 0.1); 
-  overflow: hidden; 
+  box-shadow: 0 2px 4px rgba(40, 145, 127, 0.1);
+  overflow: hidden;
 }
 .room-card:hover {
   transform: translateY(-5px);
@@ -217,7 +215,7 @@ body {
 .room-image-container {
   width: 100%;
 
-  height:200px ;
+  height: 200px;
   background-color: #f0f0f0;
 }
 
@@ -360,14 +358,14 @@ body {
 
 .modal-content {
   background-color: white;
-  padding: 25px; 
+  padding: 25px;
   border-radius: 8px;
-  width: 85%; 
-  max-width: 450px; 
-  max-height: 90vh; 
+  width: 85%;
+  max-width: 450px;
+  max-height: 90vh;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   margin: 20px 0;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 .modal-content h2 {
   margin-top: 0;
@@ -508,12 +506,11 @@ body {
   width: 100%;
   padding: 10px 12px;
   font-size: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   color: #333333eb;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 
 #soLuongKhach-input {
@@ -524,8 +521,7 @@ body {
   border-radius: 5px;
   color: #333333f2;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 #diaChi-input {
   width: 100%;
@@ -535,8 +531,7 @@ body {
   border-radius: 5px;
   color: #333333f2;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 
 #moTa-input {
@@ -547,8 +542,7 @@ body {
   border-radius: 5px;
   color: #333333f2;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 #diaChiChiTiet-input {
   width: 100%;
@@ -558,8 +552,7 @@ body {
   border-radius: 5px;
   color: #333333f2;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 #diaChi-input {
   width: 100%;
@@ -569,8 +562,7 @@ body {
   border-radius: 5px;
   color: #333333f2;
   transition: all 0.2s ease;
-  appearance: none;           
- 
+  appearance: none;
 }
 
 @media (max-width: 768px) {
@@ -599,7 +591,7 @@ body {
     gap: 6px;
     padding: 6px;
   }
-  
+
   .tienIch-pill,
   .tienIch-option {
     padding: 6px 10px;
@@ -608,6 +600,42 @@ body {
 
   .modal-content {
     width: 95%;
-    max-height: 85vh; 
+    max-height: 85vh;
   }
+  .scroll-to-top {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.scroll-to-top:hover {
+  background: linear-gradient(185deg, rgba(88, 211, 168, 0.826), #70ded7ca);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-to-top.show {
+  display: flex;
 }

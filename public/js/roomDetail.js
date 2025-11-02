@@ -163,7 +163,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Phòng từ DB:", room);
 
     // Ghi đè Title Section
-    document.querySelector(".location span").textContent =room.diaChiChiTiet + " " + room.diaChi;
+    document.querySelector(".location span").textContent =
+      room.diaChiChiTiet + " " + room.diaChi;
 
     // Ghi đè tên phòng
     document.querySelector(".homestay-title").textContent = room.tenPhong;
@@ -284,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               window.location.reload();
             }, 1000);
           } else {
-           Swal.fire({
+            Swal.fire({
               icon: "error",
               title: "Thông báo",
               text: "Có lỗi xảy ra!",
@@ -385,10 +386,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       if (!resCurrent.ok) {
         Swal.fire({
-              icon: "warning",
-              title: "Thông báo",
-              text: "Vui lòng đăng nhập để đặt phòng!",
-            });
+          icon: "warning",
+          title: "Thông báo",
+          text: "Vui lòng đăng nhập để đặt phòng!",
+        });
         return;
       } else {
         e.preventDefault();
@@ -398,4 +399,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Lỗi load phòng:", error);
   }
+  // btn cuộn lên trang đầu
+  const scrollToTopBtn = document.getElementById("scrollToTop");
+
+  window.addEventListener("scroll", function () {
+    if (window.pageYOffset > 100) {
+      scrollToTopBtn.classList.add("show");
+    } else {
+      scrollToTopBtn.classList.remove("show");
+    }
+  });
+
+  scrollToTopBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
 });

@@ -55,13 +55,13 @@ function hideFilter() {
 }
 
 const amenitiesIconMap = {
-  "beboi": "fa-swimming-pool",
-  "viewdep": "fa-rainbow",
-  "phonggym": "fa-dumbbell",
-  "maychieu": "fa-film",
-  "bancong": "fa-cloud",
-  "bep": "fa-utensils",
-  "bontam": "fa-bath",
+  beboi: "fa-swimming-pool",
+  viewdep: "fa-rainbow",
+  phonggym: "fa-dumbbell",
+  maychieu: "fa-film",
+  bancong: "fa-cloud",
+  bep: "fa-utensils",
+  bontam: "fa-bath",
 };
 
 function createAmenitiesHtml(room) {
@@ -93,7 +93,7 @@ function createAmenitiesHtml(room) {
 function createRoomCardHtml(room, homestayName) {
   const imageUrl = `/${room.hinhAnh}`;
   const amenities = createAmenitiesHtml(room);
-  
+
   return `
         <div class="card room-card">
             <div class="room-image" style="background-image: url('${imageUrl}')"></div>
@@ -249,4 +249,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       "homestay-sections"
     ).innerHTML = `<p class="text-danger text-center">Không thể tải dữ liệu phòng. Kiểm tra API: ${API_BASE_URL}/api/rooms-grouped-by-company</p>`;
   }
+
+  // btn cuộn lên trang đầu
+  const scrollToTopBtn = document.getElementById("scrollToTop");
+
+  window.addEventListener("scroll", function () {
+    if (window.pageYOffset > 100) {
+      scrollToTopBtn.classList.add("show");
+    } else {
+      scrollToTopBtn.classList.remove("show");
+    }
+  });
+
+  scrollToTopBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
 });

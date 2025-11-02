@@ -16,12 +16,12 @@
         border-radius: 12px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s;
       }
       .booking-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       .booking-header {
         display: flex;
@@ -141,6 +141,39 @@
         font-weight: bold;
         font-size: 16px;
       }
+      .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 18px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .scroll-to-top:hover {
+        background: linear-gradient(
+          185deg,
+          rgba(88, 211, 168, 0.826),
+          #70ded7ca
+        );
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .scroll-to-top.show {
+        display: flex;
+      }
     </style>
   </head>
   <body>
@@ -187,10 +220,17 @@
           <div class="header-right">
             <div class="search-box">
               <i class="fas fa-search" style="color: #94a3b8"></i>
-              <input type="text" placeholder="Tìm kiếm theo tên, SĐT..." id="searchInput" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên, SĐT..."
+                id="searchInput"
+              />
             </div>
             <div class="notification-bell" id="open-notification-panel">
-              <i class="far fa-bell" style="font-size: 20px; color: #64748b"></i>
+              <i
+                class="far fa-bell"
+                style="font-size: 20px; color: #64748b"
+              ></i>
               <span class="badge" id="notificationBadge">0</span>
             </div>
             <button
@@ -228,7 +268,7 @@
           </div>
         </div>
 
-        <div id="loadingContainer" class="loading" style="display: none;">
+        <div id="loadingContainer" class="loading" style="display: none">
           <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
         </div>
 
@@ -244,6 +284,10 @@
       <div class="panel-body" id="notification-panel-body"></div>
     </div>
     <div class="overlay" id="overlay"></div>
+
+    <button id="scrollToTop" class="scroll-to-top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <script src="/js/room.js"></script>
   </body>

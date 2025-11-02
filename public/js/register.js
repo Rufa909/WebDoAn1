@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
           backdrop: true,
         });
         form.reset();
-        window.location.href = '/pages/login.html';
+        setTimeout(() => {window.location.href = '/pages/login.html';}, 2000)
       } else if (res.status == 400) {
         Swal.fire({
           icon: "error",
