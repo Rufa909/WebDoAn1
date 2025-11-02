@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hồ Sơ Cá Nhân</title>
     <link rel="icon" type="image/x-icon" href="/images/logo.png" />
     <link
@@ -15,9 +15,9 @@
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/css/profile.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/profile.css" />
+  </head>
+  <body>
     <!-- Header -->
     <div class="header-container">
       <div
@@ -47,15 +47,20 @@
               border: none;
               color: #fff;
             "
-          ><i class="fa-solid fa-circle-user fa-lg"></i>
+          >
+            <i class="fa-solid fa-circle-user fa-lg"></i>
             Đăng nhập
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
-                <a class="dropdown-item" href="/pages/login.html"><i class="fa-solid fa-circle-user"></i> Đăng Nhập</a>
+              <a class="dropdown-item" href="/pages/login.html"
+                ><i class="fa-solid fa-circle-user"></i> Đăng Nhập</a
+              >
             </li>
             <li>
-              <a class="dropdown-item" href="/pages/register.html"><i class="fa-solid fa-user-plus"></i> Đăng Ký</a>
+              <a class="dropdown-item" href="/pages/register.html"
+                ><i class="fa-solid fa-user-plus"></i> Đăng Ký</a
+              >
             </li>
           </ul>
         </div>
@@ -64,195 +69,108 @@
     <hr />
 
     <div class="container">
-        <div class="header" style="position: relative;">
-            <div id="profileHeader">
-                
+      <div class="header" style="position: relative">
+        <div id="profileHeader"></div>
+        <div class="avatar" id="userAvatar">AL</div>
+        <h1 class="user-name" id="username">Alibaba</h1>
+        <div class="user-role" id="userRole">User</div>
+      </div>
+
+      <div class="content">
+        <!-- Thông tin cá nhân -->
+        <div class="section">
+          <h2 class="section-title">Thông Tin Cá Nhân</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Họ và tên</label>
+              <input
+                type="text"
+                class="form-input"
+                id="infoName"
+                value=""
+                disabled
+              />
             </div>
-            <div class="avatar" id="userAvatar">AL</div>
-            <h1 class="user-name" id="username">Alibaba</h1>
-            <div class="user-role" id="userRole">User</div>
+            <div class="form-group">
+              <label class="form-label">Ngày sinh</label>
+              <input
+                type="date"
+                class="form-input"
+                id="infoBirth"
+                value=""
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Giới tính</label>
+              <input
+                type="text"
+                class="form-input"
+                id="infoGender"
+                value=""
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-input"
+                id="infoEmail"
+                value=""
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại</label>
+              <input
+                type="text"
+                class="form-input"
+                id="infoPhone"
+                value=""
+                disabled
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="content">
-            <!-- Thông tin cá nhân -->
-            <div class="section">
-                <h2 class="section-title">Thông Tin Cá Nhân</h2>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Họ và tên</label>
-                        <input type="text" class="form-input" id="infoName" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Ngày sinh</label>
-                        <input type="date" class="form-input" id="infoBirth" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Giới tính</label>
-                        <input type="text" class="form-input" id="infoGender" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" id="infoEmail" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-input" id="infoPhone" value="" disabled>
-                    </div>
-                </div>
+        <!-- Lịch sử đặt phòng -->
+        <div class="section">
+          <h2 class="section-title">Lịch Sử Đặt Phòng</h2>
+          <div id="bookingsList">
+            <div id="loadingContainer" class="loading" style="display: block">
+              <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
             </div>
-
-            <!-- Lịch sử đặt phòng -->
-            <div class="section">
-                <h2 class="section-title">Lịch Sử Đặt Phòng</h2>
-                <div id="bookingsList">
-                    <!-- Đặt phòng đã xác nhận -->
-                    <div class="booking-card">
-                        <div class="booking-header">
-                            <div class="booking-title">Fini Home - Hùng Phú 1</div>
-                            <span class="booking-status status-confirmed">Đã xác nhận</span>
-                        </div>
-                        <div class="booking-info">
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-in: 25/10/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-out: 27/10/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-moon"></i>
-                                <span>2 đêm</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-users"></i>
-                                <span>2 khách</span>
-                            </div>
-                        </div>
-                        <div class="booking-price">1.000.000 VNĐ</div>
-                        <div class="booking-actions">
-                            <button class="action-btn btn-primary">Xem chi tiết</button>
-                            <button class="action-btn btn-danger">Hủy đặt phòng</button>
-                        </div>
-                    </div>
-
-                    <!-- Đặt phòng chờ xác nhận -->
-                    <div class="booking-card">
-                        <div class="booking-header">
-                            <div class="booking-title">Sweet Dreams - Cái Răng</div>
-                            <span class="booking-status status-pending">Chờ xác nhận</span>
-                        </div>
-                        <div class="booking-info">
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-in: 30/10/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-out: 01/11/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-moon"></i>
-                                <span>2 đêm</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-users"></i>
-                                <span>3 khách</span>
-                            </div>
-                        </div>
-                        <div class="booking-price">1.000.000 VNĐ</div>
-                        <div class="booking-actions">
-                            <button class="action-btn btn-primary">Xem chi tiết</button>
-                            <button class="action-btn btn-danger">Hủy đặt phòng</button>
-                        </div>
-                    </div>
-
-                    <!-- Đặt phòng đã hoàn thành -->
-                    <div class="booking-card">
-                        <div class="booking-header">
-                            <div class="booking-title">Luca Home - Ninh Kiều</div>
-                            <span class="booking-status status-completed">Đã hoàn thành</span>
-                        </div>
-                        <div class="booking-info">
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-in: 15/09/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-out: 17/09/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-moon"></i>
-                                <span>2 đêm</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-users"></i>
-                                <span>2 khách</span>
-                            </div>
-                        </div>
-                        <div class="booking-price">1.000.000 VNĐ</div>
-                        <div class="booking-actions">
-                            <button class="action-btn btn-primary">Xem chi tiết</button>
-                            <button class="action-btn btn-secondary">Đánh giá</button>
-                        </div>
-                    </div>
-
-                    <!-- Đặt phòng đã hủy -->
-                    <div class="booking-card">
-                        <div class="booking-header">
-                            <div class="booking-title">CCV Cinemas 1 - Cái Răng</div>
-                            <span class="booking-status status-cancelled">Đã hủy</span>
-                        </div>
-                        <div class="booking-info">
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-in: 10/09/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>Check-out: 12/09/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-moon"></i>
-                                <span>2 đêm</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fa-solid fa-users"></i>
-                                <span>4 khách</span>
-                            </div>
-                        </div>
-                        <div class="booking-price" style="text-decoration: line-through; color: #999;">1.000.000 VNĐ</div>
-                        <div class="booking-actions">
-                            <button class="action-btn btn-secondary">Xem chi tiết</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trạng thái xác minh -->
-            <div class="section">
-                <h2 class="section-title">Trạng Thái Xác Minh</h2>
-                <div>
-                    <span class="badge">Email đã xác minh</span>
-                    <span class="badge">Điện thoại đã xác minh</span>
-                    <span class="badge">CMND đã xác minh</span>
-                    <span class="badge premium">Thành viên VIP</span>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button class="edit-btn" id="editBtn">Chỉnh Sửa</button>
-                
-            </div>
+    
+          </div>
         </div>
+
+        <!-- Trạng thái xác minh -->
+        <div class="section">
+          <h2 class="section-title">Trạng Thái Xác Minh</h2>
+          <div>
+            <span class="badge">Email đã xác minh</span>
+            <span class="badge">Điện thoại đã xác minh</span>
+            <span class="badge">CMND đã xác minh</span>
+            <span class="badge premium">Thành viên VIP</span>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="edit-btn" id="editBtn">Chỉnh Sửa</button>
+        </div>
+      </div>
     </div>
     <footer class="footer">
-        <p>© 2025 Alibaba Homestay, Inc - Nền tảng đặt Homestay hàng đầu Việt Nam</p>
+      <p>
+        © 2025 Alibaba Homestay, Inc - Nền tảng đặt Homestay hàng đầu Việt Nam
+      </p>
     </footer>
 
     <script src="/js/data.js"></script>
+    <script src="/js/lichSuDatPhong.js"></script>
     <script src="/js/accountManagement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>

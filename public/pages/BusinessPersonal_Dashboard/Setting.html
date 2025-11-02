@@ -418,6 +418,21 @@
       document.addEventListener("DOMContentLoaded", async function () {
         const navItems = document.querySelectorAll(".settings-nav-item");
         const sections = document.querySelectorAll(".setting-section");
+        const homestay_name = document.getElementById("homestay_name").value;
+        try {
+          const res = await fetch(`/current_user`, {
+              credentials: "include",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              currentUserId = data.user?.id || null;
+              console.log("id user: ", currentUserId);
+              currentUserHomestayName = data.user?.tenHomestay || null;
+              console.log("tên homestay: ", currentUserHomestayName);
+            }
+        } catch (err) {
+          console.log(err);
+        }
 
         navItems.forEach((item) => {
           item.addEventListener("click", function () {
@@ -434,6 +449,33 @@
             }
           });
         });
+
+        document.getElementById("save-changes").addEventListener("click", async () => {
+          const homestayName = document.getElementById("homestay_name").value;
+
+          try {
+            const res = await fetch(`/current_user`, {
+              credentials: "include",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              currentUserId = data.user?.id || null;
+              console.log("id: ", currentUserId);
+            }
+            const putRes = await fetch(`/users/tendoanhnghiep/${currentUserId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
+                tenHomestay: homestayName,
+              }),
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        });
+
+
       });
     </script>
   </body>

@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Phòng từ DB:", room);
 
     // Ghi đè Title Section
-    document.querySelector(".location span").textContent = room.diaChi;
+    document.querySelector(".location span").textContent =room.diaChiChiTiet + " " + room.diaChi;
 
     // Ghi đè tên phòng
     document.querySelector(".homestay-title").textContent = room.tenPhong;

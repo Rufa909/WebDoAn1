@@ -63,7 +63,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(bookingRouter);
 app.use(express.static("public"));
 app.use("/pages", express.static("pages"));
 
@@ -407,7 +406,9 @@ app.post("/login", async (req, res) => {
       gioiTinh: user.gioiTinh,
       soDienThoai: user.sdt,
       chucVu: user.chucVu,
+      tenHomestay: user.tenHomestay,
     };
+    console.log("User từ DB:", user);
     res.sendStatus(200);
   } catch (err) {
     console.error("Lỗi /login:", err);
@@ -487,7 +488,6 @@ app.get("/current_user", async (req, res) => {
       req.session.destroy(() => {});
       return res.sendStatus(401);
     }
-
     res.json({ user: req.session.user });
   } catch (err) {
     console.error("Lỗi /current_user:", err);
@@ -499,13 +499,29 @@ app.get("/current_user", async (req, res) => {
 app.get("/users", async (req, res) => {
   try {
     const [rows] = await db.execute(
-      "SELECT id, ho, ten, email, sdt, chucVu FROM users"
+      "SELECT id, ho, ten, email, sdt, chucVu, tenHomestay FROM users"
     );
     res.json(rows);
   } catch (err) {
     console.error("Lỗi /users:", err);
     res.sendStatus(500);
   }
+});
+
+// Thêm tên doanh nghiệp mặc định cho 1 businessman
+app.put("/users/tendoanhnghiep/:id", async (req, res) => {
+  try{
+    const { id } = req.params;
+    const { tenHomestay } = req.body;
+
+    const [result] = await db.execute(
+      "UPDATE users SET tenHomestay = ? WHERE id = ?", [tenHomestay, id]
+    );
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Lỗi /users/tendoanhnghiep (PUT):", err);
+    res.sendStatus(500);
+  };
 });
 
 // Xóa user theo ID + xóa session của user đó
@@ -822,6 +838,72 @@ app.get("/api/reviews-danhgia/:maPhong", async (req, res) => {
   }
 });
 
+// Lịch sử đặt phòng]
+app.get("/api/user/bookings", async (req, res) => {
+  const userId = req.session?.user?.id;
+  if (!userId) {
+    return res.status(401).json({ error: "Bạn phải đăng nhập!" });
+  }
+
+  try {
+    const [rows] = await db.execute(
+      `SELECT 
+        dp.id AS bookingId,
+        dp.hoTen,
+        tp.tenPhong,
+        tp.tenHomestay,
+        tp.hinhAnh,
+        dp.ngayDat,
+        dp.khungGio,
+        dp.giaKhungGio,
+        dp.soLuongKhach,
+        dp.trangThai,
+        dp.ngayTao
+       FROM datPhongTheoGio dp
+       JOIN thongTinPhong tp ON dp.maPhong = tp.maPhong
+       WHERE dp.idNguoiDung = ?
+       ORDER BY dp.ngayTao DESC`,
+      [userId]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Lỗi /api/user/bookings:", err);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
+
+//hủy đặt
+app.put("/api/user/bookings/cancel/:id", async (req, res) => {
+  const userId = req.session?.user?.id;
+  const { id } = req.params;
+
+  if (!userId) return res.status(401).json({ error: "Bạn chưa đăng nhập!" });
+
+  try {
+    const [check] = await db.execute(
+      "SELECT * FROM datPhongTheoGio WHERE id = ? AND idNguoiDung = ?",
+      [id, userId]
+    );
+
+    if (check.length === 0) {
+      return res.status(404).json({ error: "Không tìm thấy đặt phòng của bạn." });
+    }
+    if (check[0].trangThai === "daHuy" || check[0].trangThai === "hoanTat") {
+      return res.status(400).json({ error: "Không thể hủy đặt phòng này." });
+    }
+
+    await db.execute(
+      "UPDATE datPhongTheoGio SET trangThai = 'daHuy' WHERE id = ?",
+      [id]
+    );
+
+    res.json({ message: "Hủy đặt phòng thành công!" });
+  } catch (err) {
+    console.error("Lỗi hủy đặt phòng:", err);
+    res.status(500).json({ error: "Lỗi server khi hủy đặt phòng" });
+  }
+});
 
 
 
@@ -829,6 +911,7 @@ app.get("/api/reviews-danhgia/:maPhong", async (req, res) => {
 
 
 
+app.use(bookingRouter);
 /// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
