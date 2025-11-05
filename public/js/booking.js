@@ -31,6 +31,12 @@ function formatDateLocal(date) {
 /* ========================================
    API: LẤY LỊCH CÓ SẴN (7 NGÀY TỪ HÔM NAY)
    ======================================== */
+// ========================================
+// THAY THẾ ĐOẠN CODE API /api/booking/available/:maPhong
+// TRONG FILE public/js/booking.js
+// (Khoảng dòng 45-120)
+// ========================================
+
 router.get("/api/booking/available/:maPhong", async (req, res) => {
   let connection;
   try {
@@ -52,7 +58,7 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
       [maPhong]
     );
 
-    // 3. LẤY BOOKING ĐANG CHỜ HOẶC ĐÃ XÁC NHẬN
+    // 3. LẤY BOOKING ĐANG CHỜ HOẶC ĐÃ XÁC NHẬN - THÊM idNguoiDung
     const [bookings] = await connection.execute(
       `SELECT ngayDat, khungGio, trangThai, idNguoiDung 
        FROM datPhongTheoGio 
@@ -75,16 +81,13 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
       const checkDate = new Date(now);
       checkDate.setDate(now.getDate() + i);
 
-      // SỬ DỤNG LOCAL TIME thay vì UTC
       const dateStr = formatDateLocal(checkDate);
-
       const daySchedule = { date: dateStr, slots: {} };
 
       for (const slot of khungGioList) {
         const price = prices.find((p) => p.khungGio === slot)?.gia || 0;
 
         const booking = bookings.find((b) => {
-          // So sánh với dateStr (đã là local time)
           let bDate;
           if (b.ngayDat instanceof Date) {
             bDate = formatDateLocal(b.ngayDat);
@@ -108,15 +111,19 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
         let userId = null;
 
         if (booking) {
+          // *** QUAN TRỌNG: TRẢ VỀ userId CHO CẢ 2 TRẠNG THÁI ***
+          userId = booking.idNguoiDung;
+
           if (booking.trangThai === "daXacNhan") {
             status = "booked";
           } else if (booking.trangThai === "choXacNhan") {
             status = "pending";
-            userId = booking.idNguoiDung;
           }
         }
+
         if (isPast) status = "past";
 
+        // TRẢ VỀ CẢ userId (dù là booked hay pending)
         daySchedule.slots[slot] = { price, status, userId };
       }
       schedule.push(daySchedule);
@@ -130,7 +137,6 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     if (connection) connection.release();
   }
 });
-
 /* ========================================
    API: TẠO BOOKING MỚI
    ======================================== */

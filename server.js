@@ -145,7 +145,7 @@ app.put(
       tienIch,
       gia,
       moTa,
-      diaChiChiTiet
+      diaChiChiTiet,
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -193,19 +193,15 @@ app.put(
 
       if (result.affectedRows === 0) {
         if (req.file) fs.unlinkSync(req.file.path);
-        return res
-          .status(404)
-          .json({
-            message: "Không tìm thấy phòng hoặc bạn không có quyền sửa.",
-          });
+        return res.status(404).json({
+          message: "Không tìm thấy phòng hoặc bạn không có quyền sửa.",
+        });
       }
 
-      res
-        .status(200)
-        .json({
-          message: "Cập nhật thông tin phòng thành công!",
-          hinhAnh: hinhAnhUpdate,
-        });
+      res.status(200).json({
+        message: "Cập nhật thông tin phòng thành công!",
+        hinhAnh: hinhAnhUpdate,
+      });
     } catch (err) {
       console.error("Lỗi khi cập nhật phòng:", err);
       if (req.file) fs.unlinkSync(req.file.path);
@@ -242,11 +238,9 @@ app.delete(
       const [result] = await db.execute(sql, [maPhong, maDoanhNghiep]);
 
       if (result.affectedRows === 0) {
-        return res
-          .status(404)
-          .json({
-            message: "Không tìm thấy phòng hoặc bạn không có quyền xóa.",
-          });
+        return res.status(404).json({
+          message: "Không tìm thấy phòng hoặc bạn không có quyền xóa.",
+        });
       }
 
       res.status(200).json({ message: "Xóa phòng thành công!" });
@@ -273,7 +267,7 @@ app.post(
       tienIch,
       gia,
       moTa,
-      diaChiChiTiet
+      diaChiChiTiet,
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -303,7 +297,7 @@ app.post(
         gia,
         hinhAnh,
         moTa,
-        diaChiChiTiet
+        diaChiChiTiet,
       ]);
 
       res.status(201).json({
@@ -476,25 +470,6 @@ app.post("/logout", (req, res) => {
   });
 });
 
-// Check user đăng nhập
-app.get("/current_user", async (req, res) => {
-  if (!req.session.user) return res.sendStatus(401);
-
-  try {
-    const [rows] = await db.execute("SELECT id FROM users WHERE id = ?", [
-      req.session.user.id,
-    ]);
-    if (rows.length === 0) {
-      req.session.destroy(() => {});
-      return res.sendStatus(401);
-    }
-    res.json({ user: req.session.user });
-  } catch (err) {
-    console.error("Lỗi /current_user:", err);
-    res.sendStatus(500);
-  }
-});
-
 // Lấy danh sách tất cả user
 app.get("/users", async (req, res) => {
   try {
@@ -510,18 +485,19 @@ app.get("/users", async (req, res) => {
 
 // Thêm tên doanh nghiệp mặc định cho 1 businessman
 app.put("/users/tendoanhnghiep/:id", async (req, res) => {
-  try{
+  try {
     const { id } = req.params;
     const { tenHomestay } = req.body;
 
     const [result] = await db.execute(
-      "UPDATE users SET tenHomestay = ? WHERE id = ?", [tenHomestay, id]
+      "UPDATE users SET tenHomestay = ? WHERE id = ?",
+      [tenHomestay, id]
     );
     res.sendStatus(200);
   } catch (err) {
     console.error("Lỗi /users/tendoanhnghiep (PUT):", err);
     res.sendStatus(500);
-  };
+  }
 });
 
 // Xóa user theo ID + xóa session của user đó
@@ -657,7 +633,9 @@ app.get("/api/rooms/:maPhong", async (req, res) => {
     }
 
     const room = results[0];
-    room.moTa = room.moTa || `Phòng ${room.tenPhong} sang trọng tại ${room.diaChi}. Đầy đủ tiện nghi cho chuyến đi của bạn.`;
+    room.moTa =
+      room.moTa ||
+      `Phòng ${room.tenPhong} sang trọng tại ${room.diaChi}. Đầy đủ tiện nghi cho chuyến đi của bạn.`;
 
     res.json(room);
   } catch (err) {
@@ -887,7 +865,9 @@ app.put("/api/user/bookings/cancel/:id", async (req, res) => {
     );
 
     if (check.length === 0) {
-      return res.status(404).json({ error: "Không tìm thấy đặt phòng của bạn." });
+      return res
+        .status(404)
+        .json({ error: "Không tìm thấy đặt phòng của bạn." });
     }
     if (check[0].trangThai === "daHuy" || check[0].trangThai === "hoanTat") {
       return res.status(400).json({ error: "Không thể hủy đặt phòng này." });
@@ -904,12 +884,40 @@ app.put("/api/user/bookings/cancel/:id", async (req, res) => {
     res.status(500).json({ error: "Lỗi server khi hủy đặt phòng" });
   }
 });
+// Check user đăng nhập
+app.get("/current_user", async (req, res) => {
+  if (!req.session.user) return res.sendStatus(401);
 
+  try {
+    // LẤY THÔNG TIN ĐẦY ĐỦ TỪ DATABASE
+    const [rows] = await db.execute(
+      "SELECT id, ho, ten, email, sdt, chucVu FROM users WHERE id = ?",
+      [req.session.user.id]
+    );
 
+    if (rows.length === 0) {
+      req.session.destroy(() => {});
+      return res.sendStatus(401);
+    }
 
-
-
-
+    // TRẢ VỀ THÔNG TIN ĐẦY ĐỦ
+    const user = rows[0];
+    res.json({
+      user: {
+        id: user.id,
+        ho: user.ho,
+        ten: user.ten,
+        hoTen: `${user.ho} ${user.ten}`, // Ghép họ tên
+        email: user.email,
+        sdt: user.sdt,
+        chucVu: user.chucVu,
+      },
+    });
+  } catch (err) {
+    console.error("Lỗi /current_user:", err);
+    res.sendStatus(500);
+  }
+});
 
 app.use(bookingRouter);
 /// Start server
