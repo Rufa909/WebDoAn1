@@ -252,7 +252,7 @@
       }
 
       .save-btn {
-        background-color: #3b82f6;
+        background-color: rgb(83, 150, 244);
         color: white;
         border: none;
         padding: 10px 20px;
@@ -263,13 +263,48 @@
       }
 
       .save-btn:hover {
-        background-color: #2563eb;
+        background-color: rgb(67, 140, 243);
+      }
+
+      .register-btn {
+        background-color: #2ce0c2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.2s;
+      }
+
+      .register-btn:hover {
+        background-color: #0eecc7;
       }
 
       .setting-description {
         font-size: 14px;
         color: #64748b;
         margin-top: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      th {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 14px;
+        background-color: #f8f9fa;
       }
     </style>
   </head>
@@ -358,9 +393,11 @@
         <div class="settings-container">
           <div class="settings-nav">
             <div class="settings-nav-item active" data-tab="general">
-              <i class="fas fa-home"></i> Thông tin chung
+              <i class="fas fa-user"></i> Thông tin chung
             </div>
-
+            <div class="settings-nav-item" data-tab="homestays">
+              <i class="fas fa-home"></i> Danh sách homestay
+            </div>
             <div class="settings-nav-item" data-tab="security">
               <i class="fas fa-shield-alt"></i> Bảo mật
             </div>
@@ -375,18 +412,58 @@
                   type="text"
                   id="homestay_name"
                   value=""
-                  placeholder="Nhập tên doanh nghiệp của bạn"
+                  placeholder="Nhập tên homestay của bạn"
                 />
               </div>
               <div class="form-group">
-                <label for="hotline">Hotline</label>
-                <input type="text" id="hotline" placeholder="09xx xxx xxx" />
+                <label for="province">Tỉnh / Thành phố</label>
+                <select id="province" required>
+                  <option value="">-- Chọn tỉnh / thành phố --</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="district">Quận / Huyện</label>
+                <select id="district" disabled required>
+                  <option value="">-- Chọn quận / huyện --</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="ward">Phường / Xã</label>
+                <select id="ward" disabled required>
+                  <option value="">-- Chọn phường / xã --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="address">Địa chỉ chi tiết</label>
+                <input type="text" id="address" placeholder="VD: 876/8e" />
               </div>
 
               <div class="button-group">
-                <button type="submit" class="save-btn" id="save-changes">
-                  Lưu thay đổi
+                <button type="submit" class="register-btn" id="dangKyhomestay">
+                  Đăng ký
                 </button>
+              </div>
+            </div>
+
+            <div id="homestays" class="setting-section" style="display: none">
+              <!-- List homestay cua bn -->
+              <div class="homestay-list">
+                <h2>Danh sách homestay của bạn:</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="font-size: medium">Tên homestay</th>
+                      <th style="font-size: medium">Địa chỉ</th>
+                      <th style="font-size: medium">Ngày tạo</th>
+                      <th style="text-align: right; font-size: medium">
+                        Hành động
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
               </div>
             </div>
 
@@ -414,25 +491,11 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       document.addEventListener("DOMContentLoaded", async function () {
         const navItems = document.querySelectorAll(".settings-nav-item");
         const sections = document.querySelectorAll(".setting-section");
-        const homestay_name = document.getElementById("homestay_name").value;
-        try {
-          const res = await fetch(`/current_user`, {
-              credentials: "include",
-            });
-            if (res.ok) {
-              const data = await res.json();
-              currentUserId = data.user?.id || null;
-              console.log("id user: ", currentUserId);
-              currentUserHomestayName = data.user?.tenHomestay || null;
-              console.log("tên homestay: ", currentUserHomestayName);
-            }
-        } catch (err) {
-          console.log(err);
-        }
 
         navItems.forEach((item) => {
           item.addEventListener("click", function () {
@@ -450,32 +513,239 @@
           });
         });
 
-        document.getElementById("save-changes").addEventListener("click", async () => {
-          const homestayName = document.getElementById("homestay_name").value;
+        // Địa chỉ cụ thể: //
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
 
-          try {
-            const res = await fetch(`/current_user`, {
-              credentials: "include",
-            });
-            if (res.ok) {
-              const data = await res.json();
-              currentUserId = data.user?.id || null;
-              console.log("id: ", currentUserId);
-            }
-            const putRes = await fetch(`/users/tendoanhnghiep/${currentUserId}`, {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({
-                tenHomestay: homestayName,
-              }),
-            });
-          } catch (err) {
-            console.log(err);
-          }
+        // Lấy danh sách tỉnh/thành
+        const resAddress = await fetch("https://provinces.open-api.vn/api/p/");
+        const provinces = await resAddress.json();
+        provinces.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+
+        provinceSelect.innerHTML =
+          '<option value="">-- Chọn tỉnh / thành phố --</option>';
+        provinces.forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p.code;
+          opt.textContent = p.name;
+          provinceSelect.appendChild(opt);
         });
 
+        // chọn tỉnh
+        provinceSelect.addEventListener("change", async () => {
+          districtSelect.innerHTML =
+            '<option value="">-- Chọn quận / huyện --</option>';
+          wardSelect.innerHTML =
+            '<option value="">-- Chọn phường / xã --</option>';
+          wardSelect.disabled = true;
 
+          const provinceCode = provinceSelect.value;
+          if (!provinceCode) return;
+          districtSelect.disabled = false;
+
+          const resAddress = await fetch(
+            `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`
+          );
+          const data = await resAddress.json();
+          data.districts.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+          data.districts.forEach((d) => {
+            const opt = document.createElement("option");
+            opt.value = d.code;
+            opt.textContent = d.name;
+            districtSelect.appendChild(opt);
+          });
+        });
+
+        // chọn quận/huyện
+        districtSelect.addEventListener("change", async () => {
+          wardSelect.innerHTML =
+            '<option value="">-- Chọn phường / xã --</option>';
+          const districtCode = districtSelect.value;
+          if (!districtCode) return;
+          wardSelect.disabled = false;
+
+          const resAddress = await fetch(
+            `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`
+          );
+          const data = await resAddress.json();
+          data.wards.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+          data.wards.forEach((w) => {
+            const opt = document.createElement("option");
+            opt.value = w.name;
+            opt.textContent = w.name;
+            wardSelect.appendChild(opt);
+          });
+        });
+
+        // btn dangKyhomestay
+        document
+          .getElementById("dangKyhomestay")
+          .addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const provinceText = document.querySelector(
+              "#province option:checked"
+            ).text;
+            const districtText = document.querySelector(
+              "#district option:checked"
+            ).text;
+            const wardText = document.querySelector(
+              "#ward option:checked"
+            ).text;
+            const addressDetail = document.getElementById("address").value;
+
+            const data = {
+              tenHomestay: document.getElementById("homestay_name").value,
+              diaChi: `${addressDetail}, ${wardText}, ${districtText}, ${provinceText}`,
+            };
+
+            const res = await fetch("/api/homestays", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+
+            if (res.ok) {
+              Swal.fire({
+                icon: "success",
+                title: "Thành công",
+                text: "Homestay mới đã được thêm!",
+              });
+              setTimeout(() => location.reload(), 1000);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Thất bại",
+                text: "Không thể thêm homestay.",
+              });
+            }
+          });
+
+        const tbody = document.querySelector("tbody");
+        const res = await fetch("/api/my-homestays", {
+          credentials: "include",
+        });
+        const users = await res.json();
+
+        console.log("Kết quả từ server:", users);
+
+        tbody.innerHTML = users
+          .map((u) => {
+            const formattedDate = new Date(u.ngayTao).toLocaleString("vi-VN", {
+              timeZone: "Asia/Ho_Chi_Minh",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return `<tr>
+                    <td>${u.tenHomestay}</td>
+                    <td>${u.diaChi}</td>
+                    <td>${formattedDate}</td>
+                    <td class="action-buttons" style="text-align: end">
+                      <button
+                        class="edit-btn"
+                        data-id-homestay="${u.idHomestay}"
+                        style="
+                          background-color: #3b82f6;
+                          color: white;
+                          border: none;
+                          padding: 12px 17px;
+                          border-radius: 5px;
+                          cursor: pointer;
+                        "
+                      >
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <button
+                        class="delete-btn"
+                        data-id-homestay="${u.idHomestay}"
+                        style="
+                          background-color: #ef4444;
+                          color: white;
+                          border: none;
+                          padding: 12px 25px;
+                          border-radius: 5px;
+                          cursor: pointer;
+                        "
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>`;
+          })
+          .join("");
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            Swal.fire({
+              title: "Xác nhận?",
+              text: "Bạn có chắc muốn xóa tài khoản này?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Xóa",
+              cancelButtonText: "Hủy",
+              backdrop: true,
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                const idHomestay = btn.dataset.idHomestay;
+                if (!idHomestay) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Thiếu thông tin",
+                    text: "Không tìm thấy ID homestay cần xóa!",
+                    backdrop: true,
+                  });
+                  return;
+                }
+
+                try {
+                  const delRes = await fetch(
+                    `/api/my-homestays/${idHomestay}`,
+                    {
+                      method: "DELETE",
+                      credentials: "include",
+                    }
+                  );
+                  console.log("Delete status:", delRes.status);
+                  if (delRes.ok) {
+                    Swal.fire({
+                      icon: "success",
+                      title: "Thành công",
+                      text: "Đã xóa!",
+                      backdrop: true,
+                    });
+                    setTimeout(() => {
+                      location.reload();
+                    }, 1000);
+                  } else {
+                    let errorMsg = `Lỗi ${delRes.status}`;
+                    try {
+                      const errorData = await delRes.json();
+                      errorMsg = errorData.message || errorMsg;
+                    } catch {}
+                    Swal.fire({
+                      icon: "error",
+                      title: "Lỗi",
+                      text: errorMsg,
+                      backdrop: true,
+                    });
+                  }
+                } catch (err) {
+                  console.error("Delete error:", err);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Lỗi kết nối",
+                    text: "Không thể xóa.",
+                    backdrop: true,
+                  });
+                }
+              }
+            });
+          });
+        });
       });
     </script>
   </body>

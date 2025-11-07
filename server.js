@@ -257,8 +257,9 @@ app.post(
   requireLogin,
   upload.single("hinhAnh"),
   async (req, res) => {
-    const maDoanhNghiep = req.session.user.id;
+    const maDoanhNghiep = String(req.session.user.id);
     const {
+      idHomestay,
       tenPhong,
       tenHomestay,
       diaChi,
@@ -283,11 +284,12 @@ app.post(
 
       const sql = `
       INSERT INTO thongTinPhong 
-      (maDoanhNghiep, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh,moTa,diaChiChiTiet) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
+      (maDoanhNghiep, idHomestay, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh,moTa,diaChiChiTiet) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
     `;
       const [result] = await db.execute(sql, [
         maDoanhNghiep,
+        idHomestay,
         tenPhong,
         tenHomestay,
         diaChi,
@@ -304,6 +306,7 @@ app.post(
         message: "Thêm phòng thành công!",
         newRoom: {
           maPhong: result.insertId,
+          idHomestay,
           maDoanhNghiep,
           tenPhong,
           tenHomestay,
@@ -474,7 +477,7 @@ app.post("/logout", (req, res) => {
 app.get("/users", async (req, res) => {
   try {
     const [rows] = await db.execute(
-      "SELECT id, ho, ten, email, sdt, chucVu, tenHomestay FROM users"
+      "SELECT id, ho, ten, email, sdt, chucVu FROM users"
     );
     res.json(rows);
   } catch (err) {
@@ -497,6 +500,96 @@ app.put("/users/tendoanhnghiep/:id", async (req, res) => {
   } catch (err) {
     console.error("Lỗi /users/tendoanhnghiep (PUT):", err);
     res.sendStatus(500);
+  }
+});
+
+// Tạo mới homestay
+app.post("/api/homestays", requireLogin, async (req, res) => {
+  const idDoanhNghiep = req.session.user.id;
+  const { tenHomestay, diaChi } = req.body;
+
+  if (
+    req.session.user.chucVu !== "Doanh Nghiệp" &&
+    req.session.user.chucVu !== "Doanh Nhân"
+  ) {
+    return res
+      .status(403)
+      .json({ error: "Chỉ doanh nghiệp mới có thể thêm homestay!" });
+  }
+
+  if (!tenHomestay || !diaChi) {
+    return res
+      .status(400)
+      .json({ error: "Tên và địa chỉ homestay là bắt buộc." });
+  }
+
+  try {
+    const [result] = await db.execute(
+      `INSERT INTO homestay (id, tenHomestay, diaChi) VALUES (?, ?, ?)`,
+      [idDoanhNghiep, tenHomestay, diaChi]
+    );
+
+    res.status(201).json({
+      message: "Thêm homestay thành công!",
+      newHomestay: {
+        idHomestay: result.insertId,
+        id: idDoanhNghiep,
+        tenHomestay,
+        diaChi,
+      },
+    });
+  } catch (err) {
+    console.error("Lỗi /api/homestays:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi thêm homestay." });
+  }
+});
+
+// Lấy danh sách homestay
+app.get("/api/my-homestays", requireLogin, async (req, res) => {
+  const idDoanhNghiep = req.session.user.id;
+
+  try {
+    const [rows] = await db.execute(
+      "SELECT * FROM homestay WHERE id = ? ORDER BY ngayTao DESC",
+      [idDoanhNghiep]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("Lỗi /api/my-homestays:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách homestay." });
+  }
+});
+
+app.delete("/api/my-homestays/:idHomestay", requireLogin, async (req, res) => {
+  try {
+    const { idHomestay } = req.params;
+    const idUser = req.session.user.id;
+
+    const [check] = await db.execute(
+      "SELECT * FROM homestay WHERE idHomestay = ? AND id = ?",
+      [idHomestay, idUser]
+    );
+
+    if (check.length === 0) {
+      return res.status(403).json({
+        error:
+          "Bạn không có quyền xóa homestay này hoặc homestay không tồn tại.",
+      });
+    }
+
+    const [result] = await db.execute(
+      "DELETE FROM homestay WHERE idHomestay = ?",
+      [idHomestay]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Không tìm thấy homestay để xóa." });
+    }
+
+    res.status(200).json({ message: "Xóa homestay thành công!" });
+  } catch (err) {
+    console.error("Lỗi /api/my-homestays/:idHomestay (DELETE):", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi xóa homestay." });
   }
 });
 
@@ -836,7 +929,8 @@ app.get("/api/user/bookings", async (req, res) => {
         dp.giaKhungGio,
         dp.soLuongKhach,
         dp.trangThai,
-        dp.ngayTao
+        dp.ngayTao,
+        dp.ghiChu
        FROM datPhongTheoGio dp
        JOIN thongTinPhong tp ON dp.maPhong = tp.maPhong
        WHERE dp.idNguoiDung = ?
@@ -889,9 +983,8 @@ app.get("/current_user", async (req, res) => {
   if (!req.session.user) return res.sendStatus(401);
 
   try {
-    // LẤY THÔNG TIN ĐẦY ĐỦ TỪ DATABASE
     const [rows] = await db.execute(
-      "SELECT id, ho, ten, email, sdt, chucVu FROM users WHERE id = ?",
+      "SELECT id, ho, ten, gioiTinh, ngaySinh, email, sdt, chucVu FROM users WHERE id = ?",
       [req.session.user.id]
     );
 
@@ -900,14 +993,15 @@ app.get("/current_user", async (req, res) => {
       return res.sendStatus(401);
     }
 
-    // TRẢ VỀ THÔNG TIN ĐẦY ĐỦ
     const user = rows[0];
     res.json({
       user: {
         id: user.id,
         ho: user.ho,
         ten: user.ten,
-        hoTen: `${user.ho} ${user.ten}`, // Ghép họ tên
+        ngaySinh: user.ngaySinh,
+        gioiTinh: user.gioiTinh,
+        hoTen: `${user.ho} ${user.ten}`,
         email: user.email,
         sdt: user.sdt,
         chucVu: user.chucVu,

@@ -371,7 +371,7 @@ router.put("/api/booking/reject/:bookingId", async (req, res) => {
     await connection.execute(
       `UPDATE datPhongTheoGio 
        SET trangThai = "daHuy", 
-           ghiChu = CONCAT(COALESCE(ghiChu, ""), "\nLý do từ chối: ", ?)
+           ghiChu = CONCAT(COALESCE(ghiChu, ""), "\n ", ?)
        WHERE id = ?`,
       [lyDoTuChoi || "Không phù hợp", req.params.bookingId]
     );

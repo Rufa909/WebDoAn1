@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("infoName").value =
       user.user.ho + " " + user.user.ten;
     document.getElementById("infoEmail").value = user.user.email;
-    document.getElementById("infoPhone").value = user.user.soDienThoai;
+    document.getElementById("infoPhone").value = user.user.sdt;
     if (user.user.ngaySinh) {
       const date = new Date(user.user.ngaySinh);
       date.setDate(date.getDate() + 1); 

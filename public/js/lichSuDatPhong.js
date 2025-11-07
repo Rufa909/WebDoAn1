@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     bookings.forEach((bk) => {
-      if (bk.trangThai === "daHuy") return;
       let statusClass = "";
       switch (bk.trangThai) {
         case "choXacNhan":
@@ -51,9 +50,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             <div class="info-item"><i class="fa-solid fa-users"></i> ${
               bk.soLuongKhach
             } khách</div>
-            <div class="info-item"><i class="fa-solid fa-user"></i> Họ tên: ${
-              bk.hoTen
-            }</div>
+            ${
+              bk.trangThai === "daHuy"
+                ? `<div class="info-item"><i class="fa-solid fa-user"></i> Lý do: ${bk.ghiChu}</div>`
+                : ""
+            }
+            
           </div>
 
           <div class="booking-price">${bk.giaKhungGio.toLocaleString()} VNĐ</div>

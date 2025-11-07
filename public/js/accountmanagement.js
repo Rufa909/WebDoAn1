@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const users = await res.json();
 
-  tbody.innerHTML = users
-    .map(
+  tbody.innerHTML = users.map(
       (u) => `
       <tr>
         <td>${u.ho} ${u.ten}</td>

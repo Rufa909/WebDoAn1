@@ -101,7 +101,7 @@ function createRoomCardHtml(room, homestayName) {
                 <h5 class="card-title">${room.tenPhong} - ${homestayName}</h5>
                 
                 <p class="room-price">
-                    ${new Intl.NumberFormat("vi-VN").format(room.gia)} VNĐ/đêm
+                    ${new Intl.NumberFormat("vi-VN").format(room.gia)} VNĐ/ 3 giờ
                 </p>
                 ${amenities}
                 
