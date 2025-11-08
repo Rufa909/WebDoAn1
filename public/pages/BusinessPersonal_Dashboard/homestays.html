@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/logo.png" />
+    <title>Booking Dashboard - Sơ đồ phòng</title>
+    
+    <link rel="stylesheet" href="../../css/homestays.css" />
+    <link rel="stylesheet" href="../../css/roomdiagram.css" />
+
+
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="logo">
+          <a href="../../index.html">
+            <img src="../../images/Logo.png" alt="Aibaba Homestay Logo" />
+          </a>
+          <span>Aibaba Homestay</span>
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Bảng Điều Khiển</span>
+          </div>
+        </a>
+
+        <a href="room.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Đặt Phòng</span>
+          </div>
+        </a>
+
+        <a href="homestays.html" class="nav-link">
+          <div class="nav-item active-management">
+            <i class="fas fa-door-open"></i>
+            <span>Phòng</span>
+          </div>
+        </a>
+
+        <a href="bill.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Hóa Đơn</span>
+          </div>
+        </a>
+
+        <a href="setting.html" class="nav-link">
+          <div class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Cài Đặt</span>
+          </div>
+        </a>
+      </div>
+      <div class="main-content"> <div class="header">
+            <h2>Danh sách Homestays</h2>
+        </div>
+        <main class="homestay-grid" id="homestay-grid-container">
+           <p>Đang tải danh sách homestay...</p>
+        </main>
+    </div>
+
+
+  
+    <button id="scrollToTop" class="scroll-to-top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <!-- Script JS -->
+    <script src="../../js/homestays.js"></script>
+  </body>
+</html>

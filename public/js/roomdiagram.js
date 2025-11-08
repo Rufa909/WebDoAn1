@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "room-grid-container",
     "room-modal",
     "modal-title",
+    "id-h",
     "room-form",
     "cancel-button",
     "tienIch-input-visual",
@@ -31,16 +32,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let allRoomsData = []; // Lưu trữ dữ liệu phòng để chỉnh sửa
   let isEditingMode = false;
   let currentEditingMaPhong = null;
+  //  Thêm các biến toàn cục để lưu homestay
+  let CURRENT_HOMESTAY_ID = null;
+  let CURRENT_HOMESTAY_DETAILS = null; // Để lưu tên, địa chỉ...
   const tienIchPillContainer = document.getElementById("tienIch-input-visual");
   const tienIchHiddenInput = document.getElementById("tienIch-input");
+  // Đọc idHomestay từ URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const idHomestayFromUrl = urlParams.get("idHomestay");
+  if (!idHomestayFromUrl) {
+    // Nếu không có ID, không thể tiếp tục
+    console.error("Lỗi: Không tìm thấy idHomestay trên URL.");
+    document.body.innerHTML =
+      '<h1>Lỗi: Không tìm thấy mã homestay. Vui lòng quay lại <a href="my-homestays.html">trang chọn homestay</a>.</h1>';
+    return; // Dừng toàn bộ script
+  }
+  
+  // Gán ID nếu nó tồn tại
+  CURRENT_HOMESTAY_ID = idHomestayFromUrl;
   const tienIchOptionsContainer = document.getElementById(
     "tienIch-options-container"
   );
   const ALL_AMENITIES = [
-    "Bể bơi",
+    "TV",
     "Bồn tắm",
-    "Phòng gym",
-    "Bếp",
+    "Tủ lạnh",
+    "Máy giặt",
     "Ban công",
     "View đẹp",
     "Máy chiếu",
@@ -48,10 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Map icon cho từng tiện ích (sử dụng Font Awesome) - Chỉ thêm mới
   const AMENITY_ICONS = {
-    "Bể bơi": "fa-swimming-pool",
+    "TV": "fa-tv",
     "Bồn tắm": "fa-bath",
-    "Phòng gym": "fa-dumbbell",
-    Bếp: "fa-solid fa-utensils",
+    "Tủ lạnh": "fa-snowflake",
+    "Máy giặt":"fa-tshirt",
     "Ban công": "fa-rainbow",
     "View đẹp": "fa-cloud",
     "Máy chiếu": "fa-film",
@@ -204,6 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .map((a) => `<span class="card-amenity-pill">${a}</span>`)
             .join(", ")
         : "<span>N/A</span>";
+    //  Lấy tên và địa chỉ homestay từ biến toàn cục
+    const homestayName = CURRENT_HOMESTAY_DETAILS?.tenHomestay || "N/A";
+    const homestayAddress = CURRENT_HOMESTAY_DETAILS?.diaChi || "N/A";
     roomCard.innerHTML = `
       <div class="room-image-container">
         <img 
@@ -222,10 +242,10 @@ document.addEventListener("DOMContentLoaded", () => {
             room.maPhong || "N/A"
           }</span></p>
           <p class="info-line"><strong>Homestay:</strong> <span>${
-            room.tenHomestay || "N/A"
+            homestayName || "N/A"
           }</span></p>
           <p class="info-line"><strong>Địa chỉ:</strong> <span>${
-            room.diaChi || "N/A"
+            homestayAddress || "N/A"
           }</span></p>
           <p class="info-line"><strong>Số khách:</strong> <span>${
             room.soLuongKhach || "N/A"
@@ -236,6 +256,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="info-line"><strong>Tiện ích:</strong> <span>${amenitiesHTML}</span></p>
           <p class="info-line"><strong>Giá:</strong> <span class="price">${formatCurrency(
             room.gia
+          )}</span></p>
+          <p class="info-line"><strong>Giá theo giờ:</strong> <span class="price">${formatCurrency(
+            room.giaKhungGio
           )}</span></p>
         </div>
         <div class="room-actions">
@@ -269,65 +292,92 @@ document.addEventListener("DOMContentLoaded", () => {
     tienIchHiddenInput.value = "";
     renderTienIchOptions();
 
-    if (room) {
-      // Chế độ edit
-      isEditingMode = true;
-      currentEditingMaPhong = room.maPhong;
-      modalTitle.textContent = "Chỉnh sửa thông tin phòng";
-      document.getElementById("tenPhong-input").value = room.tenPhong || "";
-      document.getElementById("tenHomestay-input").value =
-        room.tenHomestay || "";
-      document.getElementById("diaChi-input").value = room.diaChi || "";
-      document.getElementById("loaiGiuong-input").value = room.loaiGiuong || "";
-      document.getElementById("soLuongKhach-input").value =
-        room.soLuongKhach || "";
-      document.getElementById("diaChiChiTiet-input").value =
-        room.diaChiChiTiet || "";
-      document.getElementById("moTa-input").value = room.moTa || "";
-      document.getElementById("gia-input").value = room.gia || "";
-      if (room.tienIch) {
-        // Thêm logic addPill
-        const existingTienIch = room.tienIch
-          .split(",")
-          .map((item) => item.trim())
-          .filter(Boolean);
-        existingTienIch.forEach((amenity) => addPill(amenity)); // Sẽ ẩn options tương ứng
-      }
-      // Hiển thị ảnh cũ
-      if (room.hinhAnh) {
-        previewImg.src = "/" + room.hinhAnh;
-        previewImg.style.display = "block";
-      }
-    } else {
-      // Chế độ thêm mới (fix: set false rõ ràng)
-      isEditingMode = false;
-      currentEditingMaPhong = null;
-      modalTitle.textContent = "Thêm phòng mới";
-    }
-    updateHiddenInputAndButtons();
-    modal.style.display = "flex";
-  };
+    const idHomestayInput = document.getElementById("id-h"); // Input ẩn
+    const infoName = document.getElementById("modal-homestay-name");
+    const infoId = document.getElementById("modal-homestay-id");
+    const infoAddress = document.getElementById("modal-homestay-address");
+    if (!CURRENT_HOMESTAY_DETAILS) {
+    alert("Lỗi: Không tải được thông tin homestay. Không thể thực hiện.");
+    return;
+  }
+  
+  // Điền thông tin từ biến toàn cục
+    infoName.textContent = CURRENT_HOMESTAY_DETAILS.tenHomestay || "Chưa có";
+    infoId.textContent = CURRENT_HOMESTAY_ID;
+    //Gộp địa chỉ
+    const addressParts = [
+        CURRENT_HOMESTAY_DETAILS.diaChiChiTiet || "", 
+        CURRENT_HOMESTAY_DETAILS.diaChi || ""      
+    ];
+    infoAddress.textContent = addressParts.filter(Boolean).join(', ');
+    idHomestayInput.value = CURRENT_HOMESTAY_ID; // Gán ID vào input ẩn
+ 
 
-  const hideModal = () => {
-    modal.style.display = "none";
-    isEditingMode = false; // Reset mode
+  //  XỬ LÝ RIÊNG CHO CHẾ ĐỘ EDIT (ĐIỀN THÔNG TIN PHÒNG)
+  if (room) {
+    // Chế độ edit
+    isEditingMode = true;
+    currentEditingMaPhong = room.maPhong;
+    modalTitle.textContent = "Chỉnh sửa thông tin phòng";
+
+    // Chỉ điền các thông tin CỦA PHÒNG
+    document.getElementById("tenPhong-input").value = room.tenPhong || "";
+    document.getElementById("loaiGiuong-input").value = room.loaiGiuong || "";
+    document.getElementById("soLuongKhach-input").value =
+      room.soLuongKhach || "";
+    document.getElementById("moTa-input").value = room.moTa || "";
+    document.getElementById("gia-input").value = room.gia || "";
+    document.getElementById("giaKhungGio-input").value = room.giaKhungGio || "";
+
+    // Xử lý Tiện ích
+    if (room.tienIch) {
+      const existingTienIch = room.tienIch
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+      existingTienIch.forEach((amenity) => addPill(amenity));
+    }
+    
+    // Hiển thị ảnh cũ
+    if (room.hinhAnh) {
+      previewImg.src = "/" + room.hinhAnh;
+      previewImg.style.display = "block";
+    }
+  } else {
+    // Chế độ thêm mới
+    isEditingMode = false;
     currentEditingMaPhong = null;
-    previewImg.style.display = "none";
-    fileInput.value = "";
-    tienIchPillContainer.innerHTML = "";
-    tienIchHiddenInput.value = "";
-    // Reset options display khi đóng modal - Chỉ thêm mới
+    modalTitle.textContent = "Thêm phòng mới";
+    // Không cần làm gì thêm, vì thông tin homestay đã được điền ở BƯỚC 1.
+  }
+
+  updateHiddenInputAndButtons();
+  modal.style.display = "flex";
+};
+
+const hideModal = () => {
+  modal.style.display = "none";
+  isEditingMode = false; // Reset mode
+  currentEditingMaPhong = null;
+  previewImg.style.display = "none";
+  fileInput.value = "";
+  tienIchPillContainer.innerHTML = "";
+  tienIchHiddenInput.value = "";
+  
     renderTienIchOptions();
-  };
+};
 
   // === CÁC HÀM GỌI API ===
   const fetchAndDisplayRooms = async () => {
     roomGridContainer.innerHTML =
       '<p class="loading-message">Đang tải thông tin phòng...</p>';
     try {
-      const response = await fetch("/api/my-business-rooms", {
-        credentials: "include",
-      }); // Thêm credentials cho session
+     const response = await fetch(
+        `/api/my-homestays/${CURRENT_HOMESTAY_ID}/details`, // API MỚI
+        {
+          credentials: "include",
+        }
+      ); 
       if (response.status === 401) {
         window.location.href = "/pages/login.html";
         return;
@@ -338,14 +388,28 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
       const data = await response.json();
-      if (!Array.isArray(data)) {
-        throw new Error("Dữ liệu trả về không phải mảng phòng.");
+
+      
+      // Xử lý cấu trúc dữ liệu mới { homestay, rooms }
+      if (!data.homestay || !Array.isArray(data.rooms)) {
+        throw new Error("Dữ liệu trả về không hợp lệ (thiếu homestay hoặc rooms).");
       }
-      allRoomsData = data;
-      console.log("Dữ liệu phòng load thành công:", allRoomsData);
+
+      CURRENT_HOMESTAY_DETAILS = data.homestay; // Lưu chi tiết homestay
+      allRoomsData = data.rooms; // Lưu danh sách phòng
+
+      console.log("Dữ liệu homestay:", CURRENT_HOMESTAY_DETAILS);
+      console.log("Dữ liệu phòng:", allRoomsData);
+
+      // Cập nhật tiêu đề trang (Tùy chọn)
+      const headerTitle = document.querySelector(".header h2");
+      if (headerTitle) {
+        headerTitle.textContent = `Danh sách phòng của ${CURRENT_HOMESTAY_DETAILS.tenHomestay || 'Homestay'}`;
+      }
+
       renderRoomCards(allRoomsData);
       attachEventListeners();
-    } catch (error) {
+    }catch (error) {
       console.error("Không thể lấy dữ liệu phòng:", error);
       roomGridContainer.innerHTML = `<p class="error-message">Không thể tải dữ liệu: ${error.message}. Vui lòng thử lại.</p>`;
     }
@@ -363,14 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData();
     formData.append("tenPhong", tenPhong);
-    formData.append(
-      "tenHomestay",
-      document.getElementById("tenHomestay-input").value.trim()
-    );
-    formData.append(
-      "diaChi",
-      document.getElementById("diaChi-input").value.trim()
-    );
+   
     formData.append(
       "loaiGiuong",
       document.getElementById("loaiGiuong-input").value.trim()
@@ -380,13 +437,18 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("soLuongKhach-input").value
     );
     formData.append("gia", gia);
-    formData.append("tienIch", tienIchHiddenInput.value); // <-- Lấy từ input ẩn
     formData.append(
-      "diaChiChiTiet",
-      document.getElementById("diaChiChiTiet-input").value.trim()
+      "giaKhungGio",
+      document.getElementById("giaKhungGio-input").value || 0
     );
+    formData.append("tienIch", tienIchHiddenInput.value); // <-- Lấy từ input ẩn
+    
     formData.append("moTa", document.getElementById("moTa-input").value.trim());
-
+    formData.append("tenHomestay",CURRENT_HOMESTAY_DETAILS.tenHomestay || ""  );
+    formData.append("diaChi",CURRENT_HOMESTAY_DETAILS.diaChi || ""  );
+    formData.append("diaChiChiTiet",CURRENT_HOMESTAY_DETAILS.diaChiChiTiet || ""  );
+    formData.append("idHomestay",document.getElementById("id-h").value // Lấy từ input ẩn
+    );
     if (fileInput.files[0]) {
       formData.append("hinhAnh", fileInput.files[0]); // Upload file
     }

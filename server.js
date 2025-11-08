@@ -146,6 +146,7 @@ app.put(
       gia,
       moTa,
       diaChiChiTiet,
+      giaKhungGio
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -173,7 +174,7 @@ app.put(
 
       const sql = `
       UPDATE thongTinPhong 
-      SET tenPhong = ?, tenHomestay = ?, diaChi = ?, loaiGiuong = ?, soLuongKhach = ?, tienIch = ?, gia = ?, hinhAnh = ?,moTa=?, diaChiChiTiet=?
+      SET tenPhong = ?, tenHomestay = ?, diaChi = ?, loaiGiuong = ?, soLuongKhach = ?, tienIch = ?, gia = ?, hinhAnh = ?,moTa=?, diaChiChiTiet=?, giaKhungGio=?
       WHERE maPhong = ? AND maDoanhNghiep = ?`;
 
       const [result] = await db.execute(sql, [
@@ -187,6 +188,7 @@ app.put(
         hinhAnhUpdate,
         moTa,
         diaChiChiTiet,
+        giaKhungGio,
         maPhong,
         maDoanhNghiep,
       ]);
@@ -269,6 +271,7 @@ app.post(
       gia,
       moTa,
       diaChiChiTiet,
+      giaKhungGio
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -284,8 +287,8 @@ app.post(
 
       const sql = `
       INSERT INTO thongTinPhong 
-      (maDoanhNghiep, idHomestay, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh,moTa,diaChiChiTiet) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
+      (maDoanhNghiep, idHomestay, tenPhong, tenHomestay, diaChi, loaiGiuong, soLuongKhach, tienIch, gia, hinhAnh,moTa,diaChiChiTiet, giaKhungGio) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
       const [result] = await db.execute(sql, [
         maDoanhNghiep,
@@ -300,6 +303,7 @@ app.post(
         hinhAnh,
         moTa,
         diaChiChiTiet,
+        giaKhungGio
       ]);
 
       res.status(201).json({
@@ -316,6 +320,7 @@ app.post(
           tienIch,
           gia,
           hinhAnh,
+          giaKhungGio
         },
       });
     } catch (err) {
@@ -593,6 +598,74 @@ app.delete("/api/my-homestays/:idHomestay", requireLogin, async (req, res) => {
   }
 });
 
+  // Lấy danh sách phòng thuộc một homestay
+ 
+app.get("/api/my-homestays/:idHomestay/rooms", requireLogin, async (req, res) => {
+  try {
+    const { idHomestay } = req.params;         // Lấy từ URL
+    const maDoanhNghiep = req.session.user.id; // Lấy từ session
+
+    const [check] = await db.execute(
+      // Câu lệnh SQL kiểm tra cả 2 điều kiện
+      "SELECT idHomestay FROM homestay WHERE idHomestay = ? AND id = ?",
+      [idHomestay, maDoanhNghiep] // Phải khớp cả hai
+    );
+
+    
+    if (check.length === 0) {
+      return res.status(403).json({
+        error: "Bạn không có quyền xem phòng của homestay này hoặc homestay không tồn tại.",
+      });
+    }
+
+  
+    const [rooms] = await db.execute(
+      
+      "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC", 
+      [idHomestay]
+    );
+
+    res.json(rooms); // Trả về danh sách phòng
+
+  } catch (err) {
+    console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
+  }
+});
+// Lấy danh sách phòng thuộc một homestay cụ thể
+
+app.get("/api/my-homestays/:idHomestay/rooms", requireLogin, async (req, res) => {
+  try {
+    const { idHomestay } = req.params;
+    const idUser = req.session.user.id; // Lấy ID user từ session
+
+    // Bước 1: Kiểm tra xem user này có sở hữu homestay này không
+    // (Giống hệt logic của API DELETE)
+    const [check] = await db.execute(
+      "SELECT * FROM homestay WHERE idHomestay = ? AND id = ?",
+      [idHomestay, idUser]
+    );
+
+    // Nếu không sở hữu hoặc homestay không tồn tại
+    if (check.length === 0) {
+      return res.status(403).json({
+        error: "Bạn không có quyền xem phòng của homestay này.",
+      });
+    }
+
+    // Bước 2: Nếu sở hữu, lấy tất cả các phòng của homestay đó
+    // (Giả sử bảng của bạn tên là 'phong' và có cột 'idHomestay')
+    const [rooms] = await db.execute(
+      "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC",
+      [idHomestay]
+    );
+
+    res.json(rooms); // Trả về danh sách phòng
+  } catch (err) {
+    console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
+    res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
+  }
+});
 // Xóa user theo ID + xóa session của user đó
 const requireAdmin = (req, res, next) => {
   if (!req.session?.user || req.session.user.chucVu !== "Admin") {
@@ -601,6 +674,48 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
+ //LẤY CHI TIẾT HOMESTAY VÀ CÁC PHÒNG CỦA NÓ
+app.get(
+  "/api/my-homestays/:idHomestay/details",
+  requireLogin,
+  async (req, res) => {
+    try {
+      const { idHomestay } = req.params;
+      const maDoanhNghiep = req.session.user.id; // Lấy ID doanh nghiệp từ session
+
+      // Lấy chi tiết Homestay
+      const [homestayCheck] = await db.execute(
+        "SELECT * FROM homestay WHERE idHomestay = ? AND id = ?",
+        [idHomestay, maDoanhNghiep]
+      );
+
+      if (homestayCheck.length === 0) {
+        return res.status(403).json({
+          error:
+            "Bạn không có quyền xem homestay này hoặc homestay không tồn tại.",
+        });
+      }
+
+      const homestayDetails = homestayCheck[0];
+
+      //Lấy tất cả các phòng thuộc homestay này
+  
+      const [rooms] = await db.execute(
+        "SELECT * FROM thongTinPhong WHERE idHomestay = ? ORDER BY tenPhong ASC",
+        [idHomestay]
+      );
+
+      // Trả về dữ liệu theo cấu trúc { homestay, rooms }
+      res.json({
+        homestay: homestayDetails,
+        rooms: rooms,
+      });
+    } catch (err) {
+      console.error("Lỗi /api/my-homestays/:idHomestay/details:", err);
+      res.status(500).json({ error: "Lỗi máy chủ khi lấy chi tiết homestay." });
+    }
+  }
+);
 app.delete("/users/:id", requireAdmin, async (req, res) => {
   // Thêm requireAdmin
   try {
