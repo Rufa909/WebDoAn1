@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const tbody = document.querySelector("tbody");
+  if (!tbody) {
+    console.error("Lỗi: Không tìm thấy <tbody> trong HTML. Kiểm tra file HTML.");
+    document.body.innerHTML += '<p style="color: red;">Lỗi tải dữ liệu: Không có bảng users.</p>';
+    return;
+  }
   const res = await fetch("/users", {
     credentials: "include",
   });

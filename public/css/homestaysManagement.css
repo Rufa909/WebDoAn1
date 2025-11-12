@@ -1,0 +1,179 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f6fa;
+  color: #2c3e50;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background: #1a1d2e;
+  color: white;
+  padding: 20px 0;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.logo {
+  padding: 0 20px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.logo img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.logo i {
+  background: #3b82f6;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.nav-item {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #8b92a7;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: #252940;
+  color: white;
+}
+
+.nav-item.active-management {
+  background: #252940;
+  color: white;
+  border-left: 3px solid #3b82f6;
+}
+
+.nav-item.active-dashboard {
+  border-left: 3px solid #3b82f6;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 240px;
+  padding: 20px 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 28px;
+  color: #1a1d2e;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  width: 250px;
+}
+
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-bell .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+}
+.filter-tab {
+  padding: 8px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.filter-tab.active {
+  background: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
+  color: white;
+  border-color: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
+}
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+.empty-state i {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+.time-slot-info {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 10px 0;
+}

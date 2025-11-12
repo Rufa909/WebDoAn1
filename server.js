@@ -813,6 +813,7 @@ app.get("/api/rooms-grouped-by-company", async (req, res) => {
         gia: room.gia,
         soLuongKhach: room.soLuongKhach,
         tienIch: room.tienIch,
+        giaKhungGio: room.giaKhungGio,
       });
 
       return acc;
@@ -1062,6 +1063,7 @@ app.get("/api/user/bookings", async (req, res) => {
 
 //hủy đặt
 app.put("/api/user/bookings/cancel/:id", async (req, res) => {
+  console.log("Debug: Booking ID:", req.params.id);  // ← Thêm
   const userId = req.session?.user?.id;
   const { id } = req.params;
 
@@ -1070,7 +1072,7 @@ app.put("/api/user/bookings/cancel/:id", async (req, res) => {
   try {
     const [check] = await db.execute(
       "SELECT * FROM datPhongTheoGio WHERE id = ? AND idNguoiDung = ?",
-      [id, userId]
+      [parseInt(id), userId]
     );
 
     if (check.length === 0) {

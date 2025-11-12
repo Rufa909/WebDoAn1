@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/images/logo.png" />
-    <title>Account</title>
+    <title>Homestays</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="../../css/accountManagement.css" />
+    <link rel="stylesheet" href="../../css/homestaysManagement.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
   </head>
   <body>
@@ -27,16 +27,16 @@
             <span>Bảng Điều Khiển</span>
           </div>
         </a>
-        <div class="nav-item active-management">
-          <i class="fas fa-users"></i>
-          <span>Tài khoản</span>
-        </div>
-        <a href="homestays.html" class="nav-link">
+        <a href="account.html" class="nav-link">
           <div class="nav-item">
-            <i class="fas fa-hotel"></i>
-            <span>Homestays</span>
+            <i class="fas fa-users"></i>
+            <span>Tài Khoản</span>
           </div>
         </a>
+        <div class="nav-item active-management">
+          <i class="fas fa-hotel"></i>
+          <span>Homestays</span>
+        </div>
         <a href="settings.html" class="nav-link">
           <div class="nav-item">
             <i class="fas fa-cog"></i>
@@ -47,7 +47,7 @@
 
       <div class="main-content">
         <div class="header">
-          <h1>Quản Lý Tài Khoản</h1>
+          <h1>Quản Lý Homestay</h1>
           <div class="header-right">
             <div class="search-box">
               <i class="fas fa-search" style="color: #94a3b8"></i>
@@ -87,38 +87,26 @@
           </div>
         </div>
 
-        <div class="account-list-container">
-          <div class="account-actions">
-            <div>
-              <h2 style="font-size: 1.5em; color: #1a1d2e; margin-bottom: 5px">
-                DANH SÁCH TÀI KHOẢN
-              </h2>
-              <p style="color: #64748b; font-size: 14px">
-                Thiết lập tài khoản và quản lý quyền truy cập.
-              </p>
-            </div>
-            <button
-              class="add-new-button"
-              id="openPopupBtn"
-            >
-              <i class="fas fa-plus"></i>
-              Thêm tài khoản mới
-            </button>
+        <div class="filter-tabs">
+          <div class="filter-tab active" data-status="all">
+            <i class="fas fa-list"></i> Tất cả
           </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Họ & Tên</th>
-                <th>Email</th>
-                <th>Số điện thoại (SĐT)</th>
-                <th>Vai trò</th>
-                <th style="text-align: right">Hành động</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="filter-tab" data-status="choXacNhan">
+            <i class="fas fa-clock"></i> Chờ xác nhận
+          </div>
+          <div class="filter-tab" data-status="daXacNhan">
+            <i class="fas fa-check-circle"></i> Đã xác nhận
+          </div>
+          <div class="filter-tab" data-status="daHuy">
+            <i class="fas fa-times-circle"></i> Đã hủy
+          </div>
         </div>
+
+        <div id="loadingContainer" class="loading" style="display: none">
+          <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+        </div>
+
+        <div class="homestay-grid" id="homestay-grid-container"></div>
       </div>
     </div>
 

@@ -513,64 +513,50 @@
           });
         });
 
-        // Địa chỉ cụ thể: //
+        // Địa chỉ cụ thể:
         const provinceSelect = document.getElementById("province");
         const districtSelect = document.getElementById("district");
         const wardSelect = document.getElementById("ward");
 
-        // Lấy danh sách tỉnh/thành
-        const resAddress = await fetch("https://provinces.open-api.vn/api/p/");
-        const provinces = await resAddress.json();
-        provinces.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+        provinceSelect.innerHTML = `<option value="92" selected>Thành phố Cần Thơ</option>`;
+        provinceSelect.disabled = true; // Không cho đổi tỉnh
 
-        provinceSelect.innerHTML =
-          '<option value="">-- Chọn tỉnh / thành phố --</option>';
-        provinces.forEach((p) => {
+        // Danh sách quận/huyện của Cần Thơ
+        const resAddress = await fetch(
+          "https://provinces.open-api.vn/api/p/92?depth=2"
+        );
+        const canTho = await resAddress.json();
+
+        districtSelect.disabled = false;
+        wardSelect.disabled = true;
+
+        districtSelect.innerHTML =
+          '<option value="">-- Chọn quận / huyện --</option>';
+        canTho.districts.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+        canTho.districts.forEach((d) => {
           const opt = document.createElement("option");
-          opt.value = p.code;
-          opt.textContent = p.name;
-          provinceSelect.appendChild(opt);
+          opt.value = d.code;
+          opt.textContent = d.name;
+          districtSelect.appendChild(opt);
         });
 
-        // chọn tỉnh
-        provinceSelect.addEventListener("change", async () => {
-          districtSelect.innerHTML =
-            '<option value="">-- Chọn quận / huyện --</option>';
-          wardSelect.innerHTML =
-            '<option value="">-- Chọn phường / xã --</option>';
-          wardSelect.disabled = true;
-
-          const provinceCode = provinceSelect.value;
-          if (!provinceCode) return;
-          districtSelect.disabled = false;
-
-          const resAddress = await fetch(
-            `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`
-          );
-          const data = await resAddress.json();
-          data.districts.sort((a, b) => a.name.localeCompare(b.name, "vi"));
-          data.districts.forEach((d) => {
-            const opt = document.createElement("option");
-            opt.value = d.code;
-            opt.textContent = d.name;
-            districtSelect.appendChild(opt);
-          });
-        });
-
-        // chọn quận/huyện
         districtSelect.addEventListener("change", async () => {
           wardSelect.innerHTML =
             '<option value="">-- Chọn phường / xã --</option>';
           const districtCode = districtSelect.value;
-          if (!districtCode) return;
-          wardSelect.disabled = false;
+          if (!districtCode) {
+            wardSelect.disabled = true;
+            return;
+          }
 
-          const resAddress = await fetch(
+          const resWard = await fetch(
             `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`
           );
-          const data = await resAddress.json();
-          data.wards.sort((a, b) => a.name.localeCompare(b.name, "vi"));
-          data.wards.forEach((w) => {
+          const districtData = await resWard.json();
+
+          wardSelect.disabled = false;
+          districtData.wards.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+          districtData.wards.forEach((w) => {
             const opt = document.createElement("option");
             opt.value = w.name;
             opt.textContent = w.name;

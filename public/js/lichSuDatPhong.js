@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           <div class="booking-actions">
         ${
-          bk.trangThai === "choXacNhan"
-            ? `<button class="action-btn btn-danger btn-cancel-booking" data-id="${bk.id}">
+          (bk.trangThai === "choXacNhan")
+            ? `<button class="action-btn btn-danger btn-cancel-booking" data-id="${bk.bookingId}">
               Hủy đặt phòng
             </button>`
             : ""
@@ -107,6 +107,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           backdrop: true,
         });
         loadBookingHistory();
+        window.location.reload();
       } else {
         Swal.fire({
           icon: "error",

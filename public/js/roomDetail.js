@@ -173,10 +173,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     ).innerHTML = `<i class="fa-solid fa-house" style="color: #606366;"></i> ${room.tenHomestay}`;
 
     // Ghi đè giá
-    const formattedPrice = new Intl.NumberFormat("vi-VN").format(room.gia);
+    const formattedPrice = new Intl.NumberFormat("vi-VN").format(room.giaKhungGio);
+    const formattedPriceTimeSlot = new Intl.NumberFormat("vi-VN").format(room.gia);
     document.querySelector(
       ".price"
     ).innerHTML = `${formattedPrice} VNĐ <span class="price-unit">/3 giờ</span>`;
+    
+
     document.querySelector(
       ".total-row span:last-child"
     ).innerHTML = `${formattedPrice} VNĐ`;
