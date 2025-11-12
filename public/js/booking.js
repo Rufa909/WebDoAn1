@@ -43,22 +43,27 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     const { maPhong } = req.params;
     connection = await getConnectionWithTimezone();
 
-    // 1. LẤY THÔNG TIN PHÒNG
-    const [roomInfo] = await connection.execute(
-      "SELECT * FROM thongTinPhong WHERE maPhong = ?",
+    // 1. LẤY THÔNG TIN PHÒNG + GIÁ + SỨC CHỨA
+    const [roomRows] = await connection.execute(
+      `SELECT *, 
+              gia AS giaQuaDem,
+              giaKhungGio AS giaTheoGio,
+              soLuongKhach AS sucChua
+       FROM thongTinPhong 
+       WHERE maPhong = ?`,
       [maPhong]
     );
-    if (roomInfo.length === 0) {
+
+    if (roomRows.length === 0) {
       return res.status(404).json({ error: "Không tìm thấy phòng" });
     }
 
-    // 2. LẤY GIÁ KHUNG GIỜ
-    const [prices] = await connection.execute(
-      "SELECT khungGio, gia FROM giaKhungGio WHERE maPhong = ?",
-      [maPhong]
-    );
+    const room = roomRows[0];
+    const giaTheoGio = Number(room.giaTheoGio) || 0;
+    const giaQuaDem = Number(room.giaQuaDem) || 0;
+    const sucChua = Number(room.sucChua) || 2;   // <-- sức chứa phòng
 
-    // 3. LẤY BOOKING ĐANG CHỜ HOẶC ĐÃ XÁC NHẬN - THÊM idNguoiDung
+    // 2. LẤY BOOKING (có idNguoiDung)
     const [bookings] = await connection.execute(
       `SELECT ngayDat, khungGio, trangThai, idNguoiDung 
        FROM datPhongTheoGio 
@@ -80,24 +85,37 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     for (let i = 0; i < 7; i++) {
       const checkDate = new Date(now);
       checkDate.setDate(now.getDate() + i);
-
       const dateStr = formatDateLocal(checkDate);
       const daySchedule = { date: dateStr, slots: {} };
 
       for (const slot of khungGioList) {
-        const price = prices.find((p) => p.khungGio === slot)?.gia || 0;
+        // GIÁ: ưu tiên bảng giaKhungGio (nếu có), nếu không dùng giá mặc định
+        let price = giaTheoGio;
+        if (slot === "20:30-09:30") {
+          price = giaQuaDem;
+        }
 
-        const booking = bookings.find((b) => {
-          let bDate;
-          if (b.ngayDat instanceof Date) {
-            bDate = formatDateLocal(b.ngayDat);
-          } else {
-            bDate = String(b.ngayDat).split("T")[0];
-          }
+        // Nếu có giá đặc biệt trong bảng giaKhungGio → dùng nó
+        const [customPrice] = await connection.execute(
+          `SELECT gia FROM giaKhungGio 
+           WHERE maPhong = ? AND khungGio = ? 
+             AND (ngayApDung IS NULL OR ngayApDung <= ?) 
+             AND (ngayKetThuc IS NULL OR ngayKetThuc >= ?)
+           LIMIT 1`,
+          [maPhong, slot, dateStr, dateStr]
+        );
+        if (customPrice.length > 0) {
+          price = Number(customPrice[0].gia);
+        }
+
+        // Kiểm tra booking
+        const booking = bookings.find(b => {
+          const bDate = b.ngayDat instanceof Date 
+            ? formatDateLocal(b.ngayDat) 
+            : String(b.ngayDat).split("T")[0];
           return bDate === dateStr && b.khungGio === slot;
         });
 
-        // Kiểm tra slot đã qua (chỉ hôm nay)
         let isPast = false;
         if (i === 0) {
           const [start] = slot.split("-");
@@ -109,27 +127,26 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
 
         let status = "available";
         let userId = null;
-
         if (booking) {
-          // *** QUAN TRỌNG: TRẢ VỀ userId CHO CẢ 2 TRẠNG THÁI ***
           userId = booking.idNguoiDung;
-
-          if (booking.trangThai === "daXacNhan") {
-            status = "booked";
-          } else if (booking.trangThai === "choXacNhan") {
-            status = "pending";
-          }
+          status = booking.trangThai === "daXacNhan" ? "booked" : "pending";
         }
-
         if (isPast) status = "past";
 
-        // TRẢ VỀ CẢ userId (dù là booked hay pending)
         daySchedule.slots[slot] = { price, status, userId };
       }
       schedule.push(daySchedule);
     }
 
-    res.json({ room: roomInfo[0], schedule });
+    // TRẢ VỀ room kèm sức chứa
+    res.json({
+      room: {
+        ...room,
+        sucChua: sucChua   // <-- quan trọng, frontend sẽ dùng cái này
+      },
+      schedule
+    });
+
   } catch (error) {
     console.error("Error in /api/booking/available:", error);
     res.status(500).json({ error: "Lỗi server" });
@@ -141,8 +158,7 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
    API: TẠO BOOKING MỚI
    ======================================== */
 router.post("/api/booking/create", async (req, res) => {
-  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } =
-    req.body;
+  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } = req.body;
 
   if (!maPhong || !hoTen || !sdt || !slots || slots.length === 0) {
     return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
@@ -153,7 +169,21 @@ router.post("/api/booking/create", async (req, res) => {
     connection = await getConnectionWithTimezone();
     await connection.beginTransaction();
 
-    // KIỂM TRA TRÙNG (CẢ PENDING)
+    // LẤY SỨC CHỨA PHÒNG
+    const [roomRows] = await connection.execute(
+      "SELECT soLuongKhach FROM thongTinPhong WHERE maPhong = ?",
+      [maPhong]
+    );
+    const sucChua = roomRows[0]?.soLuongKhach || 2;
+    const nguoiThua = Math.max(0, soLuongKhach - sucChua);
+    const phuThu = nguoiThua * 50000;
+
+    let ghiChuMoi = ghiChu || "";
+    if (phuThu > 0) {
+      ghiChuMoi += `\n[Phụ thu] ${nguoiThua} người thừa × 50k = ${phuThu.toLocaleString()}đ`;
+    }
+
+    // KIỂM TRA TRÙNG
     for (const slot of slots) {
       const [existing] = await connection.execute(
         `SELECT id FROM datPhongTheoGio 
@@ -169,10 +199,10 @@ router.post("/api/booking/create", async (req, res) => {
       }
     }
 
-    // TẠO BOOKING
-    const bookingIds = [];
+    // TẠO BOOKING (chia đều phụ thu)
     for (const slot of slots) {
-      const [result] = await connection.execute(
+      const giaTong = slot.giaKhungGio + (phuThu / slots.length);
+      await connection.execute(
         `INSERT INTO datPhongTheoGio 
          (idNguoiDung, maPhong, hoTen, sdt, soLuongKhach, ngayDat, khungGio, 
           giaKhungGio, ghiChu, trangThai, ngayTao)
@@ -182,21 +212,19 @@ router.post("/api/booking/create", async (req, res) => {
           maPhong,
           hoTen,
           sdt,
-          soLuongKhach || 2,
+          soLuongKhach,
           slot.ngayDat,
           slot.khungGio,
-          slot.giaKhungGio,
-          ghiChu || null,
+          giaTong,
+          ghiChuMoi,
         ]
       );
-      bookingIds.push(result.insertId);
     }
 
     await connection.commit();
     res.json({
       success: true,
-      message: "Đặt thành công, đang chờ xác nhận",
-      bookingIds,
+      message: `Đặt thành công! ${phuThu > 0 ? `Phụ thu ${phuThu.toLocaleString()}đ` : ""}`,
     });
   } catch (error) {
     if (connection) await connection.rollback();
@@ -206,7 +234,6 @@ router.post("/api/booking/create", async (req, res) => {
     if (connection) connection.release();
   }
 });
-
 /* ========================================
    API: DỌN PENDING CŨ (15 PHÚT)
    ======================================== */

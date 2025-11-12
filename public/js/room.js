@@ -173,13 +173,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 ${
                   booking.ghiChu
                     ? `
-                    <div class="info-item" style="margin-top: 10px;">
-                        <i class="fas fa-sticky-note"></i>
-                        <span><strong>Ghi chú:</strong> ${booking.ghiChu}</span>
-                    </div>
-                `
+    <div class="info-item" style="margin-top: 10px;">
+        <i class="fas fa-sticky-note" style="color: #3498db;"></i>
+        <span><strong>Ghi chú khách:</strong> ${booking.ghiChu}</span>
+    </div>
+`
                     : ""
                 }
+
+${
+  booking.lyDoTuChoi
+    ? `
+    <div class="info-item" style="margin-top: 10px; background: #ffebee; padding: 8px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+        <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+        <span><strong>Lý do từ chối:</strong> ${booking.lyDoTuChoi}</span>
+    </div>
+`
+    : ""
+}
                 
                 <div class="info-item" style="margin-top: 5px; font-size: 12px; color: #999;">
                     <i class="fas fa-clock"></i>

@@ -304,7 +304,6 @@
     </style>
   </head>
   <body>
-    <!-- Header -->
     <div class="header-container">
       <div
         class="container-fluid d-flex justify-content-between align-items-center"
@@ -329,7 +328,6 @@
       <div class="booking-section">
         <h2 class="booking-title">Chọn thời gian</h2>
 
-        <!-- CHÚ THÍCH MÀU SẮC - ĐẶT Ở TRÊN -->
         <div class="legend">
           <div class="legend-item">
             <div
@@ -397,6 +395,11 @@
         <div id="bookingInfo">
           <strong>Chọn khung giờ:</strong>
           <span id="selectedCount">0</span> khung giờ<br />
+          <span id="roomPriceText">Tiền phòng: 0đ</span><br />
+          <div
+            id="bookingDetail"
+            style="margin-top: 5px; font-size: 16px; line-height: 1.6"
+          ></div>
           <strong>Tổng tiền:</strong> <span id="totalPrice">0</span>đ
         </div>
 
@@ -411,23 +414,23 @@
 
         <form id="bookingForm">
           <div class="form-group">
-            <label>Họ và tên *</label
+            <label>Họ và tên </label
             ><input type="text" id="hoTen" class="form-input" required />
           </div>
           <div class="form-group">
-            <label>Số điện thoại *</label
+            <label>Số điện thoại </label
             ><input type="tel" id="sdt" class="form-input" required /><small
               style="color: #666; font-size: 13px"
-              >* Gửi qua Zalo</small
-            >
+            ></small>
           </div>
-          <div class="form-group">
+        <div class="form-group">
             <label>Số lượng khách</label
             ><select id="soLuongKhach" class="form-select">
               <option value="2">2 khách</option>
               <option value="3">3 khách</option>
               <option value="4">4 khách</option>
             </select>
+            <small id="sucChuaNote" style="color: #3498db; font-size: 13px; display: block; margin-top: 5px;"></small>
           </div>
           <div class="form-group">
             <label>Ghi chú</label
@@ -443,9 +446,13 @@
             "
           >
             <p><strong style="color: #e74c3c">Lưu ý:</strong></p>
-            <p>- Xác nhận ≥18 tuổi</p>
+            <p>
+              <strong style="color: #e74c3c"
+                >- Phụ thu 50.000đ mỗi người khi vượt quá số người của
+                phòng</strong
+              >
+            </p>
             <p>- Hủy/đổi trước 3 tiếng</p>
-            <p>- Đồng ý <a href="#" style="color: #007bff">Nội quy</a></p>
           </div>
         </form>
       </div>
@@ -464,6 +471,7 @@
       let selectedSlots = [];
       let currentUserId = null;
       let currentUserData = null;
+      let sucChuaPhong = 2;
 
       const loadingEl = document.getElementById("loadingSchedule");
       const errorEl = document.getElementById("errorMessage");
@@ -483,7 +491,6 @@
         return `${day}/${month}/${year}`;
       }
 
-      // LẤY USER HIỆN TẠI VÀ TỰ ĐỘNG ĐIỀN THÔNG TIN
       async function getCurrentUser() {
         try {
           const res = await fetch(`${API_BASE_URL}/current_user`, {
@@ -494,7 +501,6 @@
             currentUserId = data.user?.id || null;
             currentUserData = data.user;
 
-            // TỰ ĐỘNG ĐIỀN THÔNG TIN VÀO FORM
             if (data.user) {
               const hoTenInput = document.getElementById("hoTen");
               const sdtInput = document.getElementById("sdt");
@@ -515,7 +521,6 @@
         }
       }
 
-      // TẢI LỊCH TỪ API
       async function loadRoomSchedule() {
         loadingEl.style.display = "block";
         errorEl.style.display = "none";
@@ -530,15 +535,31 @@
           const data = await res.json();
 
           roomData = data.room;
+          sucChuaPhong = roomData.sucChua || 2;
           scheduleData = data.schedule;
 
           updatePriceHeaders();
           renderScheduleTable();
+          updateSoLuongKhachOptions();
+          updateBookingInfo();
+          document.getElementById('sucChuaNote').textContent = 
+              `(Sức chứa tối đa của phòng là: ${sucChuaPhong} người)`;
         } catch (e) {
           errorEl.textContent = e.message;
           errorEl.style.display = "block";
         } finally {
           loadingEl.style.display = "none";
+        }
+      }
+      function updateSoLuongKhachOptions() {
+        const select = document.getElementById("soLuongKhach");
+        select.innerHTML = "";
+        for (let i = 1; i <= sucChuaPhong + 3; i++) {
+          const opt = document.createElement("option");
+          opt.value = i;
+          opt.textContent = i + " khách" + (i > sucChuaPhong ? "" : "");
+          if (i === sucChuaPhong) opt.selected = true;
+          select.appendChild(opt);
         }
       }
 
@@ -677,13 +698,39 @@
 
       function updateBookingInfo() {
         const count = selectedSlots.length;
-        const total = selectedSlots.reduce((s, p) => s + p.price, 0);
+        const soLuongKhach =
+          parseInt(document.getElementById("soLuongKhach").value) ||
+          sucChuaPhong;
+        const nguoiThua = Math.max(0, soLuongKhach - sucChuaPhong);
+        const phuThu = nguoiThua * 50000;
+
+        const tongTienSlots = selectedSlots.reduce((s, p) => s + p.price, 0);
+        const tongTien = tongTienSlots + phuThu;
+
         document.getElementById("selectedCount").textContent = count;
-        document.getElementById("totalPrice").textContent = formatPrice(total);
+        document.getElementById("totalPrice").textContent =
+          formatPrice(tongTien);
+
+        document.getElementById(
+          "roomPriceText"
+        ).innerHTML = `<strong>Tiền phòng:</strong> ${formatPrice(
+          tongTienSlots
+        )}đ`;
+
+        let chiTietPhuThu = "";
+        if (phuThu > 0) {
+          chiTietPhuThu = `<span style="color:#e74c3c; font-weight:bold;">
+            Phụ thu ${nguoiThua} người thừa: +${formatPrice(
+            phuThu
+          )}đ (50k/người)
+          </span>`;
+        }
+
+        document.getElementById("bookingDetail").innerHTML = chiTietPhuThu;
+
         document.getElementById("bookNowBtn").disabled = count === 0;
       }
 
-      // ĐẶT PHÒNG
       document.getElementById("bookNowBtn").onclick = async () => {
         const hoTen = document.getElementById("hoTen").value.trim();
         const sdt = document.getElementById("sdt").value.trim();
@@ -693,12 +740,18 @@
         if (!hoTen || !sdt || selectedSlots.length === 0)
           return alert("Vui lòng nhập đủ thông tin!");
 
-        const total = selectedSlots.reduce((s, p) => s + p.price, 0);
+        const tongTienSlots = selectedSlots.reduce((s, p) => s + p.price, 0);
+        const nguoiThua = Math.max(0, parseInt(soLuongKhach) - sucChuaPhong);
+        const phuThu = nguoiThua * 50000;
+        const tongTien = tongTienSlots + phuThu;
+
         if (
           !confirm(
             `Xác nhận đặt ${
               selectedSlots.length
-            } khung giờ?\nTổng: ${formatPrice(total)}đ`
+            } khung giờ?\nTổng tiền (Bao gồm phụ thu): ${formatPrice(
+              tongTien
+            )}đ`
           )
         )
           return;
@@ -757,6 +810,9 @@
           btn.innerHTML = "Đặt phòng";
         }
       };
+      document
+        .getElementById("soLuongKhach")
+        .addEventListener("change", updateBookingInfo);
 
       window.addEventListener("DOMContentLoaded", () => {
         loadRoomSchedule();
