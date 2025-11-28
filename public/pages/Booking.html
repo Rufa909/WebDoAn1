@@ -301,10 +301,26 @@
           grid-template-columns: 1fr;
         }
       }
+
+      .back-btn {
+        background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
+        color: white;
+        padding: 5px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        align-items: center;
+      }
+
+      .back-btn:hover {
+        background: #45b8b0;
+      }
     </style>
   </head>
   <body>
-    <div class="header-container">
+    <!-- Header -->
+    <div class="header-container" style="background-color: #fff">
       <div
         class="container-fluid d-flex justify-content-between align-items-center"
       >
@@ -320,6 +336,11 @@
         >
           <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
         </a>
+        <div style="display: flex; gap: 10px">
+          <button class="back-btn" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại
+          </button>
+        </div>
       </div>
     </div>
     <hr />
@@ -457,6 +478,26 @@
         </form>
       </div>
     </div>
+
+<div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="depositModalLabel">Xác nhận đặt phòng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Vui lòng liên hệ chủ homestay cọc 50% tổng số tiền để đặt phòng Số tiền là: <span id="depositAmount"></span>đ</p>
+        <img src="/images/qrcoc.png" alt="QR Zalo" class="img-fluid d-block mx-auto">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
       const API_BASE_URL = "http://localhost:3000";
@@ -720,7 +761,7 @@
         let chiTietPhuThu = "";
         if (phuThu > 0) {
           chiTietPhuThu = `<span style="color:#e74c3c; font-weight:bold;">
-            Phụ thu ${nguoiThua} người thừa: +${formatPrice(
+            Phụ thu thêm ${nguoiThua} người  + ${formatPrice(
             phuThu
           )}đ (50k/người)
           </span>`;
@@ -785,9 +826,12 @@
           const justBookedSlot =
             selectedSlots.length > 0 ? { ...selectedSlots[0] } : null;
 
-          document.getElementById("successMessage").textContent =
-            "Đặt thành công! Đang chờ xác nhận.";
-          document.getElementById("successMessage").style.display = "block";
+          const deposit = tongTien / 2;
+          document.getElementById("depositAmount").textContent = formatPrice(deposit);
+
+          const depositModal = new bootstrap.Modal(document.getElementById('depositModal'));
+          depositModal.show();
+
           document.getElementById("bookingForm").reset();
           selectedSlots = [];
 
@@ -796,12 +840,6 @@
           await loadRoomSchedule();
           updateBookingInfo();
 
-          setTimeout(
-            () =>
-              (document.getElementById("successMessage").style.display =
-                "none"),
-            5000
-          );
         } catch (e) {
           errorEl.textContent = "Lỗi: " + e.message;
           errorEl.style.display = "block";
@@ -816,7 +854,6 @@
 
       window.addEventListener("DOMContentLoaded", () => {
         loadRoomSchedule();
-        setInterval(loadRoomSchedule, 15000);
       });
     </script>
   </body>

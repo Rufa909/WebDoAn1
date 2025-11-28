@@ -179,9 +179,7 @@ router.post("/api/booking/create", async (req, res) => {
     const phuThu = nguoiThua * 50000;
 
     let ghiChuMoi = ghiChu || "";
-    if (phuThu > 0) {
-      ghiChuMoi += `\n[Phụ thu] ${nguoiThua} người thừa × 50k = ${phuThu.toLocaleString()}đ`;
-    }
+  
 
     // KIỂM TRA TRÙNG
     for (const slot of slots) {

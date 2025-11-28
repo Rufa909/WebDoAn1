@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok) {
         const data = await response.json();
         return data.user;
-        v;
       }
 
       alert("Vui lòng đăng nhập để tiếp tục");
@@ -124,95 +123,99 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const showActions = booking.trangThai === "choXacNhan";
 
-    return `
-            <div class="booking-card" data-booking-id="${booking.id}">
-                <div class="booking-header">
-                    <div>
-                        <h3 style="margin: 0; color: #2c3e50;">${
-                          booking.tenPhong
-                        }</h3>
-                        <small style="color: #7f8c8d;">${
-                          booking.tenHomestay
-                        }</small>
-                    </div>
-                    <span class="booking-status ${
-                      status.class
-                    }">${status.text}</span>
-                </div>
-                
-                <div class="time-slot-info">
-                    <i class="fas fa-calendar-day"></i> 
-                    <strong>${formatDate(booking.ngayDat)}</strong> - 
-                    <i class="fas fa-clock"></i> 
-                    <strong>${booking.khungGio}</strong>
-                </div>
-                
-                <div class="booking-info">
-                    <div class="info-item">
-                        <i class="fas fa-user"></i>
-                        <span><strong>Khách:</strong> ${booking.hoTen}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone"></i>
-                        <span><strong>SĐT:</strong> ${booking.sdt}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-users"></i>
-                        <span><strong>Số khách:</strong> ${
-                          booking.soLuongKhach
-                        } người</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span class="price-highlight">${formatPrice(
-                          booking.giaKhungGio
-                        )}đ</span>
-                    </div>
-                </div>
-                
-                ${
-                  booking.ghiChu
-                    ? `
-    <div class="info-item" style="margin-top: 10px;">
-        <i class="fas fa-sticky-note" style="color: #3498db;"></i>
-        <span><strong>Ghi chú khách:</strong> ${booking.ghiChu}</span>
-    </div>
-`
-                    : ""
-                }
+    
+    let surchargeText = '';
+    let updatedGhiChu = booking.ghiChu || '';  // Sao chép ghiChu gốc để chỉnh sửa
+    if (updatedGhiChu.includes('[Phụ thu]')) {
+      const match = updatedGhiChu.match(/\[Phụ thu\] (\d+) người thừa/);
+      if (match) {
+        surchargeText = `(phụ thu ${match[1]} người)`;
+        
+        updatedGhiChu = updatedGhiChu.replace(/\[Phụ thu\] \d+ người thừa x \d+k = [\d.]+đ/, '').trim();
+        if (updatedGhiChu === '') updatedGhiChu = null;  
+      }
+    }
+    
 
-${
-  booking.lyDoTuChoi
-    ? `
-    <div class="info-item" style="margin-top: 10px; background: #ffebee; padding: 8px; border-radius: 6px; border-left: 4px solid #e74c3c;">
-        <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
-        <span><strong>Lý do từ chối:</strong> ${booking.lyDoTuChoi}</span>
-    </div>
-`
-    : ""
-}
-                
-                <div class="info-item" style="margin-top: 5px; font-size: 12px; color: #999;">
-                    <i class="fas fa-clock"></i>
-                    <span>Đặt lúc: ${formatDateTime(booking.ngayTao)}</span>
-                </div>
-                
-                ${
-                  showActions
-                    ? `
-                    <div class="booking-actions">
-                        <button class="btn-confirm" data-id="${booking.id}">
-                            <i class="fas fa-check"></i> Xác nhận
-                        </button>
-                        <button class="btn-reject" data-id="${booking.id}">
-                            <i class="fas fa-times"></i> Từ chối
-                        </button>
-                    </div>
-                `
-                    : ""
-                }
+    return `
+      <div class="booking-card" data-booking-id="${booking.id}">
+        <div class="booking-header">
+          <div>
+            <h3 style="margin: 0; color: #2c3e50;">${booking.tenPhong}</h3>
+            <small style="color: #7f8c8d;">${booking.tenHomestay}</small>
+          </div>
+          <span class="booking-status ${status.class}">${status.text}</span>
+        </div>
+        
+        <div class="time-slot-info">
+          <i class="fas fa-calendar-day"></i> 
+          <strong>${formatDate(booking.ngayDat)}</strong> - 
+          <i class="fas fa-clock"></i> 
+          <strong>${booking.khungGio}</strong>
+        </div>
+        
+        <div class="booking-info">
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <span><strong>Khách:</strong> ${booking.hoTen}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-phone"></i>
+            <span><strong>SĐT:</strong> ${booking.sdt}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span><strong>Số khách:</strong> ${booking.soLuongKhach} người <span class="surcharge-highlight">${surchargeText}</span></span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span class="price-highlight">${formatPrice(booking.giaKhungGio)}đ</span>
+          </div>
+        </div>
+        
+        ${
+          updatedGhiChu
+            ? `
+        <div class="info-item" style="margin-top: 10px;">
+          <i class="fas fa-sticky-note" style="color: #3498db;"></i>
+          <span><strong>Ghi chú khách:</strong> ${updatedGhiChu}</span>
+        </div>
+      `
+            : ""
+        }
+
+        ${
+          booking.lyDoTuChoi
+            ? `
+        <div class="info-item" style="margin-top: 10px; background: #ffebee; padding: 8px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+          <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+          <span><strong>Lý do từ chối:</strong> ${booking.lyDoTuChoi}</span>
+        </div>
+      `
+            : ""
+        }
+        
+        <div class="info-item" style="margin-top: 5px; font-size: 12px; color: #999;">
+          <i class="fas fa-clock"></i>
+          <span>Đặt lúc: ${formatDateTime(booking.ngayTao)}</span>
+        </div>
+        
+        ${
+          showActions
+            ? `
+            <div class="booking-actions">
+              <button class="btn-confirm" data-id="${booking.id}">
+                <i class="fas fa-check"></i> Xác nhận
+              </button>
+              <button class="btn-reject" data-id="${booking.id}">
+                <i class="fas fa-times"></i> Từ chối
+              </button>
             </div>
-        `;
+        `
+            : ""
+        }
+      </div>
+    `;
   }
 
   function attachEventListeners() {
@@ -397,8 +400,8 @@ ${
   // Load dữ liệu ban đầu
   loadBookings();
 
-  // Auto refresh mỗi 30 giây
-  setInterval(loadBookings, 30000);
+  
+  
 
   // btn cuộn lên trang đầu
   const scrollToTopBtn = document.getElementById("scrollToTop");
