@@ -24,9 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 card.className = "homestay-card";
                 
                 card.innerHTML = `
-                    <h3> Mã Homestay: ${homestay.idHomestay}</h3>
-                    <p> <h4> Tên: ${homestay.tenHomestay || "Chưa đặt tên"}</h4></p>
-                    <small> Địa chỉ: ${homestay.diaChi || "Chưa có địa chỉ"}</small>
+                    <p> <h3> Tên: ${homestay.tenHomestay || "Chưa đặt tên"}</h3></p>
+                    <small> <strong>Địa chỉ:</strong> ${homestay.diaChi || "Chưa có địa chỉ"}</small>
                     
                 `;
 

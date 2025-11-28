@@ -1,11 +1,14 @@
 const API_BASE_URL = "http://localhost:3000";
 
 const amenitiesIconMap = {
+  tv: "fa-tv",
+  tulanh: "fa-snowflake",
   beboi: "fa-swimming-pool",
   viewdep: "fa-rainbow",
   phonggym: "fa-dumbbell",
   maychieu: "fa-film",
   bancong: "fa-cloud",
+  maygiat: "fa-water",
   bep: "fa-utensils",
   bontam: "fa-bath",
 };

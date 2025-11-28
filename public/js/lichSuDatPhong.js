@@ -106,8 +106,10 @@ document.addEventListener("DOMContentLoaded", async function () {
           text: "Hủy đặt phòng thành công",
           backdrop: true,
         });
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
         loadBookingHistory();
-        window.location.reload();
       } else {
         Swal.fire({
           icon: "error",

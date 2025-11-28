@@ -60,7 +60,7 @@ const amenitiesIconMap = {
   tulanh: "fa-snowflake",
   maychieu: "fa-film",
   bancong: "fa-cloud",
-  maygiat: "fa-utensils",
+  maygiat: "fa-water",
   bontam: "fa-bath",
 };
 
@@ -224,17 +224,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!homestaySectionsEl)
       throw new Error("Không tìm thấy container #homestay-sections");
 
-    for (const doanhNghiep of groupedData) {
-      const homestayName = doanhNghiep.tenHomestay;
+    for (const homestay of groupedData) {
+      const homestayName = homestay.tenHomestay;
 
-      const roomsHtml = doanhNghiep.phong
+      const roomsHtml = homestay.phong
         .map((room) => createRoomCardHtml(room, homestayName))
         .join("");
       finalHtml += `
-                <div class="enterprise-block" data-branch="${doanhNghiep.tenHomestay
+                <div class="enterprise-block" data-branch="${homestay.tenHomestay
                   .toLowerCase()
                   .replace(/\s/g, "-")}">
-                    <h3 class="address-header">${doanhNghiep.tenHomestay}</h3>
+                    <h3 class="address-header">${homestay.tenHomestay}</h3>
                     <div class="scroll-container">
                         <div class="rooms-grid">${roomsHtml}</div>
                     </div>

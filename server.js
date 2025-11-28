@@ -789,22 +789,22 @@ app.get("/api/rooms-grouped-by-company", async (req, res) => {
   }
 
   try {
-    const sql = "SELECT * FROM thongTinPhong ORDER BY maDoanhNghiep";
+    const sql = "SELECT * FROM thongTinPhong ORDER BY idHomestay ASC";
     const [results] = await db.execute(sql);
 
     const groupedData = results.reduce((acc, room) => {
-      const maDN = room.maDoanhNghiep;
-      const tenHomestay = room.tenHomestay || `Doanh nghiệp ${maDN}`;
+      const idHomestay = room.idHomestay;
+      const tenHomestay = room.tenHomestay || `Doanh nghiệp ${idHomestay}`;
 
-      if (!acc[maDN]) {
-        acc[maDN] = {
-          maDoanhNghiep: maDN,
+      if (!acc[idHomestay]) {
+        acc[idHomestay] = {
+          idHomestay: idHomestay,
           tenHomestay,
           phong: [],
         };
       }
 
-      acc[maDN].phong.push({
+      acc[idHomestay].phong.push({
         maPhong: room.maPhong,
         tenPhong: room.tenPhong,
         hinhAnh: room.hinhAnh,
