@@ -61,7 +61,7 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     const room = roomRows[0];
     const giaTheoGio = Number(room.giaTheoGio) || 0;
     const giaQuaDem = Number(room.giaQuaDem) || 0;
-    const sucChua = Number(room.sucChua) || 2;   // <-- sức chứa phòng
+    const sucChua = Number(room.sucChua) || 2; // <-- sức chứa phòng
 
     // 2. LẤY BOOKING (có idNguoiDung)
     const [bookings] = await connection.execute(
@@ -109,10 +109,11 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
         }
 
         // Kiểm tra booking
-        const booking = bookings.find(b => {
-          const bDate = b.ngayDat instanceof Date 
-            ? formatDateLocal(b.ngayDat) 
-            : String(b.ngayDat).split("T")[0];
+        const booking = bookings.find((b) => {
+          const bDate =
+            b.ngayDat instanceof Date
+              ? formatDateLocal(b.ngayDat)
+              : String(b.ngayDat).split("T")[0];
           return bDate === dateStr && b.khungGio === slot;
         });
 
@@ -142,11 +143,10 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     res.json({
       room: {
         ...room,
-        sucChua: sucChua   // <-- quan trọng, frontend sẽ dùng cái này
+        sucChua: sucChua, // <-- quan trọng, frontend sẽ dùng cái này
       },
-      schedule
+      schedule,
     });
-
   } catch (error) {
     console.error("Error in /api/booking/available:", error);
     res.status(500).json({ error: "Lỗi server" });
@@ -158,7 +158,8 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
    API: TẠO BOOKING MỚI
    ======================================== */
 router.post("/api/booking/create", async (req, res) => {
-  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } = req.body;
+  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } =
+    req.body;
 
   if (!maPhong || !hoTen || !sdt || !slots || slots.length === 0) {
     return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
@@ -179,7 +180,20 @@ router.post("/api/booking/create", async (req, res) => {
     const phuThu = nguoiThua * 50000;
 
     let ghiChuMoi = ghiChu || "";
-  
+
+    // THÊM LOGIC CHÈN CHUỖI PHỤ THU VÀO GHI CHÚ
+    if (nguoiThua > 0) {
+      const phuThuTrenMoiSlot = phuThu / slots.length;
+      const phuThuString = phuThuTrenMoiSlot.toLocaleString("vi-VN"); // Dùng toLocaleString để format số
+
+      // Format: [Phụ thu] [X] người thừa x 50k = [Y]đ
+      const chuoiPhuThu = `[Phụ thu] ${nguoiThua} người thừa x 50k = ${phuThu.toLocaleString(
+        "vi-VN"
+      )}đ`;
+
+      // Chèn chuỗi phụ thu vào đầu ghi chú mới, hoặc chỉ là chuỗi phụ thu nếu ghi chú gốc rỗng
+      ghiChuMoi = chuoiPhuThu + (ghiChuMoi ? `\n${ghiChuMoi}` : "");
+    }
 
     // KIỂM TRA TRÙNG
     for (const slot of slots) {
@@ -199,7 +213,7 @@ router.post("/api/booking/create", async (req, res) => {
 
     // TẠO BOOKING (chia đều phụ thu)
     for (const slot of slots) {
-      const giaTong = slot.giaKhungGio + (phuThu / slots.length);
+      const giaTong = slot.giaKhungGio + phuThu / slots.length;
       await connection.execute(
         `INSERT INTO datPhongTheoGio 
          (idNguoiDung, maPhong, hoTen, sdt, soLuongKhach, ngayDat, khungGio, 
@@ -222,7 +236,9 @@ router.post("/api/booking/create", async (req, res) => {
     await connection.commit();
     res.json({
       success: true,
-      message: `Đặt thành công! ${phuThu > 0 ? `Phụ thu ${phuThu.toLocaleString()}đ` : ""}`,
+      message: `Đặt thành công! ${
+        phuThu > 0 ? `Phụ thu ${phuThu.toLocaleString()}đ` : ""
+      }`,
     });
   } catch (error) {
     if (connection) await connection.rollback();
