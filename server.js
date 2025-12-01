@@ -146,7 +146,7 @@ app.put(
       gia,
       moTa,
       diaChiChiTiet,
-      giaKhungGio
+      giaKhungGio,
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -271,7 +271,7 @@ app.post(
       gia,
       moTa,
       diaChiChiTiet,
-      giaKhungGio
+      giaKhungGio,
     } = req.body;
 
     if (!tenPhong || !gia) {
@@ -303,7 +303,7 @@ app.post(
         hinhAnh,
         moTa,
         diaChiChiTiet,
-        giaKhungGio
+        giaKhungGio,
       ]);
 
       res.status(201).json({
@@ -320,7 +320,7 @@ app.post(
           tienIch,
           gia,
           hinhAnh,
-          giaKhungGio
+          giaKhungGio,
         },
       });
     } catch (err) {
@@ -598,74 +598,79 @@ app.delete("/api/my-homestays/:idHomestay", requireLogin, async (req, res) => {
   }
 });
 
-  // Lấy danh sách phòng thuộc một homestay
- 
-app.get("/api/my-homestays/:idHomestay/rooms", requireLogin, async (req, res) => {
-  try {
-    const { idHomestay } = req.params;         // Lấy từ URL
-    const maDoanhNghiep = req.session.user.id; // Lấy từ session
+// Lấy danh sách phòng thuộc một homestay
 
-    const [check] = await db.execute(
-      // Câu lệnh SQL kiểm tra cả 2 điều kiện
-      "SELECT idHomestay FROM homestay WHERE idHomestay = ? AND id = ?",
-      [idHomestay, maDoanhNghiep] // Phải khớp cả hai
-    );
+app.get(
+  "/api/my-homestays/:idHomestay/rooms",
+  requireLogin,
+  async (req, res) => {
+    try {
+      const { idHomestay } = req.params; // Lấy từ URL
+      const maDoanhNghiep = req.session.user.id; // Lấy từ session
 
-    
-    if (check.length === 0) {
-      return res.status(403).json({
-        error: "Bạn không có quyền xem phòng của homestay này hoặc homestay không tồn tại.",
-      });
+      const [check] = await db.execute(
+        // Câu lệnh SQL kiểm tra cả 2 điều kiện
+        "SELECT idHomestay FROM homestay WHERE idHomestay = ? AND id = ?",
+        [idHomestay, maDoanhNghiep] // Phải khớp cả hai
+      );
+
+      if (check.length === 0) {
+        return res.status(403).json({
+          error:
+            "Bạn không có quyền xem phòng của homestay này hoặc homestay không tồn tại.",
+        });
+      }
+
+      const [rooms] = await db.execute(
+        "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC",
+        [idHomestay]
+      );
+
+      res.json(rooms); // Trả về danh sách phòng
+    } catch (err) {
+      console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
+      res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
     }
-
-  
-    const [rooms] = await db.execute(
-      
-      "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC", 
-      [idHomestay]
-    );
-
-    res.json(rooms); // Trả về danh sách phòng
-
-  } catch (err) {
-    console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
-    res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
   }
-});
+);
 // Lấy danh sách phòng thuộc một homestay cụ thể
 
-app.get("/api/my-homestays/:idHomestay/rooms", requireLogin, async (req, res) => {
-  try {
-    const { idHomestay } = req.params;
-    const idUser = req.session.user.id; // Lấy ID user từ session
+app.get(
+  "/api/my-homestays/:idHomestay/rooms",
+  requireLogin,
+  async (req, res) => {
+    try {
+      const { idHomestay } = req.params;
+      const idUser = req.session.user.id; // Lấy ID user từ session
 
-    // Bước 1: Kiểm tra xem user này có sở hữu homestay này không
-    // (Giống hệt logic của API DELETE)
-    const [check] = await db.execute(
-      "SELECT * FROM homestay WHERE idHomestay = ? AND id = ?",
-      [idHomestay, idUser]
-    );
+      // Bước 1: Kiểm tra xem user này có sở hữu homestay này không
+      // (Giống hệt logic của API DELETE)
+      const [check] = await db.execute(
+        "SELECT * FROM homestay WHERE idHomestay = ? AND id = ?",
+        [idHomestay, idUser]
+      );
 
-    // Nếu không sở hữu hoặc homestay không tồn tại
-    if (check.length === 0) {
-      return res.status(403).json({
-        error: "Bạn không có quyền xem phòng của homestay này.",
-      });
+      // Nếu không sở hữu hoặc homestay không tồn tại
+      if (check.length === 0) {
+        return res.status(403).json({
+          error: "Bạn không có quyền xem phòng của homestay này.",
+        });
+      }
+
+      // Bước 2: Nếu sở hữu, lấy tất cả các phòng của homestay đó
+      // (Giả sử bảng của bạn tên là 'phong' và có cột 'idHomestay')
+      const [rooms] = await db.execute(
+        "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC",
+        [idHomestay]
+      );
+
+      res.json(rooms); // Trả về danh sách phòng
+    } catch (err) {
+      console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
+      res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
     }
-
-    // Bước 2: Nếu sở hữu, lấy tất cả các phòng của homestay đó
-    // (Giả sử bảng của bạn tên là 'phong' và có cột 'idHomestay')
-    const [rooms] = await db.execute(
-      "SELECT * FROM phong WHERE idHomestay = ? ORDER BY tenPhong ASC",
-      [idHomestay]
-    );
-
-    res.json(rooms); // Trả về danh sách phòng
-  } catch (err) {
-    console.error("Lỗi /api/my-homestays/:idHomestay/rooms:", err);
-    res.status(500).json({ error: "Lỗi máy chủ khi lấy danh sách phòng." });
   }
-});
+);
 // Xóa user theo ID + xóa session của user đó
 const requireAdmin = (req, res, next) => {
   if (!req.session?.user || req.session.user.chucVu !== "Admin") {
@@ -674,7 +679,7 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
- //LẤY CHI TIẾT HOMESTAY VÀ CÁC PHÒNG CỦA NÓ
+//LẤY CHI TIẾT HOMESTAY VÀ CÁC PHÒNG CỦA NÓ
 app.get(
   "/api/my-homestays/:idHomestay/details",
   requireLogin,
@@ -699,7 +704,7 @@ app.get(
       const homestayDetails = homestayCheck[0];
 
       //Lấy tất cả các phòng thuộc homestay này
-  
+
       const [rooms] = await db.execute(
         "SELECT * FROM thongTinPhong WHERE idHomestay = ? ORDER BY tenPhong ASC",
         [idHomestay]
@@ -1063,7 +1068,7 @@ app.get("/api/user/bookings", async (req, res) => {
 
 //hủy đặt
 app.put("/api/user/bookings/cancel/:id", async (req, res) => {
-  console.log("Debug: Booking ID:", req.params.id);  // ← Thêm
+  console.log("Debug: Booking ID:", req.params.id); // ← Thêm
   const userId = req.session?.user?.id;
   const { id } = req.params;
 
@@ -1127,6 +1132,231 @@ app.get("/current_user", async (req, res) => {
   } catch (err) {
     console.error("Lỗi /current_user:", err);
     res.sendStatus(500);
+  }
+});
+
+// API: Thống kê cho Admin
+app.use(async (req, res, next) => {
+  try {
+    await db.execute(
+      "UPDATE dashboard_admin SET tongLuotXem = tongLuotXem + 1 WHERE id = 1"
+    );
+  } catch (err) {
+    console.error("Không thể tăng lượt truy cập:", err);
+  }
+  next();
+});
+
+app.get("/api/admin/stats", requireLogin, async (req, res) => {
+  try {
+    if (req.session.user.chucVu !== "Admin") {
+      return res.status(403).json({ error: "Không có quyền truy cập" });
+    }
+
+    const [doanhNghiep] = await db.execute(
+      "SELECT COUNT(*) AS total FROM users WHERE chucVu = 'Doanh Nghiệp'"
+    );
+
+    const [users] = await db.execute(
+      "SELECT COUNT(*) AS total FROM users WHERE chucVu = 'Người Dùng'"
+    );
+
+    const [views] = await db.execute(
+      "SELECT tongLuotXem FROM dashboard_admin WHERE id = 1"
+    );
+
+    const [
+      [roomsRows, roomsFields],
+      [homestaysRows, hsFields],
+      [bookingsRows, bkFields],
+      [recentBookingsRows, rbFields],
+      [recentHomestaysRows, rhFields],
+      [doanhNghiepByMonthRows, dnFields],
+      [usersByMonthRows, uFields],
+    ] = await Promise.all([
+      db.execute("SELECT COUNT(*) AS total FROM thongTinPhong"),
+      db.execute("SELECT COUNT(*) AS total FROM homestay"),
+      db.execute("SELECT COUNT(*) AS total FROM datPhongTheoGio"),
+
+      db.execute(`SELECT hoTen, sdt, ngayDat, khungGio, ngayTao 
+                  FROM datPhongTheoGio 
+                  ORDER BY ngayTao DESC LIMIT 5`),
+
+      db.execute(`SELECT tenHomestay, diaChi, ngayTao
+                  FROM homestay 
+                  ORDER BY ngayTao DESC LIMIT 5`),
+
+      db.execute(`SELECT MONTH(ngayTao) AS month, COUNT(*) AS total
+                  FROM users WHERE chucVu = 'Doanh Nghiệp'
+                  GROUP BY MONTH(ngayTao)`),
+
+      db.execute(`SELECT MONTH(ngayTao) AS month, COUNT(*) AS total
+                  FROM users WHERE chucVu = 'Người Dùng'
+                  GROUP BY MONTH(ngayTao)`),
+    ]);
+
+    res.json({
+      doanhNghiep: doanhNghiep[0].total,
+      nguoiDung: users[0].total,
+      views: views[0].tongLuotXem,
+      rooms: roomsRows[0].total,
+      homestays: homestaysRows[0].total,
+      bookings: bookingsRows[0].total,
+      recentBookings: recentBookingsRows,
+      recentHomestays: recentHomestaysRows,
+      doanhNghiepByMonth: doanhNghiepByMonthRows,
+      usersByMonth: usersByMonthRows,
+    });
+  } catch (err) {
+    console.error("Lỗi API /api/admin/stats:", err);
+    res.status(500).json({ error: "Lỗi máy chủ" });
+  }
+});
+
+// API: Thong kê cho Businessman
+app.get("/api/doanhnghiep/stats", requireLogin, async (req, res) => {
+  try {
+    const idDN = req.session.user.id; // ID doanh nghiệp
+
+    // --- Tổng doanh thu ---
+    const [doanhThu] = await db.execute(
+      `
+  SELECT SUM(d.giaKhungGio) AS total
+  FROM datPhongTheoGio d
+  JOIN thongTinPhong p ON d.maPhong = p.maPhong
+  WHERE p.maDoanhNghiep = ?
+    AND d.trangThai = 'daXacNhan'
+  `,
+      [idDN]
+    );
+
+    // --- Lịch đặt mới trong hôm nay ---
+    const [lichMoi] = await db.execute(
+      `
+      SELECT COUNT(*) AS total
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ? 
+        AND DATE(d.ngayTao) = CURDATE()
+    `,
+      [idDN]
+    );
+
+    // --- Tổng phòng thuộc doanh nghiệp ---
+    const [tongPhong] = await db.execute(
+      `
+      SELECT COUNT(*) AS total
+      FROM thongTinPhong 
+      WHERE maDoanhNghiep = ?
+    `,
+      [idDN]
+    );
+
+    // --- Tổng số phòng đang sử dụng (đã xác nhận & trong hôm nay) ---
+    const [dangSuDung] = await db.execute(
+      `
+      SELECT COUNT(*) AS total
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ?
+        AND d.trangThai = 'daXacNhan'
+        AND d.ngayDat = CURDATE()
+    `,
+      [idDN]
+    );
+
+    // --- Đã đặt trước (đặt cho ngày mai trở đi) ---
+    const [datTruoc] = await db.execute(
+      `
+      SELECT COUNT(*) AS total
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ?
+        AND d.ngayDat > CURDATE()
+        AND d.trangThai = 'daXacNhan'
+    `,
+      [idDN]
+    );
+
+    // --- Phòng trống ---
+    const phongTrong =
+      tongPhong[0].total - dangSuDung[0].total - datTruoc[0].total;
+
+    // --- Hoạt động gần đây ---
+    const [activity] = await db.execute(
+      `
+      SELECT d.hoTen, d.ngayDat, d.khungGio, d.ngayTao
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ?
+      ORDER BY d.ngayTao DESC
+      LIMIT 3
+    `,
+      [idDN]
+    );
+
+    // --- Số khách theo từng tháng ---
+    const [guestsMonth] = await db.execute(
+      `
+      SELECT MONTH(ngayDat) AS month, COUNT(*) AS total
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ?
+      GROUP BY MONTH(ngayDat)
+      ORDER BY MONTH(ngayDat)
+    `,
+      [idDN]
+    );
+
+    // --- Doanh thu theo từng tháng ---
+    const [revenueMonth] = await db.execute(
+      `
+  SELECT 
+      MONTH(d.ngayDat) AS month, 
+      SUM(d.giaKhungGio) AS total
+  FROM datPhongTheoGio d
+  JOIN thongTinPhong p ON d.maPhong = p.maPhong
+  WHERE p.maDoanhNghiep = ?
+    AND d.trangThai = 'daXacNhan'
+  GROUP BY MONTH(d.ngayDat)
+  ORDER BY MONTH(d.ngayDat)
+  `,
+      [idDN]
+    );
+
+    // --- Đặt phòng theo tháng ---
+    const [bookingsMonth] = await db.execute(
+      `
+      SELECT MONTH(ngayDat) AS month,
+             SUM(CASE WHEN trangThai = 'daXacNhan' THEN 1 ELSE 0 END) AS booked,
+             SUM(CASE WHEN trangThai = 'daHuy' THEN 1 ELSE 0 END) AS canceled
+      FROM datPhongTheoGio d
+      JOIN thongTinPhong p ON d.maPhong = p.maPhong
+      WHERE p.maDoanhNghiep = ?
+      GROUP BY MONTH(ngayDat)
+      ORDER BY MONTH(ngayDat)
+    `,
+      [idDN]
+    );
+
+    res.json({
+      doanhThu: doanhThu[0].total,
+      lichMoi: lichMoi[0].total,
+      tongPhong: tongPhong[0].total,
+      dangSuDung: dangSuDung[0].total,
+      datTruoc: datTruoc[0].total,
+      phongTrong: phongTrong,
+      activity,
+      guestsMonth,
+      revenueMonth: revenueMonth.map((r) => ({
+        month: r.month,
+        total: r.total ? Number(r.total) : 0,
+      })),
+      bookingsMonth,
+    });
+  } catch (err) {
+    console.log("Lỗi API /api/doanhnghiep/stats:", err);
+    res.status(500).json({ error: "Lỗi máy chủ" });
   }
 });
 

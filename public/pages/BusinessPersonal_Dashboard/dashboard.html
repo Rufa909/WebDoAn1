@@ -671,96 +671,6 @@
             </div>
             <canvas id="bookingsChart" height="250"></canvas>
           </div>
-          <div class="chart-card">
-            <div class="chart-header">
-              <h3>Đặt phòng theo nền tảng</h3>
-              <select>
-                <option>This Week</option>
-                <option>This Month</option>
-              </select>
-            </div>
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 40px;
-              "
-            >
-              <canvas id="platformChart" width="200" height="200"></canvas>
-              <div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="charts-grid">
-          <div class="ratings-card">
-            <div class="chart-header">
-              <h3>Đánh giá chung</h3>
-            </div>
-            <div class="overall-rating">
-              <div class="rating-score">0.0</div>
-              <div class="rating-label">Đẳng cấp</div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 5px">
-                00 Lượt đánh giá
-              </div>
-            </div>
-            <div class="rating-item">
-              <span style="font-size: 14px; color: #64748b; width: 100px"
-                >Sạch sẽ</span
-              >
-              <div class="rating-bar">
-                <div class="rating-fill" style="width: 88%"></div>
-              </div>
-              <span style="font-weight: 600; width: 30px; text-align: right"
-                >0.0</span
-              >
-            </div>
-            <div class="rating-item">
-              <span style="font-size: 14px; color: #64748b; width: 100px"
-                >Hạ tầng</span
-              >
-              <div class="rating-bar">
-                <div class="rating-fill" style="width: 91%"></div>
-              </div>
-              <span style="font-weight: 600; width: 30px; text-align: right"
-                >0.0</span
-              >
-            </div>
-            <div class="rating-item">
-              <span style="font-size: 14px; color: #64748b; width: 100px"
-                >Vị trí</span
-              >
-              <div class="rating-bar">
-                <div class="rating-fill" style="width: 90%"></div>
-              </div>
-              <span style="font-weight: 600; width: 30px; text-align: right"
-                >0.0</span
-              >
-            </div>
-            <div class="rating-item">
-              <span style="font-size: 14px; color: #64748b; width: 100px"
-                >Dịch vụ</span
-              >
-              <div class="rating-bar">
-                <div class="rating-fill" style="width: 87%"></div>
-              </div>
-              <span style="font-weight: 600; width: 30px; text-align: right"
-                >0.0</span
-              >
-            </div>
-            <div class="rating-item">
-              <span style="font-size: 14px; color: #64748b; width: 100px"
-                >Giá tiền</span
-              >
-              <div class="rating-bar">
-                <div class="rating-fill" style="width: 89%"></div>
-              </div>
-              <span style="font-weight: 600; width: 30px; text-align: right"
-                >0.0</span
-              >
-            </div>
-          </div>
 
           <div class="activity-card">
             <div class="chart-header">
@@ -798,6 +708,116 @@
           behavior: "smooth",
         });
       });
+
+      async function loadDoanhNghiepStats() {
+        try {
+          const res = await fetch("/api/doanhnghiep/stats", {
+            credentials: "include",
+          });
+          const data = await res.json();
+
+          // --- Gán dữ liệu lên Dashboard ---
+          document
+            .querySelectorAll(".stat-card")[0]
+            .querySelector(".stat-value").textContent =
+            (Number(data.doanhThu) || 0).toLocaleString("vi-VN") + " đ";
+
+          document
+            .querySelectorAll(".stat-card")[1]
+            .querySelector(".stat-value").textContent = data.lichMoi;
+
+          document
+            .querySelectorAll(".stat-card")[2]
+            .querySelector(".stat-value").textContent = data.dangSuDung;
+
+          document
+            .querySelectorAll(".stat-card")[3]
+            .querySelector(".stat-value").textContent = data.datTruoc;
+
+          document.querySelector(".occupancy-card .stat-value").textContent =
+            data.tongPhong;
+
+          document.querySelectorAll(".room-stat-value")[0].textContent =
+            data.dangSuDung;
+          document.querySelectorAll(".room-stat-value")[1].textContent =
+            data.datTruoc;
+          document.querySelectorAll(".room-stat-value")[2].textContent =
+            data.phongTrong;
+
+          // --- Hoạt động gần đây ---
+          const activityBox = document.querySelector(".activity-card");
+
+          const container = document.createElement("div");
+          container.innerHTML = "";
+
+          data.activity.forEach((a) => {
+            container.innerHTML += `
+        <div class="activity-item">
+          <div class="activity-icon"><i class="fas fa-user"></i></div>
+          <div class="activity-content">
+            <div class="activity-title">${a.hoTen} đặt phòng</div>
+            <div class="activity-time">${a.ngayDat} - ${a.khungGio}</div>
+          </div>
+        </div> 
+      `;
+          });
+
+          // Guests per month
+          new Chart(document.getElementById("guestsChart"), {
+            type: "line",
+            data: {
+              labels: data.guestsMonth.map((m) => "Th " + m.month),
+              datasets: [
+                {
+                  label: "Khách theo tháng",
+                  data: data.guestsMonth.map((m) => m.total),
+                  borderColor: "#3b82f6",
+                  borderWidth: 3,
+                  tension: 0.4,
+                },
+              ],
+            },
+          });
+          const ctxRevenue = document.getElementById("revenueChart");
+          new Chart(ctxRevenue, {
+            type: "bar",
+            data: {
+              labels: data.revenueMonth.map((m) => "Th " + m.month),
+              datasets: [
+                {
+                  label: "Doanh thu",
+                  data: data.revenueMonth.map((m) => m.total),
+                  backgroundColor: "#4ecdc4",
+                },
+              ],
+            },
+          });
+          new Chart(document.getElementById("bookingsChart"), {
+            type: "bar",
+            data: {
+              labels: data.bookingsMonth.map((m) => "Th " + m.month),
+              datasets: [
+                {
+                  label: "Đã đặt",
+                  data: data.bookingsMonth.map((m) => m.booked),
+                  backgroundColor: "#3b82f6",
+                },
+                {
+                  label: "Đã hủy",
+                  data: data.bookingsMonth.map((m) => m.canceled),
+                  backgroundColor: "#94a3b8",
+                },
+              ],
+            },
+          });
+
+          activityBox.appendChild(container);
+        } catch (err) {
+          console.error("Lỗi tải thống kê doanh nghiệp:", err);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadDoanhNghiepStats);
     </script>
   </body>
 </html>

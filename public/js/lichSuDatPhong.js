@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             } khách</div>
             ${
               bk.trangThai === "daHuy"
-                ? `<div class="info-item"><i class="fa-solid fa-user"></i> Lý do: ${bk.ghiChu}</div>`
+                ? `<div class="info-item"><i class="fa-solid fa-user"></i> Lý do: ${bk.lyDoTuChoi || "Không phù hợp"}</div>`
                 : ""
             }
             
