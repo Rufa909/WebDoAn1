@@ -46,6 +46,7 @@
         border-bottom: 2px solid #3498db;
         padding-bottom: 10px;
       }
+
       table {
         border-collapse: collapse;
         width: 100%;
@@ -92,7 +93,6 @@
         cursor: not-allowed;
         opacity: 0.6;
       }
-
       .slot.booked {
         background: #fff3e0;
         border: 2px solid #ff9800 !important;
@@ -100,7 +100,6 @@
         cursor: not-allowed;
         color: #ef6c00;
       }
-
       .slot.my-booked {
         background: #e3f2fd !important;
         border: 2px solid #2196f3 !important;
@@ -121,7 +120,6 @@
         border-radius: 12px;
         font-weight: bold;
       }
-
       .slot.available {
         background: #e8f5e8;
         color: #2e7d32;
@@ -137,7 +135,6 @@
         transform: scale(1.05);
         box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
       }
-
       .slot.pending {
         background: #ffe0b2 !important;
         border: 2px dashed #fb8c00 !important;
@@ -159,7 +156,6 @@
         border-radius: 12px;
         font-weight: bold;
       }
-
       .slot.my-pending {
         background: #fff3e0 !important;
         border: 2px dashed #ff9800 !important;
@@ -251,29 +247,7 @@
         margin: 20px 0;
         border-left: 4px solid #4caf50;
       }
-      .toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #333;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        z-index: 1000;
-        animation: fadeInOut 3s forwards;
-      }
-      @keyframes fadeInOut {
-        0%,
-        100% {
-          opacity: 0;
-        }
-        10%,
-        90% {
-          opacity: 1;
-        }
-      }
 
-      /* Chú thích màu sắc */
       .legend {
         display: flex;
         gap: 15px;
@@ -296,12 +270,6 @@
         border: 1px solid #ddd;
       }
 
-      @media (max-width: 768px) {
-        .main-content {
-          grid-template-columns: 1fr;
-        }
-      }
-
       .back-btn {
         background: linear-gradient(185deg, rgb(60, 200, 150), #4ecdc4);
         color: white;
@@ -310,45 +278,72 @@
         border-radius: 5px;
         cursor: pointer;
         text-decoration: none;
-        align-items: center;
       }
-
       .back-btn:hover {
         background: #45b8b0;
+      }
+
+      .age-input-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px dashed #ddd;
+      }
+      .age-input-group label {
+        min-width: 90px;
+        font-weight: 500;
+        color: #444;
+      }
+      .age-input-group select {
+        width: 110px !important;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+        .age-input-group {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .age-input-group select {
+          width: 100% !important;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- Header -->
-    <div class="header-container" style="background-color: #fff">
-      <div
-        class="container-fluid d-flex justify-content-between align-items-center"
+    <div
+      class="container-fluid d-flex justify-content-between align-items-center"
+    >
+      <a
+        class="navbar-brand"
+        href="/index.html"
+        style="
+          font-weight: bold;
+          font-size: 1.5rem;
+          color: black;
+          text-decoration: none;
+        "
       >
-        <a
-          class="navbar-brand"
-          href="/index.html"
-          style="
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: black;
-            text-decoration: none;
-          "
-        >
-          <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
-        </a>
-        <div style="display: flex; gap: 10px">
-          <button class="back-btn" onclick="history.back()">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại
-          </button>
-        </div>
-      </div>
+        <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
+      </a>
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Quay lại
+      </button>
     </div>
+
     <hr />
 
     <div class="main-content">
+      <!-- Lịch đặt phòng -->
       <div class="booking-section">
         <h2 class="booking-title">Chọn thời gian</h2>
-
         <div class="legend">
           <div class="legend-item">
             <div
@@ -403,10 +398,8 @@
               </th>
               <th class="time-slot-header">
                 <div>20:30 - 09:30</div>
-                <small style="font-size: 11px; display: block; margin: 2px 0"
-                  >(Qua đêm)</small
-                >
-                <span class="price" id="price-4"></span>
+                <small style="font-size: 11px; display: block">(Qua đêm)</small
+                ><span class="price" id="price-4"></span>
               </th>
             </tr>
           </thead>
@@ -429,34 +422,86 @@
         </button>
       </div>
 
+      <!-- Form thông tin -->
       <div class="booking-form-section">
         <h2 class="form-title">Thông tin Đặt phòng</h2>
         <div id="successMessage" class="success" style="display: none"></div>
 
         <form id="bookingForm">
           <div class="form-group">
-            <label>Họ và tên </label
-            ><input type="text" id="hoTen" class="form-input" required />
+            <label>Họ và tên</label>
+            <input type="text" id="hoTen" class="form-input" required />
           </div>
           <div class="form-group">
-            <label>Số điện thoại </label
-            ><input type="tel" id="sdt" class="form-input" required /><small
-              style="color: #666; font-size: 13px"
-            ></small>
+            <label>Số điện thoại</label>
+            <input type="tel" id="sdt" class="form-input" required />
           </div>
-        <div class="form-group">
-            <label>Số lượng khách</label
-            ><select id="soLuongKhach" class="form-select">
-              <option value="2">2 khách</option>
-              <option value="3">3 khách</option>
-              <option value="4">4 khách</option>
-            </select>
-            <small id="sucChuaNote" style="color: #3498db; font-size: 13px; display: block; margin-top: 5px;"></small>
-          </div>
+
           <div class="form-group">
-            <label>Ghi chú</label
-            ><textarea id="ghiChu" class="form-textarea" rows="3"></textarea>
+            <label>Số người lớn </label>
+            <div class="d-flex align-items-center gap-3">
+              <button
+                type="button"
+                class="btn btn-outline-primary px-3"
+                onclick="changePeople('adult', -1)"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                id="soNguoiLon"
+                class="form-input text-center"
+                style="width: 100px"
+                value="2"
+                min="0"
+                max="10"
+                readonly
+              />
+              <button
+                type="button"
+                class="btn btn-outline-primary px-3"
+                onclick="changePeople('adult', 1)"
+              >
+                +
+              </button>
+              <span class="ms-3 text-muted">người lớn</span>
+            </div>
           </div>
+
+          <div class="form-group">
+            <label>Số trẻ em </label>
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <button
+                type="button"
+                class="btn btn-outline-info px-3"
+                onclick="changePeople('child', -1)"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                id="soTreEm"
+                class="form-input text-center"
+                style="width: 100px"
+                value="0"
+                min="0"
+                max="10"
+                readonly
+              />
+              <button
+                type="button"
+                class="btn btn-outline-info px-3"
+                onclick="changePeople('child', 1)"
+              >
+                +
+              </button>
+              <span class="ms-3 text-muted">trẻ em</span>
+            </div>
+            <div id="childAgesContainer" class="mt-2"></div>
+          </div>
+
+          <small id="sucChuaNote" class="text-primary d-block mt-3"></small>
+
           <div
             style="
               background: #f8f9fa;
@@ -466,39 +511,102 @@
               color: #666;
             "
           >
-            <p><strong style="color: #e74c3c">Lưu ý:</strong></p>
+            <p><strong style="color: #e74c3c">Chính sách phụ thu:</strong></p>
+            <p>• Người lớn: <strong>30%</strong> giá khung giờ</p>
             <p>
-              <strong style="color: #e74c3c"
-                >- Phụ thu 50.000đ mỗi người khi vượt quá số người của
-                phòng</strong
-              >
+              • Trẻ em từ <strong>7-17 tuổi</strong>: <strong>20%</strong> giá
+              khung giờ
             </p>
-            <p>- Hủy/đổi trước 3 tiếng</p>
+            <p>
+              • Trẻ em <strong>dưới 7 tuổi</strong>: <strong>Miễn phí</strong>
+            </p>
+            <div class="form-group mt-4">
+              <label
+                class="form-title"
+                style="font-size: 20px; margin-bottom: 15px"
+              >
+                Các Yêu Cầu Đặc Biệt
+              </label>
+              <p
+                style="
+                  color: #666;
+                  font-size: 14.5px;
+                  line-height: 1.6;
+                  margin-bottom: 15px;
+                "
+              >
+                Các yêu cầu đặc biệt không đảm bảo sẽ được đáp ứng – tuy nhiên,
+                chúng mình sẽ cố gắng hết sức để thực hiện.<br />
+                Bạn luôn có thể gửi yêu cầu đặc biệt
+                <strong>sau khi hoàn tất đặt phòng</strong> của mình!
+              </p>
+              <label
+                style="
+                  color: #444;
+                  font-weight: 500;
+                  margin-bottom: 8px;
+                  display: block;
+                "
+              >
+                Vui lòng ghi yêu cầu của bạn tại đây. (không bắt buộc)
+              </label>
+              <textarea
+                id="ghiChu"
+                class="form-textarea"
+                rows="5"
+                placeholder="Ví dụ: Có bé nhỏ cần ghế trẻ em, sinh nhật muốn trang trí nhẹ..."
+                style="
+                  resize: vertical;
+                  min-height: 120px;
+                  background: #fafafa;
+                  border: 2px solid #e0e0e0;
+                  border-radius: 12px;
+                  padding: 15px;
+                  font-size: 15px;
+                "
+              ></textarea>
+            </div>
           </div>
         </form>
       </div>
     </div>
 
-<div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="depositModalLabel">Xác nhận đặt phòng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Vui lòng liên hệ chủ homestay cọc 50% tổng số tiền để đặt phòng Số tiền là: <span id="depositAmount"></span>đ</p>
-        <img src="/images/qrcoc.png" alt="QR Zalo" class="img-fluid d-block mx-auto">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    <!-- Modal cọc tiền -->
+    <div class="modal fade" id="depositModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Xác nhận đặt phòng</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p>Vui lòng chuyển khoản cọc <strong>50%</strong> tổng tiền:</p>
+            <h4 class="text-danger"><span id="depositAmount">0</span>đ</h4>
+            <img
+              src="/images/qrcoc.png"
+              alt="QR Code"
+              class="img-fluid mt-3"
+              style="max-width: 280px"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
       const API_BASE_URL = "http://localhost:3000";
       const MA_PHONG = new URLSearchParams(window.location.search).get(
@@ -511,25 +619,57 @@
       let scheduleData = [];
       let selectedSlots = [];
       let currentUserId = null;
-      let currentUserData = null;
       let sucChuaPhong = 2;
-
-      const loadingEl = document.getElementById("loadingSchedule");
-      const errorEl = document.getElementById("errorMessage");
 
       function formatPrice(p) {
         return new Intl.NumberFormat("vi-VN").format(p);
       }
-
       function formatDateVN(dateStr) {
-        const parts = dateStr.split("-");
-        if (parts.length !== 3) return dateStr;
+        const [y, m, d] = dateStr.split("-");
+        return `${d}/${m}/${y}`;
+      }
 
-        const year = parts[0];
-        const month = parts[1];
-        const day = parts[2];
+      function changePeople(type, delta) {
+        const input = document.getElementById(
+          type === "adult" ? "soNguoiLon" : "soTreEm"
+        );
+        let value = parseInt(input.value) || 0;
+        value = Math.max(0, Math.min(10, value + delta));
+        input.value = value;
 
-        return `${day}/${month}/${year}`;
+        if (type === "child") renderChildAges(value);
+        updateBookingInfo();
+      }
+
+      function renderChildAges(count) {
+        const container = document.getElementById("childAgesContainer");
+        container.innerHTML = "";
+        if (count === 0) return;
+
+        for (let i = 1; i <= count; i++) {
+          const div = document.createElement("div");
+          div.className = "age-input-group";
+
+          const label = document.createElement("label");
+          label.textContent = `Tuổi bé ${i}:`;
+
+          const select = document.createElement("select");
+          select.className = "form-select form-select-sm";
+          select.dataset.index = i;
+
+          for (let age = 0; age <= 17; age++) {
+            const opt = document.createElement("option");
+            opt.value = age;
+            opt.textContent = age + " tuổi";
+            if (age === 5) opt.selected = true;
+            select.appendChild(opt);
+          }
+
+          select.addEventListener("change", updateBookingInfo);
+          div.appendChild(label);
+          div.appendChild(select);
+          container.appendChild(div);
+        }
       }
 
       async function getCurrentUser() {
@@ -540,67 +680,50 @@
           if (res.ok) {
             const data = await res.json();
             currentUserId = data.user?.id || null;
-            currentUserData = data.user;
-
             if (data.user) {
-              const hoTenInput = document.getElementById("hoTen");
-              const sdtInput = document.getElementById("sdt");
-
               if (data.user.hoTen) {
-                hoTenInput.value = data.user.hoTen;
-                hoTenInput.setAttribute("readonly", true);
+                document.getElementById("hoTen").value = data.user.hoTen;
+                document.getElementById("hoTen").readOnly = true;
               }
-
               if (data.user.sdt) {
-                sdtInput.value = data.user.sdt;
-                sdtInput.setAttribute("readonly", true);
+                document.getElementById("sdt").value = data.user.sdt;
+                document.getElementById("sdt").readOnly = true;
               }
             }
           }
         } catch (e) {
-          console.error("Lỗi lấy thông tin user:", e);
+          console.error(e);
         }
       }
 
       async function loadRoomSchedule() {
-        loadingEl.style.display = "block";
-        errorEl.style.display = "none";
-
+        document.getElementById("loadingSchedule").style.display = "block";
         await getCurrentUser();
-
         try {
           const res = await fetch(
             `${API_BASE_URL}/api/booking/available/${MA_PHONG}`
           );
-          if (!res.ok) throw new Error("Lỗi tải lịch");
           const data = await res.json();
-
           roomData = data.room;
           sucChuaPhong = roomData.sucChua || 2;
           scheduleData = data.schedule;
 
           updatePriceHeaders();
           renderScheduleTable();
-          updateSoLuongKhachOptions();
+          document.getElementById(
+            "sucChuaNote"
+          ).textContent = `(Sức chứa tối đa: ${sucChuaPhong} người lớn + trẻ em)`;
+          document.getElementById("soNguoiLon").value = Math.min(
+            sucChuaPhong,
+            10
+          );
           updateBookingInfo();
-          document.getElementById('sucChuaNote').textContent = 
-              `(Sức chứa tối đa của phòng là: ${sucChuaPhong} người)`;
         } catch (e) {
-          errorEl.textContent = e.message;
-          errorEl.style.display = "block";
+          document.getElementById("errorMessage").textContent =
+            "Lỗi tải lịch: " + e.message;
+          document.getElementById("errorMessage").style.display = "block";
         } finally {
-          loadingEl.style.display = "none";
-        }
-      }
-      function updateSoLuongKhachOptions() {
-        const select = document.getElementById("soLuongKhach");
-        select.innerHTML = "";
-        for (let i = 1; i <= sucChuaPhong + 3; i++) {
-          const opt = document.createElement("option");
-          opt.value = i;
-          opt.textContent = i + " khách" + (i > sucChuaPhong ? "" : "");
-          if (i === sucChuaPhong) opt.selected = true;
-          select.appendChild(opt);
+          document.getElementById("loadingSchedule").style.display = "none";
         }
       }
 
@@ -614,102 +737,60 @@
               el.textContent = `(${formatPrice(slots[s].price)}đ)`;
           }
         );
-        if (roomData)
-          document.title = `${roomData.tenPhong} - ${
-            roomData.tenHomestay || "Homestay"
-          }`;
       }
 
       function renderScheduleTable() {
-        const bookingSection = document.querySelector(".booking-section");
-        const scrollPosition = bookingSection.scrollTop;
         const tbody = document.querySelector("#bookingTable tbody");
         tbody.innerHTML = "";
-        const list = [
+        const slotsList = [
           "10:00-13:00",
           "13:30-16:30",
           "17:00-20:00",
           "20:30-09:30",
         ];
-
         scheduleData.forEach((day) => {
           let row = `<tr><td style="font-weight:bold;background:#f5f5f5;">${formatDateVN(
             day.date
           )}</td>`;
+          slotsList.forEach((slot) => {
+            const s = day.slots[slot];
+            let cls = "slot",
+              text = "Trống",
+              selectable = false;
+            const own = s.userId && currentUserId && s.userId === currentUserId;
 
-          list.forEach((slot) => {
-            const slotData = day.slots[slot];
-            let className = "slot";
-            let statusText = "Trống";
-            let isSelectable = false;
-
-            const isOwnBooking =
-              slotData.userId != null &&
-              currentUserId != null &&
-              slotData.userId === currentUserId;
-
-            if (slotData.status === "past") {
-              className = "slot past";
-              statusText = "Đã qua";
-            } else if (slotData.status === "booked") {
-              if (isOwnBooking) {
-                className = "slot my-booked";
-                statusText = "Đã xác nhận";
-              } else {
-                className = "slot booked";
-                statusText = "Đã đặt";
-              }
-            } else if (slotData.status === "pending") {
-              if (isOwnBooking) {
-                className = "slot my-pending";
-                statusText = "Đang chờ";
-                isSelectable = true;
-              } else {
-                className = "slot pending";
-                statusText = "Đang chờ";
-              }
+            if (s.status === "past") {
+              cls = "slot past";
+              text = "Đã qua";
+            } else if (s.status === "booked") {
+              cls = own ? "slot my-booked" : "slot booked";
+              text = own ? "Đã xác nhận" : "Đã đặt";
+            } else if (s.status === "pending") {
+              cls = own ? "slot my-pending" : "slot pending";
+              text = "Đang chờ";
+              if (own) selectable = true;
             } else {
-              className = "slot available";
-              statusText = "Trống";
-              isSelectable = true;
+              cls = "slot available";
+              text = "Trống";
+              selectable = true;
             }
 
             if (
-              isSelectable &&
-              selectedSlots.some((s) => s.date === day.date && s.slot === slot)
-            ) {
-              className += " selected";
-            }
+              selectable &&
+              selectedSlots.some((x) => x.date === day.date && x.slot === slot)
+            )
+              cls += " selected";
 
-            row += `<td class="${className}" 
-                        data-date="${day.date}" 
-                        data-slot="${slot}" 
-                        data-price="${slotData.price}"
-                        ${!isSelectable ? 'style="pointer-events:none;"' : ""}>
-                      ${statusText}
-                    </td>`;
+            row += `<td class="${cls}" data-date="${
+              day.date
+            }" data-slot="${slot}" data-price="${s.price}" ${
+              !selectable ? 'style="pointer-events:none;"' : ""
+            }>${text}</td>`;
           });
           row += `</tr>`;
           tbody.innerHTML += row;
         });
-
         attachSlotClickEvents();
-
-        requestAnimationFrame(() => {
-          bookingSection.scrollTop = scrollPosition;
-          if (window.lastBookedSlot) {
-            const cell = document.querySelector(
-              `[data-date="${window.lastBookedSlot.date}"][data-slot="${window.lastBookedSlot.slot}"]`
-            );
-            if (cell) {
-              cell.scrollIntoView({ behavior: "smooth", block: "center" });
-              cell.style.transition = "background 0.5s";
-              cell.style.background = "#ffeb3b";
-              setTimeout(() => (cell.style.background = ""), 1000);
-            }
-            delete window.lastBookedSlot;
-          }
-        });
       }
 
       function attachSlotClickEvents() {
@@ -720,11 +801,9 @@
               const date = cell.dataset.date,
                 slot = cell.dataset.slot,
                 price = parseFloat(cell.dataset.price);
-
               const idx = selectedSlots.findIndex(
-                (s) => s.date === date && s.slot === slot
+                (x) => x.date === date && x.slot === slot
               );
-
               if (idx > -1) {
                 selectedSlots.splice(idx, 1);
                 cell.classList.remove("selected");
@@ -738,61 +817,87 @@
       }
 
       function updateBookingInfo() {
-        const count = selectedSlots.length;
-        const soLuongKhach =
-          parseInt(document.getElementById("soLuongKhach").value) ||
-          sucChuaPhong;
-        const nguoiThua = Math.max(0, soLuongKhach - sucChuaPhong);
-        const phuThu = nguoiThua * 50000;
+        const soNguoiLon =
+          parseInt(document.getElementById("soNguoiLon").value) || 0;
+        const ages = Array.from(
+          document.querySelectorAll("#childAgesContainer select")
+        ).map((s) => parseInt(s.value) || 0);
 
-        const tongTienSlots = selectedSlots.reduce((s, p) => s + p.price, 0);
-        const tongTien = tongTienSlots + phuThu;
+        const tre7_17 = ages.filter((age) => age >= 7).length;
+        const treDuoi7 = ages.filter((age) => age < 7).length;
 
-        document.getElementById("selectedCount").textContent = count;
+        let remaining = sucChuaPhong;
+        const allottedNguoiLon = Math.min(soNguoiLon, remaining);
+        remaining -= allottedNguoiLon;
+        const allottedTre7_17 = Math.min(tre7_17, remaining);
+        remaining -= allottedTre7_17;
+        const allottedTreDuoi7 = Math.min(treDuoi7, remaining);
+
+        const thuaNguoiLon = soNguoiLon - allottedNguoiLon;
+        const thuaTre7_17 = tre7_17 - allottedTre7_17;
+
+        const weightedExcess = thuaNguoiLon * 0.3 + thuaTre7_17 * 0.2;
+        const basePrice = selectedSlots.reduce((s, x) => s + x.price, 0);
+        const phuThu = selectedSlots.reduce(
+          (s, x) => s + x.price * weightedExcess,
+          0
+        );
+        const tongTien = basePrice + phuThu;
+
+        document.getElementById("selectedCount").textContent =
+          selectedSlots.length;
         document.getElementById("totalPrice").textContent =
           formatPrice(tongTien);
-
         document.getElementById(
           "roomPriceText"
-        ).innerHTML = `<strong>Tiền phòng:</strong> ${formatPrice(
-          tongTienSlots
-        )}đ`;
+        ).innerHTML = `<strong>Tiền phòng:</strong> ${formatPrice(basePrice)}đ`;
 
-        let chiTietPhuThu = "";
-        if (phuThu > 0) {
-          chiTietPhuThu = `<span style="color:#e74c3c; font-weight:bold;">
-            Phụ thu thêm ${nguoiThua} người  + ${formatPrice(
-            phuThu
-          )}đ (50k/người)
-          </span>`;
+        let detail = "";
+        if (weightedExcess > 0) {
+          detail = `<span style="color:#e74c3c; font-weight:bold;">
+          Phụ thu: +${formatPrice(phuThu)}đ 
+          (Người lớn: ${thuaNguoiLon} , Trẻ em: ${thuaTre7_17} )
+        </span>`;
         }
+        document.getElementById("bookingDetail").innerHTML = detail;
 
-        document.getElementById("bookingDetail").innerHTML = chiTietPhuThu;
-
-        document.getElementById("bookNowBtn").disabled = count === 0;
+        document.getElementById("bookNowBtn").disabled =
+          selectedSlots.length === 0;
       }
 
       document.getElementById("bookNowBtn").onclick = async () => {
         const hoTen = document.getElementById("hoTen").value.trim();
         const sdt = document.getElementById("sdt").value.trim();
-        const soLuongKhach = document.getElementById("soLuongKhach").value;
-        const ghiChu = document.getElementById("ghiChu").value.trim();
+        const soNguoiLon = document.getElementById("soNguoiLon").value;
+        const ages = Array.from(
+          document.querySelectorAll("#childAgesContainer select")
+        ).map((s) => parseInt(s.value));
 
-        if (!hoTen || !sdt || selectedSlots.length === 0)
-          return alert("Vui lòng nhập đủ thông tin!");
+        if (
+          !hoTen ||
+          !sdt ||
+          selectedSlots.length === 0 ||
+          (soNguoiLon == 0 && ages.length == 0)
+        ) {
+          return alert("Vui lòng nhập đầy đủ thông tin!");
+        }
 
-        const tongTienSlots = selectedSlots.reduce((s, p) => s + p.price, 0);
-        const nguoiThua = Math.max(0, parseInt(soLuongKhach) - sucChuaPhong);
-        const phuThu = nguoiThua * 50000;
-        const tongTien = tongTienSlots + phuThu;
+        const tre7_17 = ages.filter((a) => a >= 7).length;
+        const treDuoi7 = ages.filter((a) => a < 7).length;
+        const thuaNguoiLon = Math.max(0, soNguoiLon - sucChuaPhong);
+        const thuaTre7_17 = Math.max(
+          0,
+          tre7_17 - Math.max(0, sucChuaPhong - soNguoiLon)
+        );
+        const weighted = thuaNguoiLon * 0.3 + thuaTre7_17 * 0.2;
+        const base = selectedSlots.reduce((s, x) => s + x.price, 0);
+        const tong = base + base * weighted;
 
         if (
           !confirm(
             `Xác nhận đặt ${
               selectedSlots.length
-            } khung giờ?\nTổng tiền (Bao gồm phụ thu): ${formatPrice(
-              tongTien
-            )}đ`
+            } khung giờ?\nTổng tiền: ${formatPrice(tong)}đ`
           )
         )
           return;
@@ -809,8 +914,10 @@
               maPhong: MA_PHONG,
               hoTen,
               sdt,
-              soLuongKhach: parseInt(soLuongKhach),
-              ghiChu,
+              soNguoiLon: Number(soNguoiLon),
+              soTreEm: ages.length,
+              danhSachTuoiTreEm: ages,
+              ghiChu: document.getElementById("ghiChu").value.trim(),
               idNguoiDung: currentUserId || null,
               slots: selectedSlots.map((s) => ({
                 ngayDat: s.date,
@@ -823,34 +930,20 @@
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || "Đặt thất bại");
 
-          const justBookedSlot =
-            selectedSlots.length > 0 ? { ...selectedSlots[0] } : null;
+          document.getElementById("depositAmount").textContent = formatPrice(
+            Math.round(tong / 2)
+          );
+          new bootstrap.Modal(document.getElementById("depositModal")).show();
 
-          const deposit = tongTien / 2;
-          document.getElementById("depositAmount").textContent = formatPrice(deposit);
-
-          const depositModal = new bootstrap.Modal(document.getElementById('depositModal'));
-          depositModal.show();
-
-          document.getElementById("bookingForm").reset();
           selectedSlots = [];
-
-          window.lastBookedSlot = justBookedSlot;
-
           await loadRoomSchedule();
-          updateBookingInfo();
-
         } catch (e) {
-          errorEl.textContent = "Lỗi: " + e.message;
-          errorEl.style.display = "block";
+          alert("Lỗi: " + e.message);
         } finally {
           btn.disabled = false;
           btn.innerHTML = "Đặt phòng";
         }
       };
-      document
-        .getElementById("soLuongKhach")
-        .addEventListener("change", updateBookingInfo);
 
       window.addEventListener("DOMContentLoaded", () => {
         loadRoomSchedule();

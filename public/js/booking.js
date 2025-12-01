@@ -158,11 +158,28 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
    API: TẠO BOOKING MỚI
    ======================================== */
 router.post("/api/booking/create", async (req, res) => {
-  const { maPhong, hoTen, sdt, soLuongKhach, ghiChu, idNguoiDung, slots } =
-    req.body;
+  const {
+    maPhong,
+    hoTen,
+    sdt,
+    soNguoiLon,
+    soTreEm,           
+    danhSachTuoiTreEm, 
+    ghiChu,
+    idNguoiDung,
+    slots,
+  } = req.body;
 
   if (!maPhong || !hoTen || !sdt || !slots || slots.length === 0) {
     return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
+  }
+
+  const soNguoiLonNum = Number(soNguoiLon) || 0;
+  const ages = Array.isArray(danhSachTuoiTreEm) ? danhSachTuoiTreEm.map(a => Number(a) || 0) : [];
+  const tongKhach = soNguoiLonNum + ages.length;
+
+  if (tongKhach === 0) {
+    return res.status(400).json({ error: "Phải có ít nhất 1 khách" });
   }
 
   let connection;
@@ -170,32 +187,48 @@ router.post("/api/booking/create", async (req, res) => {
     connection = await getConnectionWithTimezone();
     await connection.beginTransaction();
 
-    // LẤY SỨC CHỨA PHÒNG
+    // Lấy sức chứa phòng
     const [roomRows] = await connection.execute(
       "SELECT soLuongKhach FROM thongTinPhong WHERE maPhong = ?",
       [maPhong]
     );
     const sucChua = roomRows[0]?.soLuongKhach || 2;
-    const nguoiThua = Math.max(0, soLuongKhach - sucChua);
-    const phuThu = nguoiThua * 50000;
 
-    let ghiChuMoi = ghiChu || "";
+    // Phân bổ chỗ (ưu tiên người lớn → trẻ 7-17 → trẻ <7)
+    let remaining = sucChua;
 
-    // THÊM LOGIC CHÈN CHUỖI PHỤ THU VÀO GHI CHÚ
-    if (nguoiThua > 0) {
-      const phuThuTrenMoiSlot = phuThu / slots.length;
-      const phuThuString = phuThuTrenMoiSlot.toLocaleString("vi-VN"); // Dùng toLocaleString để format số
+    const allottedNguoiLon = Math.min(soNguoiLonNum, remaining);
+    remaining -= allottedNguoiLon;
+    const thuaNguoiLon = soNguoiLonNum - allottedNguoiLon;
 
-      // Format: [Phụ thu] [X] người thừa x 50k = [Y]đ
-      const chuoiPhuThu = `[Phụ thu] ${nguoiThua} người thừa x 50k = ${phuThu.toLocaleString(
-        "vi-VN"
-      )}đ`;
+    // Trẻ em 7-17 tuổi (phụ thu 20%)
+    const tre7_17 = ages.filter(age => age >= 7 && age <= 17).length;
+    const allottedTre7_17 = Math.min(tre7_17, remaining);
+    remaining -= allottedTre7_17;
+    const thuaTre7_17 = tre7_17 - allottedTre7_17;
 
-      // Chèn chuỗi phụ thu vào đầu ghi chú mới, hoặc chỉ là chuỗi phụ thu nếu ghi chú gốc rỗng
+    // Trẻ em <7 tuổi (miễn phí)
+    const treDuoi7 = ages.filter(age => age < 7).length;
+    const allottedTreDuoi7 = Math.min(treDuoi7, remaining);
+    const thuaTreDuoi7 = treDuoi7 - allottedTreDuoi7; // không tính phụ thu
+
+    // Trọng số phụ thu
+    const weightedExcess = thuaNguoiLon * 0.3 + thuaTre7_17 * 0.2;
+
+    // Tính tổng phụ thu
+    let phuThuTotal = 0;
+    slots.forEach(slot => {
+      phuThuTotal += slot.giaKhungGio * weightedExcess;
+    });
+
+    // Ghi chú phụ thu
+    let ghiChuMoi = ghiChu?.trim() || "";
+    if (weightedExcess > 0) {
+      const chuoiPhuThu = `Phụ thu vượt sức chứa: Người lớn ${thuaNguoiLon} × 30% + Trẻ 7-17 ${thuaTre7_17} × 20% = ${phuThuTotal.toLocaleString("vi-VN")}đ`;
       ghiChuMoi = chuoiPhuThu + (ghiChuMoi ? `\n${ghiChuMoi}` : "");
     }
 
-    // KIỂM TRA TRÙNG
+    // Kiểm tra trùng slot
     for (const slot of slots) {
       const [existing] = await connection.execute(
         `SELECT id FROM datPhongTheoGio 
@@ -211,9 +244,9 @@ router.post("/api/booking/create", async (req, res) => {
       }
     }
 
-    // TẠO BOOKING (chia đều phụ thu)
+    // Tạo booking
     for (const slot of slots) {
-      const giaTong = slot.giaKhungGio + phuThu / slots.length;
+      const giaTong = slot.giaKhungGio * (1 + weightedExcess);
       await connection.execute(
         `INSERT INTO datPhongTheoGio 
          (idNguoiDung, maPhong, hoTen, sdt, soLuongKhach, ngayDat, khungGio, 
@@ -224,20 +257,23 @@ router.post("/api/booking/create", async (req, res) => {
           maPhong,
           hoTen,
           sdt,
-          soLuongKhach,
+          tongKhach,
           slot.ngayDat,
           slot.khungGio,
-          giaTong,
+          Math.round(giaTong), // làm tròn để lưu DB
           ghiChuMoi,
         ]
       );
     }
 
     await connection.commit();
+
     res.json({
       success: true,
+      tongTien: slots.reduce((s, x) => s + x.giaKhungGio, 0) + phuThuTotal,
+      phuThu: phuThuTotal,
       message: `Đặt thành công! ${
-        phuThu > 0 ? `Phụ thu ${phuThu.toLocaleString()}đ` : ""
+        phuThuTotal > 0 ? `Có phụ thu ${phuThuTotal.toLocaleString("vi-VN")}đ` : ""
       }`,
     });
   } catch (error) {

@@ -11,6 +11,86 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
+      .reject-reason-box {
+        margin: 14px 0;
+        background: white;
+        border: 2px solid #e74c3c;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(231, 76, 60, 0.15);
+      }
+      .reject-reason-header {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 10px 14px;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .reject-reason-content {
+        padding: 14px;
+        background: #ffebee;
+        color: #c62828;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .surcharge-box {
+        margin: 14px 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(255, 87, 34, 0.15);
+      }
+      .surcharge-header {
+        background: linear-gradient(135deg, #ff5722, #e64a19);
+        color: white;
+        padding: 10px 14px;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .surcharge-content {
+        padding: 12px 14px;
+        background: #fff3e0;
+        color: #d84300;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .special-request-box {
+        margin: 14px 0 0 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(255, 152, 0, 0.15);
+      }
+      .special-request-header {
+        background: linear-gradient(135deg, #ff9800, #f57c00);
+        color: white;
+        padding: 10px 14px;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .special-request-content {
+        padding: 14px;
+        background: #fff8e1;
+        color: #e65100;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .price-highlight {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 16px;
+      }
       .booking-card {
         background: white;
         border-radius: 12px;
@@ -114,7 +194,11 @@
       .filter-tab.active {
         background: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
         color: white;
-        border-color: linear-gradient(185deg, rgba(58, 186, 141, 0.826), #58d0c8);
+        border-color: linear-gradient(
+          185deg,
+          rgba(58, 186, 141, 0.826),
+          #58d0c8
+        );
       }
       .empty-state {
         text-align: center;

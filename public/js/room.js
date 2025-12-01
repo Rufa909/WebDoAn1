@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     attachEventListeners();
   }
 
-  // Tạo card booking
   function createBookingCard(booking) {
     const statusMap = {
       choXacNhan: { text: "Chờ xác nhận", class: "status-pending" },
@@ -123,21 +122,30 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const showActions = booking.trangThai === "choXacNhan";
 
-    let surchargeText = "";
-    let updatedGhiChu = booking.ghiChu || "";
-    if (updatedGhiChu.includes("[Phụ thu]")) {
-      const match = updatedGhiChu.match(/\[Phụ thu\] (\d+) người thừa/);
-      if (match) {
-        surchargeText = `(phụ thu ${match[1]} người)`;
+    let surchargeBlock = "";
+    let specialRequest = "";
 
-        updatedGhiChu = updatedGhiChu
-          .replace(/\[Phụ thu\] \d+ người thừa x \d+k = [\d.]+đ/, "")
-          .trim();
-      }
+    const rawGhiChu = booking.ghiChu || "";
+
+    const phuThuMatch = rawGhiChu.match(/(Phụ thu[\s\S]*?\d+đ)/i);
+    if (phuThuMatch) {
+      surchargeBlock = phuThuMatch[0].trim();
     }
 
-    if (!updatedGhiChu) {
-      updatedGhiChu = null;
+    let cleanCustomerNote = rawGhiChu
+      .replace(/Phụ thu[\s\S]*?\d+đ/i, "")
+      .replace(/\(Đã từ chối.*?\)/gi, "")
+      .replace(/Lý do từ chối.*$/gi, "")
+      .replace(/\n\n+/g, "\n")
+      .trim();
+
+    if (
+      cleanCustomerNote &&
+      cleanCustomerNote.length > 0 &&
+      cleanCustomerNote !== "-" &&
+      cleanCustomerNote !== "null"
+    ) {
+      specialRequest = cleanCustomerNote;
     }
 
     return `
@@ -166,12 +174,14 @@ document.addEventListener("DOMContentLoaded", function () {
           <i class="fas fa-phone"></i>
           <span><strong>SĐT:</strong> ${booking.sdt}</span>
         </div>
+
+        <!-- SỐ KHÁCH GIỮ NGUYÊN -->
         <div class="info-item">
           <i class="fas fa-users"></i>
-          <span><strong>Số khách:</strong> ${
-            booking.soLuongKhach
-          } người ${surchargeText ? `<span class="surcharge-highlight">${surchargeText}</span>` : ""}</span>
+          <span><strong>Số khách:</strong> ${booking.soLuongKhach} người</span>
         </div>
+
+        <!-- GIÁ -->
         <div class="info-item">
           <i class="fas fa-money-bill-wave"></i>
           <span class="price-highlight">${formatPrice(
@@ -179,32 +189,56 @@ document.addEventListener("DOMContentLoaded", function () {
           )}đ</span>
         </div>
       </div>
-      
+
+      <!-- KHUNG PHỤ THU (nếu có) -->
       ${
-        updatedGhiChu
+        surchargeBlock
           ? `
-        <div class="info-item" style="margin-top: 10px; background: #f8f9fa; padding: 10px; border-radius: 6px; border-left: 4px solid #3498db;">
-          <i class="fas fa-sticky-note" style="color: #3498db;"></i>
-          <span><strong>Ghi chú khách:</strong> ${updatedGhiChu}</span>
+        <div class="surcharge-box">
+          <div class="surcharge-header">
+            <i class="fas fa-exclamation-circle"></i>
+            Phụ thu
+          </div>
+          <div class="surcharge-content">
+            ${surchargeBlock.replace("Phụ thu vượt sức chứa:", "").trim()}
+          </div>
         </div>
       `
           : ""
       }
 
+      <!-- YÊU CẦU ĐẶC BIỆT CỦA KHÁCH (ngay dưới phụ thu) -->
       ${
-        booking.lyDoTuChoi
+        specialRequest
           ? `
-        <div class="info-item" style="margin-top: 10px; background: #ffebee; padding: 10px; border-radius: 6px; border-left: 4px solid #e74c3c;">
-          <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
-          <span><strong>Lý do từ chối:</strong> ${booking.lyDoTuChoi}</span>
+        <div class="special-request-box">
+          <div class="special-request-header">
+            <i class="fas fa-star"></i>
+            Yêu cầu đặc biệt từ khách
+          </div>
+          <div class="special-request-content">
+            ${specialRequest.replace(/\n/g, "<br>")}
+          </div>
         </div>
       `
           : ""
       }
-      
-      <div class="info-item" style="margin-top: 10px; font-size: 12px; color: #999;">
+
+      <!-- Lý do từ chối (nếu có) -->
+      ${
+        booking.lyDoTuChoi
+          ? `
+        <div class="info-item" style="margin-top:12px;background:#ffebee;padding:12px;border-radius:8px;border-left:4px solid #e74c3c;">
+          <i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>
+          <strong>Lý do từ chối:</strong> ${booking.lyDoTuChoi}
+        </div>
+      `
+          : ""
+      }
+
+      <div class="info-item" style="margin-top:12px;font-size:12px;color:#999;">
         <i class="fas fa-clock"></i>
-        <span>Đặt lúc: ${formatDateTime(booking.ngayTao)}</span>
+        Đặt lúc: ${formatDateTime(booking.ngayTao)}
       </div>
       
       ${
