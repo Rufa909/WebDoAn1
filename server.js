@@ -1359,7 +1359,83 @@ app.get("/api/doanhnghiep/stats", requireLogin, async (req, res) => {
     res.status(500).json({ error: "Lỗi máy chủ" });
   }
 });
+// API: Lấy danh sách tiện ích do chính doanh nghiệp này tạo
+app.get("/api/my-tien-ich-moi", requireLogin, async (req, res) => {
+  const maDoanhNghiep = req.session.user.id;
+  try {
+    const [rows] = await db.execute(
+      "SELECT tenTienIch, icon FROM tienIchMoi WHERE maDoanhNghiep = ? ",
+      [maDoanhNghiep]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Lỗi server" });
+  }
+});
 
+// API: Thêm tiện ích mới
+app.post("/api/my-tien-ich-moi", requireLogin, async (req, res) => {
+  const { tenTienIch, icon = "fa-star" } = req.body;
+  const maDoanhNghiep = req.session.user.id;
+
+  if (!tenTienIch || tenTienIch.trim().length < 2) {
+    return res.status(400).json({ error: "Tên tiện ích quá ngắn!" });
+  }
+
+  const ten = tenTienIch.trim();
+
+  try {
+    await db.execute(
+      `INSERT INTO tienIchMoi (tenTienIch, icon, maDoanhNghiep) 
+       VALUES (?, ?, ?) 
+       ON DUPLICATE KEY UPDATE icon = VALUES(icon)`,
+      [ten, icon, maDoanhNghiep]
+    );
+    res.status(201).json({ message: "Thêm thành công!", tenTienIch: ten, icon });
+  } catch (err) {
+    console.error("Lỗi thêm tiện ích:", err);
+    res.status(500).json({ error: "Lỗi server hoặc tên đã tồn tại" });
+  }
+});
+// API: Xóa tiện ích doanh nghiệp
+app.delete("/api/my-tien-ich-moi", requireLogin, async (req, res) => {
+  const { tenTienIch } = req.body;
+  const maDoanhNghiep = req.session.user.id;
+
+  if (!tenTienIch) {
+    return res.status(400).json({ error: "Thiếu tên tiện ích cần xóa." });
+  }
+
+  try {
+    // 1. Thực hiện lệnh xóa
+    // Phải kèm điều kiện maDoanhNghiep để đảm bảo user chỉ xóa được tiện ích của chính mình
+    const [result] = await db.execute(
+      "DELETE FROM tienIchMoi WHERE tenTienIch = ? AND maDoanhNghiep = ?",
+      [tenTienIch, maDoanhNghiep]
+    );
+
+    // 2. Kiểm tra xem có dòng nào bị xóa không
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ 
+        error: "Không tìm thấy tiện ích này hoặc bạn không có quyền xóa nó." 
+      });
+    }
+
+    res.json({ message: "Đã xóa tiện ích thành công!" });
+
+  } catch (err) {
+    console.error("Lỗi xóa tiện ích:", err);
+
+    if (err.errno === 1451 || err.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.status(400).json({ 
+        error: "Tiện ích này đang được sử dụng trong một phòng nào đó. Vui lòng vào chỉnh sửa phòng và bỏ chọn tiện ích này trước khi xóa vĩnh viễn." 
+      });
+    }
+
+    res.status(500).json({ error: "Lỗi server khi xóa tiện ích." });
+  }
+});
 app.use(bookingRouter);
 /// Start server
 const PORT = process.env.PORT || 3000;

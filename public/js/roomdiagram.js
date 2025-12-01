@@ -37,6 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let CURRENT_HOMESTAY_DETAILS = null; // Để lưu tên, địa chỉ...
   const tienIchPillContainer = document.getElementById("tienIch-input-visual");
   const tienIchHiddenInput = document.getElementById("tienIch-input");
+  const btnAddNew = document.getElementById("btn-add-new");
+  const addBox = document.getElementById("add-box");
+  const newNameInput = document.getElementById("new-name");
+  const saveNewBtn = document.getElementById("save-new");
+  const cancelNewBtn = document.getElementById("cancel-new");
+
+let DYNAMIC_AMENITIES = [];
   // Đọc idHomestay từ URL
   const urlParams = new URLSearchParams(window.location.search);
   const idHomestayFromUrl = urlParams.get("idHomestay");
@@ -138,24 +145,54 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHiddenInputAndButtons();
   };
 
-  const renderTienIchOptions = () => {
-    tienIchOptionsContainer.innerHTML = "";
-    ALL_AMENITIES.forEach((amenity) => {
+ const renderTienIchOptions = () => {
+  tienIchOptionsContainer.innerHTML = "";
+  
+  // Gộp danh sách
+  const allSourceAmenities = [...ALL_AMENITIES, ...DYNAMIC_AMENITIES];
+  const uniqueAmenities = [...new Set(allSourceAmenities)]; // Lọc trùng
+
+  // Lấy danh sách đang chọn
+  const currentSelectedValues = tienIchHiddenInput.value
+    .split(",")
+    .map((v) => v.trim())
+    .filter(Boolean);
+
+  uniqueAmenities.forEach((amenity) => {
+    // Chỉ hiện nếu CHƯA được chọn
+    if (!currentSelectedValues.includes(amenity)) {
       const btn = document.createElement("span");
-      btn.className = "tienIch-option";
-      btn.textContent = amenity;
-      btn.dataset.value = amenity;
-      const iconClass = AMENITY_ICONS[amenity] || "fa-star"; // Thêm icon cho option - Chỉ chỉnh mới
+      btn.className = "tienIch-option"; 
+      btn.style.position = "relative"; 
+      btn.style.paddingRight = "25px"; 
+      
+      const iconClass = AMENITY_ICONS[amenity] || "fa-star";
       btn.innerHTML = `<i class="fas ${iconClass}"></i> ${amenity}`;
+      
+      // --- PHẦN MỚI: THÊM NÚT XÓA CHO TIỆN ÍCH RIÊNG ---
+      if (DYNAMIC_AMENITIES.includes(amenity)) {
+        const deleteBtn = document.createElement("span");
+        deleteBtn.innerHTML = "&times;"; // Dấu X
+        // Style cho nút xóa
+        deleteBtn.style.cssText = "position: absolute; right: 5px; top: 0; color: red; font-weight: bold; cursor: pointer; padding: 0 5px;";
+        
+        // Sự kiện xóa
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation(); // QUAN TRỌNG: Chặn không cho kích hoạt sự kiện chọn tiện ích
+          deleteAmenityFromDB(amenity); // Gọi hàm xóa ở Bước 1
+        });
+        
+        btn.appendChild(deleteBtn);
+      }
+      // Sự kiện chọn tiện ích (giữ nguyên)
       btn.addEventListener("click", () => {
-        if (!btn.classList.contains("selected")) {
-          addPill(amenity);
-          updateHiddenInputAndButtons();
-        }
+        addPill(amenity); 
       });
+      
       tienIchOptionsContainer.appendChild(btn);
-    });
-  };
+    }
+  });
+};
 
   // Preview ảnh
   const previewImg = document.createElement("img");
@@ -284,12 +321,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // === CÁC HÀM XỬ LÝ MODAL ===
-  const showModal = (room) => {
+  const showModal = async (room) => {
     roomForm.reset();
     previewImg.style.display = "none";
     fileInput.value = "";
     tienIchPillContainer.innerHTML = "";
     tienIchHiddenInput.value = "";
+    await loadMyAmenities();
     renderTienIchOptions();
 
     const idHomestayInput = document.getElementById("id-h"); // Input ẩn
@@ -368,6 +406,112 @@ const hideModal = () => {
 };
 
   // === CÁC HÀM GỌI API ===
+ const loadMyAmenities = async () => {
+  try {
+    // API này cần trả về danh sách tiện ích của user đang đăng nhập
+    const res = await fetch("/api/my-tien-ich-moi", { credentials: "include" });
+    
+    if (res.ok) {
+      const data = await res.json();
+      DYNAMIC_AMENITIES = data.map(item => item.tenTienIch);
+      renderTienIchOptions(); 
+    }
+  } catch (err) {
+    console.log("Không tải được tiện ích cá nhân", err);
+  }
+};
+// Hiện ô nhập (chung 1 dòng)
+btnAddNew.addEventListener("click", () => {
+  addBox.style.display = "flex";      
+  btnAddNew.style.display = "none";
+  newNameInput.focus();
+});
+
+// Hủy
+cancelNewBtn.addEventListener("click", () => {
+  addBox.style.display = "none";
+  btnAddNew.style.display = "block";
+  newNameInput.value = "";
+});
+// Hiển thị ô nhập khi nhấn "Thêm tiện ích mới"
+btnAddNew.addEventListener("click", () => {
+  addBox.style.display = "block";
+  btnAddNew.style.display = "none";
+  newNameInput.focus();
+});
+
+// Hủy thêm mới
+cancelNewBtn.addEventListener("click", () => {
+  addBox.style.display = "none";
+  btnAddNew.style.display = "block";
+  newNameInput.value = "";
+});
+
+//LƯU TIỆN ÍCH MỚI (Không load trang, chỉ hiện vào khung chọn) ===
+saveNewBtn.addEventListener("click", async (e) => {
+  e.preventDefault(); // Chặn load lại trang
+
+  const ten = newNameInput.value.trim();
+  if (!ten) {
+    newNameInput.focus();
+    return;
+  }
+  
+  // Kiểm tra xem đã có chưa
+  if (ALL_AMENITIES.includes(ten) || DYNAMIC_AMENITIES.includes(ten)) {
+    // Nếu có rồi thì chỉ cần reset ô nhập
+    newNameInput.value = "";
+    newNameInput.focus();
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/my-tien-ich-moi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ tenTienIch: ten })
+    });
+
+    if (!res.ok) throw new Error("Lỗi server");
+
+    DYNAMIC_AMENITIES.push(ten);
+    renderTienIchOptions();
+    newNameInput.value = "";
+    newNameInput.focus();
+    
+  } catch (err) {
+    console.error("Lỗi thêm tiện ích:", err);
+  }
+});
+// Hàm xóa tiện ích vĩnh viễn
+const deleteAmenityFromDB = async (name) => {
+  if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn "${name}" không?`)) return;
+
+  try {
+    // Gọi API xóa (Giả sử Backend hỗ trợ method DELETE)
+    const res = await fetch("/api/my-tien-ich-moi", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ tenTienIch: name }) 
+    });
+
+    if (res.ok) {
+      // 1. Xóa khỏi mảng dữ liệu local
+      DYNAMIC_AMENITIES = DYNAMIC_AMENITIES.filter(item => item !== name);
+      
+      // 2. Vẽ lại giao diện
+      renderTienIchOptions();
+      
+      alert("Đã xóa thành công!");
+    } else {
+      alert("Lỗi server không xóa được.");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
   const fetchAndDisplayRooms = async () => {
     roomGridContainer.innerHTML =
       '<p class="loading-message">Đang tải thông tin phòng...</p>';
@@ -482,6 +626,7 @@ const hideModal = () => {
           (isEditingMode ? "Cập nhật thành công!" : "Thêm phòng thành công!")
       );
       hideModal();
+      
       fetchAndDisplayRooms(); // Reload
     } catch (error) {
       console.error("Lỗi khi lưu phòng:", error);
@@ -554,6 +699,8 @@ const hideModal = () => {
 
   // === KHỞI CHẠY ===
   fetchAndDisplayRooms();
+  // Tải tiện ích cá nhân ngay khi vào trang
+  loadMyAmenities();
 
   // btn cuộn lên trang đầu
   const scrollToTopBtn = document.getElementById("scrollToTop");

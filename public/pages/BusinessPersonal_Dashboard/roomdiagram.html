@@ -132,7 +132,19 @@
             <div id="tienIch-options-container" class="tienIch-options">
               <!-- Options sẽ được render bởi JS -->
             </div>
-          </div>
+            <div style="margin-top:15px; text-align:center;">
+              <button type="button" id="btn-add-new" style="padding:12px 24px; background:#434343; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                + Thêm tiện ích mới (VD:Bàn trang điểm, Gương,...)
+              </button> 
+            </div>
+            <!-- Ô nhập nhanh -->
+              <div id="add-box" style="display:none; margin-top:10px; text-align:center;">
+                <input type="text" id="new-name" placeholder="Nhập tên tiện ích..." style="padding:10px; width:60%; border:1px solid #ccc; border-radius:6px;">
+                <button id="save-new" style="padding:5px 10px; background:#7e7c7c; color:white; border:none; border-radius:6px; margin-left:5px;">Thêm</button>
+                <button id="cancel-new" style="padding:5px 10px; background:#7e7c7c; color:white; border:none; border-radius:6px; margin-left:5px;">Hủy</button>
+              </div>
+            </div>
+         
 
           <div class="form-group">
             <label for="gia-input">Giá mỗi đêm (VND) *</label>
