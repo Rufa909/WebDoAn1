@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
 
 function formatPrice(price) {
   if (typeof price !== "number") return "N/A";
@@ -242,15 +242,89 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
     }
 
-    homestaySectionsEl.innerHTML = finalHtml;
+   homestaySectionsEl.innerHTML = finalHtml;
+
+    // DÒNG NÀY LÀM CHO TÊN HOMESTAY TỰ ĐỘNG HIỆN
+   setTimeout(generateBranchButtonsAndFilter, 100);
+
   } catch (error) {
     console.error("Lỗi khi tải phòng:", error);
-    document.getElementById(
-      "homestay-sections"
-    ).innerHTML = `<p class="text-danger text-center">Không thể tải dữ liệu phòng. Kiểm tra API: ${API_BASE_URL}/api/rooms-grouped-by-company</p>`;
+    document.getElementById("homestay-sections").innerHTML = 
+      `<p class="text-danger text-center">Lỗi tải dữ liệu!</p>`;
   }
 
-  // btn cuộn lên trang đầu
+
+  const branchSelector = document.getElementById("branch-selector");
+
+ 
+function generateBranchButtonsAndFilter() {
+  const branchSelector = document.getElementById("branch-selector");
+  if (!branchSelector) return;
+
+  // XÓA TẤT CẢ NÚT CŨ (bao gồm cả nút "Tất cả chi nhánh" nếu có)
+  branchSelector.innerHTML = '';
+
+  // TẠO LẠI NÚT "TẤT CẢ CHI NHÁNH" – ĐẶC BIỆT: CHUYỂN VỀ TRANG CHỦ
+  const allBtn = document.createElement("button");
+  allBtn.className = "branch-btn active";
+  allBtn.dataset.branch = "all";
+  allBtn.textContent = "Tất cả chi nhánh";
+  allBtn.onclick = () => {
+    window.location.href = "/";  // CHUYỂN VỀ TRANG CHỦ
+  };
+  branchSelector.appendChild(allBtn);
+
+  // Tạo các nút homestay khác
+  const blocks = document.querySelectorAll(".enterprise-block");
+  const existingNames = new Set();
+
+  blocks.forEach(block => {
+    const header = block.querySelector(".address-header");
+    if (!header) return;
+
+    const fullName = header.textContent.trim();
+    if (!fullName || existingNames.has(fullName)) return;
+    existingNames.add(fullName);
+
+    const safeName = fullName
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+
+    block.dataset.branch = safeName;
+
+    const btn = document.createElement("button");
+    btn.className = "branch-btn";
+    btn.dataset.branch = safeName;
+    btn.textContent = fullName;
+    btn.onclick = () => filterByBranch(safeName);
+
+    branchSelector.appendChild(btn);
+  });
+}
+
+function filterByBranch(branch) {
+  // Không cần xử lý "all" ở đây nữa vì nút "all" đã được gán onclick riêng
+  document.querySelectorAll(".branch-btn").forEach(b => b.classList.remove("active"));
+  
+  const activeBtn = document.querySelector(`[data-branch="${branch}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+
+  document.querySelectorAll(".enterprise-block").forEach(block => {
+    if (block.dataset.branch === branch) {
+      block.style.display = "block";
+      block.style.opacity = "0";
+      setTimeout(() => block.style.opacity = "1", 50);
+    } else {
+      block.style.display = "none";
+    }
+  });
+}
+
+// btn cuộn lên trang đầu
   const scrollToTopBtn = document.getElementById("scrollToTop");
 
   window.addEventListener("scroll", function () {

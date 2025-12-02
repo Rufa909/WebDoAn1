@@ -1,3 +1,12 @@
+
+function redirectToBooking(roomId) {
+  const id = parseInt(roomId, 10);
+  if (isNaN(id) || id <= 0) {
+    alert("Mã phòng không hợp lệ!");
+    return;
+  }
+  window.location.href = `RoomDetail.html?room_id=${id}`;
+}
 document.addEventListener("DOMContentLoaded", () => {
   // --- 1. LẤY CÁC PHẦN TỬ VÀ THAM SỐ TỪ URL ---
   const resultsContainer = document.getElementById("homestay-results");
@@ -9,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "view dep": "fa-rainbow",
     "phong gym": "fa-dumbbell",
     "may chieu": "fa-film",
-    bep: "fa-utensils",
+    "bep": "fa-utensils",
     "bon tam": "fa-bath",
     "ban cong": "fa-cloud",
   };
@@ -26,18 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    async function redirectToBooking(roomId) {
-      const idRoom = parseInt(roomId);
-      if (isNaN(idRoom) || idRoom <= 0) {
-        console.error("Mã phòng không hợp lệ:", roomId);
-        alert("Lỗi: Không tìm thấy mã phòng.");
-        return;
-      }
-      
-      const bookingUrl = `RoomDetail.html?room_id=${idRoom}`;
-      window.location.href = bookingUrl;
-    }
-
+    
     const cardsHTML = homestaysToDisplay
       .map((room) => {
         // Xử lý danh sách tiện ích
@@ -54,9 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "")
               .replace("đ", "d");
+              
 
-            const icon = amenitiesIconMap[key] || amenitiesIconMap["default"];
+            const icon = amenitiesIconMap[key] || "fa-star";
             return `<span class="amenity"><i class="fa-solid ${icon}"></i> ${text}</span>`;
+            
+            
+   
           })
           .join("");
 
@@ -71,12 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }">
                         <div class="card-body d-flex flex-column room-info">
                             <h3 class="room-name">${room.tenPhong}</h3>
-
-                            <p class="card-text text-muted mb-2">
-                                <i class="fa-solid fa-location-dot"></i> ${
-                                  room.diaChi
-                                }
-                            </p>
+                            <h5 class="room-price mt-auto">
+                                ${new Intl.NumberFormat("vi-VN").format(
+                                  room.giaKhungGio
+                                )} VNĐ/giờ
+                            </h5>
+                            
 
                             <div class="amenities mb-3">
                                 <span class="amenity"><i class="fa-solid fa-users"></i> ${
@@ -90,12 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="amenities mb-3">
                                 ${amenitiesHTML}
                             </div>
-
-                            <h4 class="room-price mt-auto">
-                                ${new Intl.NumberFormat("vi-VN").format(
-                                  room.giaKhungGio
-                                )} VNĐ/giờ
-                            </h4>
+                             <p class="card-text text-muted mb-2">
+                                <i class="fa-solid fa-location-dot"></i> ${
+                                  room.diaChi
+                                }
+                            </p>   
+                            
                             <button class="btn btn-datphong" onclick="redirectToBooking(${room.maPhong})"> Đặt phòng
                             </button>
                         </div>

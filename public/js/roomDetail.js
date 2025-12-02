@@ -27,7 +27,7 @@ function createAmenitiesHtml(room) {
       .replace(/[\u0300-\u036f]/g, "")
       .replace("đ", "d")
       .replace(/\s/g, "");
-    const icon = amenitiesIconMap[key] || "fa-check-circle";
+    const icon = amenitiesIconMap[key] || "fa-star";
     return `<div class="amenity-item"><i class="fa-solid ${icon}"></i><span>${text}</span></div>`;
   });
 

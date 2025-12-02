@@ -154,31 +154,23 @@
     </div>
     <hr />
 
-    <!-- Main -->
-    <div class="container">
-      <div class="branch-selector">
-        <button class="branch-btn active" onclick="showBranch('all')">
-          Tất cả chi nhánh
-        </button>
-        <button class="branch-btn" onclick="showBranch('vista-home')">
-         Vista Home
-        </button>
-        <button class="branch-btn" onclick="showBranch('oasis-home')">
-        Oasis Home
-        </button>
-        <button class="branch-btn" onclick="showBranch('bloom-home')">
-        Bloom Home
-        </button>
-        <button class="branch-btn" onclick="showBranch('Joom-home')">
-        Joom Home
-        </button>
-      </div>
-      <body>
-    <div class="container">
-      <div id="homestay-sections">
+  <!-- Main -->
+<div class="container">
+  <!-- THANH CHI NHÁNH – CHỈ GIỮ LẠI 1 NÚT, CÒN LẠI JS SẼ TỰ SINH -->
+  <div class="branch-selector" id="branch-selector">
+    <button class="branch-btn active" data-branch="all">
+      Tất cả chi nhánh
+    </button>
+    <!-- Các nút khác sẽ được JS thêm tự động -->
+  </div>
 
-      </div>
+  <div class="container">
+    <div id="homestay-sections">
+      <!-- Nội dung sẽ được JS chèn vào đây -->
     </div>
+  </div>
+</div>
+
 
 
     <!-- Footer -->
