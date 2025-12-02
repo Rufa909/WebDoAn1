@@ -457,6 +457,7 @@
                       <th style="font-size: medium">Tên homestay</th>
                       <th style="font-size: medium">Địa chỉ</th>
                       <th style="font-size: medium">Ngày tạo</th>
+                      <th style="font-size: medium">Trạng thái</th>
                       <th style="text-align: right; font-size: medium">
                         Hành động
                       </th>
@@ -626,26 +627,33 @@
               hour: "2-digit",
               minute: "2-digit",
             });
+            const textStatus = {
+              choDuyet: "Chờ duyệt",
+              daDuyet: "Đã duyệt",
+              biTuChoi: "Từ chối",
+            };
+            const statusStyles = {
+              choDuyet:
+                "padding: 5px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-align: center; display: inline-block;background: #fef3c7;color: #b45309;",
+              daDuyet:
+                "padding: 5px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-align: center; display: inline-block;background: #d1fae5;color: #065f46;",
+              biTuChoi:
+                "padding: 5px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; text-align: center; display: inline-block;background: #fee2e2; color: #991b1b;",
+            };
 
             return `<tr>
                     <td>${u.tenHomestay}</td>
                     <td>${u.diaChi}</td>
                     <td>${formattedDate}</td>
+                    <td style="text-align: center; vertical-align: middle;">
+                      <span style="${statusStyles[u.trangThai]}">${textStatus[u.trangThai]}</span>
+                    </td>
+
+                    
                     <td class="action-buttons" style="text-align: end">
-                      <button
-                        class="edit-btn"
-                        data-id-homestay="${u.idHomestay}"
-                        style="
-                          background-color: #3b82f6;
-                          color: white;
-                          border: none;
-                          padding: 12px 17px;
-                          border-radius: 5px;
-                          cursor: pointer;
-                        "
-                      >
-                        <i class="fas fa-pen"></i>
-                      </button>
+                      ${
+                        u.trangThai === "daDuyet"
+                          ? `
                       <button
                         class="delete-btn"
                         data-id-homestay="${u.idHomestay}"
@@ -656,10 +664,10 @@
                           padding: 12px 25px;
                           border-radius: 5px;
                           cursor: pointer;
-                        "
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
+                        "><i class="fas fa-trash-alt"></i>
+                      </button>`
+                          : ``
+                      }
                     </td>
                   </tr>`;
           })

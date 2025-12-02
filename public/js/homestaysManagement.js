@@ -1,93 +1,102 @@
-document.addEventListener("DOMContentLoaded", async function () {
-  function createHomestayCard(homestay) {
-    const statusMap = {
-      choXacNhan: { text: "Chờ xác nhận", class: "status-pending" },
-      daXacNhan: { text: "Đã xác nhận", class: "status-confirmed" },
-      daHuy: { text: "Đã hủy", class: "status-cancelled" },
-    };
-
-    const status = statusMap[homestay.trangThai] || {
-      text: homestay.trangThai,
-      class: "",
-    };
-    const showActions = homestay.trangThai === "choXacNhan";
-    return `
-            <div class="booking-card" data-booking-id="${homestay.id}">
-                <div class="booking-header">
-                    <div>
-                        <h3 style="margin: 0; color: #2c3e50;">${
-                          homestay.tenPhong
-                        }</h3>
-                        <small style="color: #7f8c8d;">${
-                          booking.tenHomestay
-                        }</small>
-                    </div>
-                    <span class="booking-status ${
-                      status.class
-                    }">${status.text}</span>
-                </div>
-                
-                <div class="time-slot-info">
-                    <i class="fas fa-calendar-day"></i> 
-                    <strong>${formatDate(booking.ngayDat)}</strong> - 
-                    <i class="fas fa-clock"></i> 
-                    <strong>${booking.khungGio}</strong>
-                </div>
-                
-                <div class="booking-info">
-                    <div class="info-item">
-                        <i class="fas fa-user"></i>
-                        <span><strong>Khách:</strong> ${booking.hoTen}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-phone"></i>
-                        <span><strong>SĐT:</strong> ${booking.sdt}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-users"></i>
-                        <span><strong>Số khách:</strong> ${
-                          booking.soLuongKhach
-                        } người</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span class="price-highlight">${formatPrice(
-                          booking.giaKhungGio
-                        )}đ</span>
-                    </div>
-                </div>
-                
-                ${
-                  booking.ghiChu
-                    ? `
-                    <div class="info-item" style="margin-top: 10px;">
-                        <i class="fas fa-sticky-note"></i>
-                        <span><strong>Ghi chú:</strong> ${booking.ghiChu}</span>
-                    </div>
-                `
-                    : ""
-                }
-                
-                <div class="info-item" style="margin-top: 5px; font-size: 12px; color: #999;">
-                    <i class="fas fa-clock"></i>
-                    <span>Đặt lúc: ${formatDateTime(booking.ngayTao)}</span>
-                </div>
-                
-                ${
-                  showActions
-                    ? `
-                    <div class="booking-actions">
-                        <button class="btn-confirm" data-id="${booking.id}">
-                            <i class="fas fa-check"></i> Xác nhận
-                        </button>
-                        <button class="btn-reject" data-id="${booking.id}">
-                            <i class="fas fa-times"></i> Từ chối
-                        </button>
-                    </div>
-                `
-                    : ""
-                }
-            </div>
-        `;
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  loadPendingHomestays();
 });
+
+async function loadPendingHomestays() {
+  const container = document.getElementById("homestay-grid-container");
+  container.innerHTML = `<div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>`;
+
+  try {
+    const res = await fetch("/api/admin/homestays/choDuyet", {
+      credentials: "include",
+    });
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      container.innerHTML = "<p>Không có homestay nào cần duyệt.</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    data.forEach((hs) => {
+      const card = document.createElement("div");
+      card.className = "homestay-card";
+
+      card.innerHTML = `
+        <div class="card-header">
+          <h3>${hs.tenHomestay}</h3>
+          <span class="badge pending">Chờ duyệt</span>
+        </div>
+
+        <div class="card-body">
+          <p><i class="fa-solid fa-user"></i> Doanh nghiệp: <b>${
+            hs.hoDoanhNghiep + " " + hs.tenDoanhNghiep || "Không rõ"
+          }</b></p>
+          <p><i class="fa-solid fa-location-dot"></i> Địa chỉ: <b>${hs.diaChi}</b></p>
+          <p><i class="fa-solid fa-envelope"></i> Email: <b>${
+            hs.email || "Không có email"
+          }</b></p>
+          <p><i class="fa-solid fa-phone"></i> Số điện thoại: <b>${
+            hs.sdt || "Không có số điện thoại"
+          }</p>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-approve" onclick="approveHomestay(${
+            hs.idHomestay
+          })">
+            <i class="fa-solid fa-check"></i> Duyệt
+          </button>
+          <button class="btn-reject" onclick="rejectHomestay(${hs.idHomestay})">
+            <i class="fa-solid fa-xmark"></i> Từ chối
+          </button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>Lỗi tải dữ liệu.</p>";
+  }
+}
+
+async function approveHomestay(id) {
+  const result = await Swal.fire({
+    title: "Duyệt homestay?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Duyệt",
+  });
+
+  if (!result.isConfirmed) return;
+
+  const res = await fetch(`/api/admin/homestays/${id}/duyet`, {
+    method: "PUT",
+  });
+  if (!res.ok) {
+    return Swal.fire("Lỗi", "Không duyệt được homestay", "error");
+  }
+
+  Swal.fire("Thành công", "Homestay đã được duyệt", "success");
+  loadPendingHomestays();
+}
+
+async function rejectHomestay(id) {
+  const confirm = await Swal.fire({
+    title: "Từ chối homestay?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Từ chối",
+  });
+
+  if (!confirm.isConfirmed) return;
+
+  await fetch(`/api/admin/homestays/${id}/tuChoi`, {
+    method: "PUT",
+  });
+
+  Swal.fire("Đã từ chối", "Homestay đã bị từ chối", "info");
+  loadPendingHomestays();
+}

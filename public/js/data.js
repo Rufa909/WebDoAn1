@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (resCurrent.status === 200) {
     const user = await resCurrent.json();
-    console.log("User hiện tại:", user);
 
     // Display
     document.getElementById("labelLogin").innerHTML = `

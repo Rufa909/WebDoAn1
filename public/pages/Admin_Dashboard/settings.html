@@ -278,7 +278,7 @@
       <div class="sidebar">
         <div class="logo">
           <a href="../../index.html">
-            <img src="../../images/Logo.png" width="15" height="15"/>
+            <img src="../../images/Logo.png" width="15" height="15" />
           </a>
           <span>Aibaba Homestay</span>
         </div>
@@ -311,23 +311,6 @@
         <div class="header">
           <h1>Cài Đặt</h1>
           <div class="header-right">
-            <div class="search-box">
-              <i class="fas fa-search" style="color: #94a3b8"></i>
-              <input type="text" placeholder="Tìm kiếm cài đặt" />
-            </div>
-            <div class="notification-bell">
-              <i
-                class="far fa-comment-dots"
-                style="font-size: 20px; color: #64748b"
-              ></i>
-            </div>
-            <div class="notification-bell">
-              <i
-                class="far fa-bell"
-                style="font-size: 20px; color: #64748b"
-              ></i>
-              <span class="badge">1</span>
-            </div>
             <button
               class="btn btn-secondary dropdown-toggle"
               id="backToHome"
@@ -363,18 +346,54 @@
             <div id="general" class="setting-section">
               <h2>Thông tin chung</h2>
               <div class="form-group">
-                <label for="address">Địa chỉ</label>
+                <label for="hoTen">Họ và tên</label>
                 <input
                   type="text"
-                  id="address"
-                  placeholder="Số nhà, đường, tỉnh/thành phố"
+                  id="hoTen"
+                  placeholder="Alibaba Nguyễn"
+                  disabled
                 />
               </div>
               <div class="form-group">
-                <label for="hotline">Hotline</label>
-                <input type="text" id="hotline" placeholder="09xx xxx xxx" />
+                <label for="ngaySinh">Ngày sinh</label>
+                <input
+                  type="text"
+                  id="ngaySinh"
+                  placeholder="01/01/1990"
+                  disabled
+                />
               </div>
-            
+              <div class="form-group">
+                <label for="gioiTinh">Giới tính</label>
+                <input
+                  type="text"
+                  id="gioiTinh"
+                  placeholder="Nam/Nữ"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  placeholder="example@example.com"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="sdt">Số điện thoại</label>
+                <input
+                  type="text"
+                  id="sdt"
+                  placeholder="09xx xxx xxx"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label for="chucVu">Chức vụ</label>
+                <input type="text" id="chucVu" placeholder="Chức vụ" disabled />
+              </div>
 
               <div class="button-group">
                 <button class="save-btn">Lưu thay đổi</button>
@@ -397,7 +416,9 @@
               </div>
 
               <div class="button-group">
-                <button class="save-btn">Đổi mật khẩu</button>
+                <button class="save-btn" id="changePasswordBtn">
+                  Đổi mật khẩu
+                </button>
               </div>
             </div>
           </div>
@@ -405,8 +426,13 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", async function () {
+        const resCurrent = await fetch("/current_user", {
+          credentials: "include",
+        });
+        const user = await resCurrent.json();
         const navItems = document.querySelectorAll(".settings-nav-item");
         const sections = document.querySelectorAll(".setting-section");
 
@@ -425,6 +451,98 @@
             }
           });
         });
+
+        // Thoong tin nguoi dung
+        document.getElementById("hoTen").value =
+          user.user.ho + " " + user.user.ten;
+        document.getElementById("email").value = user.user.email;
+        document.getElementById("sdt").value = user.user.sdt;
+        if (user.user.ngaySinh) {
+          const date = new Date(user.user.ngaySinh);
+          date.setDate(date.getDate() + 1);
+          const formattedDate = date.toISOString().split("T")[0];
+          document.getElementById("ngaySinh").value = formattedDate;
+        } else {
+          document.getElementById("ngaySinh").value = "";
+        }
+        document.getElementById("gioiTinh").value = user.user.gioiTinh;
+        document.getElementById("chucVu").value = user.user.chucVu;
+      });
+
+      const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+      changePasswordBtn.addEventListener("click", function () {
+        // doi mat khau
+        const mkHienTai = document.getElementById("current_password").value;
+        const mkMoi = document.getElementById("new_password").value;
+        const xacNhanMkMoi = document.getElementById("confirm_password").value;
+
+        if (mkMoi !== xacNhanMkMoi) {
+          Swal.fire({
+                icon: "error",
+                title: "Thất Bại",
+                text: "Mật khẩu mới và xác nhận mật khẩu không khớp!",
+                backdrop: true,
+              });
+          return;
+        }
+        if (mkHienTai === "" || mkMoi === "" || xacNhanMkMoi === "") {
+          Swal.fire({
+                icon: "error",
+                title: "Thất Bại",
+                text: "Vui lòng điền đầy đủ thông tin!",
+                backdrop: true,
+              });
+          return;
+        }
+        if (mkHienTai === mkMoi) {
+          Swal.fire({
+                icon: "error",
+                title: "Thất Bại",
+                text: "Mật khẩu mới không được trùng với mật khẩu hiện tại!",
+                backdrop: true,
+              });
+          return;
+        }
+        // Gửi yêu cầu đổi mật khẩu lên server
+        fetch("/changePassword", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            currentPassword: mkHienTai,
+            newPassword: mkMoi,
+          }),
+          credentials: "include",
+        })
+          .then((response) => {
+            if (response.ok) return { success: true };
+            return { success: false };
+          })
+          .then((data) => {
+            if (data.success) {
+              Swal.fire({
+                icon: "success",
+                title: "Thành công",
+                text: "Bạn đã đổi mật khẩu thành công!",
+                backdrop: true,
+              });
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Thất Bại",
+                text: "Đổi mật khẩu thất bại!",
+                backdrop: true,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Lỗi khi đổi mật khẩu:", error);
+          });
       });
     </script>
   </body>
