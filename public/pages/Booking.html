@@ -333,9 +333,7 @@
       >
         <img src="/images/logo.png" width="70" height="70" /> Alibaba Homestay
       </a>
-      <button class="back-btn" onclick="history.back()">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại
-      </button>
+      <button class="back-btn" onclick="history.back()">Quay lại</button>
     </div>
 
     <hr />
@@ -376,7 +374,7 @@
         </div>
 
         <div id="loadingSchedule" class="loading" style="display: none">
-          <i class="fas fa-spinner fa-spin"></i> Đang tải lịch...
+          Đang tải lịch...
         </div>
         <div id="errorMessage" class="error" style="display: none"></div>
 
@@ -571,29 +569,75 @@
       </div>
     </div>
 
-    <!-- Modal cọc tiền -->
-    <div class="modal fade" id="depositModal" tabindex="-1">
-      <div class="modal-dialog">
+    <!-- MODAL THANH TOÁN QR ĐỘNG – ĐÃ THAY ĐỔI -->
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header bg-success text-white">
             <h5 class="modal-title">Xác nhận đặt phòng</h5>
             <button
               type="button"
-              class="btn-close"
+              class="btn-close btn-close-white"
               data-bs-dismiss="modal"
             ></button>
           </div>
-          <div class="modal-body text-center">
-            <p>Vui lòng chuyển khoản cọc <strong>50%</strong> tổng tiền:</p>
-            <h4 class="text-danger"><span id="depositAmount">0</span>đ</h4>
+          <div class="modal-body text-center py-4">
+            <i
+              class="fas fa-check-circle text-success"
+              style="font-size: 60px"
+            ></i>
+            <h4 class="mt-3">Đặt phòng thành công!</h4>
+            <p>
+              Vui lòng thanh toán cọc
+              <strong class="text-danger">50%</strong> để giữ chỗ
+            </p>
+
+            <h3 class="text-danger fw-bold mt-3" id="modalDepositAmount">0đ</h3>
+
+            <div class="mt-4 p-4 bg-light rounded shadow-sm">
+              <img
+                id="qrImage"
+                src=""
+                alt="QR VietQR"
+                class="img-fluid"
+                style="
+                  max-width: 280px;
+                  border-radius: 12px;
+                  border: 3px solid #28a745;
+                "
+              />
+            </div>
+
+            <div class="mt-4">
+              <a
+                id="qrFullBtn"
+                href="#"
+                target="_blank"
+                class="btn btn-success btn-lg px-5 shadow"
+              >
+                Bạn muốn mở QR to hơn
+              </a>
+            </div>
+
+            <div class="mt-4 small text-muted">
+              Hỗ trợ quét từ
+              <strong
+                >MOMO • ZaloPay • Vietcombank • Techcombank • MB Bank...</strong
+              ><br />
+            </div>
+
+            <hr class="my-5" />
+
+            <p class="text-muted small mb-2">
+              <strong>Liên hệ chủ homestay để biết thêm chi tiết:</strong>
+            </p>
             <img
               src="/images/qrcoc.png"
-              alt="QR Code"
-              class="img-fluid mt-3"
-              style="max-width: 280px"
+              class="img-fluid"
+              style="max-width: 180px; border-radius: 8px"
             />
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer justify-content-center">
             <button
               type="button"
               class="btn btn-secondary"
@@ -930,10 +974,22 @@
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || "Đặt thất bại");
 
-          document.getElementById("depositAmount").textContent = formatPrice(
-            Math.round(tong / 2)
-          );
-          new bootstrap.Modal(document.getElementById("depositModal")).show();
+          /* ĐÃ SỬA CHỖ NÀY – HIỆN QR ĐỘNG */
+          document.getElementById("modalDepositAmount").textContent =
+            formatPrice(result.tienCoc) + "đ";
+
+          const qrImg = document.getElementById("qrImage");
+          const qrBtn = document.getElementById("qrFullBtn");
+
+          qrImg.src = result.qrImageUrl;
+          qrBtn.href = result.qrImageUrl;
+
+          qrImg.onerror = () => {
+            qrImg.src = "/images/qrcoc.png";
+            qrBtn.href = "/images/qrcoc.png";
+          };
+
+          new bootstrap.Modal(document.getElementById("paymentModal")).show();
 
           selectedSlots = [];
           await loadRoomSchedule();
@@ -951,3 +1007,5 @@
     </script>
   </body>
 </html>
+
+

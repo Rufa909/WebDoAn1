@@ -29,14 +29,18 @@ function formatDateLocal(date) {
 }
 
 /* ========================================
+   FUNCTION: TẠO VIETQR ĐỘNG
+   ======================================== */
+function createVietQR(amount, description, bankId, accountNo, accountName, template = "compact") {
+  const encodedDesc = encodeURIComponent(description);
+  const encodedName = encodeURIComponent(accountName);
+  const qrImageUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-${template}.png?amount=${amount}&addInfo=${encodedDesc}&accountName=${encodedName}`;
+  return { qrImageUrl };
+}
+
+/* ========================================
    API: LẤY LỊCH CÓ SẴN (7 NGÀY TỪ HÔM NAY)
    ======================================== */
-// ========================================
-// THAY THẾ ĐOẠN CODE API /api/booking/available/:maPhong
-// TRONG FILE public/js/booking.js
-// (Khoảng dòng 45-120)
-// ========================================
-
 router.get("/api/booking/available/:maPhong", async (req, res) => {
   let connection;
   try {
@@ -61,7 +65,7 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     const room = roomRows[0];
     const giaTheoGio = Number(room.giaTheoGio) || 0;
     const giaQuaDem = Number(room.giaQuaDem) || 0;
-    const sucChua = Number(room.sucChua) || 2; // <-- sức chứa phòng
+    const sucChua = Number(room.sucChua) || 2;
 
     // 2. LẤY BOOKING (có idNguoiDung)
     const [bookings] = await connection.execute(
@@ -143,7 +147,7 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     res.json({
       room: {
         ...room,
-        sucChua: sucChua, // <-- quan trọng, frontend sẽ dùng cái này
+        sucChua: sucChua,
       },
       schedule,
     });
@@ -154,8 +158,9 @@ router.get("/api/booking/available/:maPhong", async (req, res) => {
     if (connection) connection.release();
   }
 });
+
 /* ========================================
-   API: TẠO BOOKING MỚI
+   API: TẠO BOOKING MỚI + VIETQR
    ======================================== */
 router.post("/api/booking/create", async (req, res) => {
   const {
@@ -210,7 +215,7 @@ router.post("/api/booking/create", async (req, res) => {
     // Trẻ em <7 tuổi (miễn phí)
     const treDuoi7 = ages.filter(age => age < 7).length;
     const allottedTreDuoi7 = Math.min(treDuoi7, remaining);
-    const thuaTreDuoi7 = treDuoi7 - allottedTreDuoi7; // không tính phụ thu
+    const thuaTreDuoi7 = treDuoi7 - allottedTreDuoi7;
 
     // Trọng số phụ thu
     const weightedExcess = thuaNguoiLon * 0.3 + thuaTre7_17 * 0.2;
@@ -220,6 +225,7 @@ router.post("/api/booking/create", async (req, res) => {
     slots.forEach(slot => {
       phuThuTotal += slot.giaKhungGio * weightedExcess;
     });
+    phuThuTotal = Math.round(phuThuTotal);
 
     // Ghi chú phụ thu
     let ghiChuMoi = ghiChu?.trim() || "";
@@ -244,6 +250,15 @@ router.post("/api/booking/create", async (req, res) => {
       }
     }
 
+    // Tạo Order ID
+    const orderId = `ALB${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    const baseTotal = slots.reduce((s, x) => s + x.giaKhungGio, 0);
+    const tongTien = baseTotal + phuThuTotal;
+    const tienCoc = Math.round(tongTien * 0.5);
+
+  
+    
+
     // Tạo booking
     for (const slot of slots) {
       const giaTong = slot.giaKhungGio * (1 + weightedExcess);
@@ -260,7 +275,7 @@ router.post("/api/booking/create", async (req, res) => {
           tongKhach,
           slot.ngayDat,
           slot.khungGio,
-          Math.round(giaTong), // làm tròn để lưu DB
+          Math.round(giaTong),
           ghiChuMoi,
         ]
       );
@@ -268,11 +283,28 @@ router.post("/api/booking/create", async (req, res) => {
 
     await connection.commit();
 
+    // ======================= TẠO VIETQR ĐỘNG =======================
+    const BANK_ID = "MB";
+    const ACCOUNT_NO = "0852278231";
+    const ACCOUNT_NAME = "HUYNH THIEN PHUC";
+
+    const { qrImageUrl } = createVietQR(
+      tienCoc,
+      `Coc Alibaba ${hoTen} ${sdt} ${orderId}`,
+      BANK_ID,
+      ACCOUNT_NO,
+      ACCOUNT_NAME,
+      "compact"
+    );
+
     res.json({
       success: true,
-      tongTien: slots.reduce((s, x) => s + x.giaKhungGio, 0) + phuThuTotal,
+      tongTien: tongTien,
+      tienCoc: tienCoc,
       phuThu: phuThuTotal,
-      message: `Đặt thành công! ${
+      orderId: orderId,
+      qrImageUrl: qrImageUrl,
+      message: `Đặt thành công! Quét QR để thanh toán cọc 50%. ${
         phuThuTotal > 0 ? `Có phụ thu ${phuThuTotal.toLocaleString("vi-VN")}đ` : ""
       }`,
     });
@@ -284,6 +316,7 @@ router.post("/api/booking/create", async (req, res) => {
     if (connection) connection.release();
   }
 });
+
 /* ========================================
    API: DỌN PENDING CŨ (15 PHÚT)
    ======================================== */
@@ -441,16 +474,12 @@ router.put("/api/booking/confirm/:bookingId", async (req, res) => {
    API: TỪ CHỐI (BUSINESS)
    ======================================== */
 router.put("/api/booking/reject/:bookingId", async (req, res) => {
-  const { lyDoTuChoi } = req.body;
   let connection;
   try {
     connection = await getConnectionWithTimezone();
     await connection.execute(
-      `UPDATE datPhongTheoGio 
-       SET trangThai = "daHuy", 
-           ghiChu = CONCAT(COALESCE(ghiChu, ""), "\n ", ?)
-       WHERE id = ?`,
-      [lyDoTuChoi || "Không phù hợp", req.params.bookingId]
+      'UPDATE datPhongTheoGio SET trangThai = "daHuy" WHERE id = ?',
+      [req.params.bookingId]
     );
     res.json({ success: true, message: "Đã từ chối" });
   } catch (error) {
