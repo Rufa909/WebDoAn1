@@ -41,10 +41,10 @@ Hệ thống cũng hỗ trợ quản trị viên quản lý phòng, khách hàng
 
 # NỘI BỘ
 ## Cài đặt môi trường
-```node -v        # kiểm tra version Node.js
+node -v        # kiểm tra version Node.js
 npm -v         # kiểm tra version npm
-npm init -y    # tạo package.json;
-Cài đặt thư viện
+npm init -y    # tạo package.json
+## Cài đặt thư viện
 npm install express
 npm install mysql2
 npm install dotenv
@@ -52,16 +52,12 @@ npm install bcrypt
 npm install sweetalert2
 npm install nodemailer
 npm install express-session express-mysql-session
-Cài đặt nodemon (dev)
+## Cài đặt nodemon (dev)
 npm install --save-dev nodemon
-▶️ Chạy server
-npm run devStart
-🔄 Làm việc với Git
-Upload code
+
+### Upload and download code
 git add .
 git commit -m "Nội dung thay đổi"
 git push origin main
-Trước khi code
 git pull origin main
 
-(Để cập nhật source code mới nhất từ repository trước khi làm việc)
