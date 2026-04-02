@@ -43,7 +43,7 @@ Hệ thống cũng hỗ trợ quản trị viên quản lý phòng, khách hàng
 ## Cài đặt môi trường
 ```node -v        # kiểm tra version Node.js
 npm -v         # kiểm tra version npm
-npm init -y    # tạo package.json
+npm init -y    # tạo package.json;
 Cài đặt thư viện
 npm install express
 npm install mysql2
