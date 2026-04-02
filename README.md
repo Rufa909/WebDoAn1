@@ -35,9 +35,9 @@ Hệ thống cũng hỗ trợ quản trị viên quản lý phòng, khách hàng
 - MySQL
 
 ## Tác giả
-Trần Quang Huy (Rufa909)
-Huỳnh Thiện Phúc (Phuc0110205)
-Triệu Thị Hoàng Nhung ()
+- Trần Quang Huy (Rufa909)
+- Huỳnh Thiện Phúc (Phuc011005)
+- Triệu Thị Hoàng Nhung (nhungtrieu2005uh-bot)
 
 Khi code xong dùng:
 git add .
