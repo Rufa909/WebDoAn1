@@ -39,26 +39,29 @@ Hệ thống cũng hỗ trợ quản trị viên quản lý phòng, khách hàng
 - Huỳnh Thiện Phúc (Phuc011005)
 - Triệu Thị Hoàng Nhung (nhungtrieu2005uh-bot)
 
-Khi code xong dùng:
+# NỘI BỘ
+## Cài đặt môi trường
+```node -v        # kiểm tra version Node.js
+npm -v         # kiểm tra version npm
+npm init -y    # tạo package.json
+Cài đặt thư viện
+npm install express
+npm install mysql2
+npm install dotenv
+npm install bcrypt
+npm install sweetalert2
+npm install nodemailer
+npm install express-session express-mysql-session
+Cài đặt nodemon (dev)
+npm install --save-dev nodemon
+▶️ Chạy server
+npm run devStart
+🔄 Làm việc với Git
+Upload code
 git add .
-git commit -m "nội dung bạn thay đổi"
+git commit -m "Nội dung thay đổi"
 git push origin main
+Trước khi code
+git pull origin main
 
-Trước khi vào code:
-git pull origin main (để lấy source code của người đã upload trước đó về rồi code)
-
-" node -v ": version của node.js
-" npm -v ": version của package nodejs
-" npm init -y ": add package
-" npm install express ": install node modules (express)
-
-" npm install mysql2 ": install MySQL
-" npm install express dotenv ": Quản lý biến môi trường
-" npm install bcrypt ": Mã hóa mật khẩu
-" npm install --save-dev nodemon ": Cài đặt nodemon và lưu vào mục devDependencies
-" npm install sweetalert2 ": thư viện Sweetaler2 hỗ trợ popup
-" npm install nodemailer ": xác thực mail
-" npm install express-session express-mysql-session ": thư viện session để lưu user đăng nhập
-
-
-" npm run devStart ": chạy thử server với dạng public
+(Để cập nhật source code mới nhất từ repository trước khi làm việc)
